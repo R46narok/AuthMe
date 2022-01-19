@@ -6,7 +6,12 @@
 <body>
 <div th:replace="fragments/fragments::nav"></div>
 <h1>
-    Home page!
+    Login page!
 </h1>
+<form th:action="@{/login}" th:method="post">
+    <input name="username"/>
+    <input name="password"/>
+    <input type="submit"/>
+</form>
 </body>
 </html>
