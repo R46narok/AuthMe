@@ -20,7 +20,7 @@ public class HomeController {
 
     @PostMapping("/")
     public String post() {
-        String value = restTemplate.getForObject("http://85.187.94.176:5236/", String.class);
+        String value = restTemplate.getForObject("http://localhost:8080/", String.class);
 
         System.out.println(value);
 

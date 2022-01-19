@@ -32,22 +32,22 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers(
                         "/",
-                        "/user/register",
-                        "/user/login")
+                        "/register",
+                        "/login")
                 .permitAll()
                 .antMatchers("/**").authenticated()
 
                 .and()
                 .formLogin()
-                .loginPage("/user/login")
+                .loginPage("/login")
                 .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
                 .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
                 .defaultSuccessUrl("/")
-                .failureForwardUrl("/user/login-error")
+                .failureForwardUrl("/login-error")
 
                 .and()
                 .logout()
-                .logoutUrl("/user/logout")
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
