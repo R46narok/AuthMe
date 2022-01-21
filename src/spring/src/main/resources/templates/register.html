@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/fragments::head"></head>
+<body>
+<div th:replace="fragments/fragments::nav"></div>
+<h1>
+    Register page!
+</h1>
+<form th:object="${registerBindingModel}" th:action="@{/register}" th:method="post">
+    <div>
+        <p th:each="err : ${#fields.errors('username')}" th:text="${err}" class="is-invalid"></p>
+        <input th:field="*{username}" th:errorclass="is-invalid" type="text"/>
+    </div>
+    <div>
+        <p th:each="err : ${#fields.errors('password')}" th:text="${err}" class="is-invalid"></p>
+
+        <input th:field="*{password}" th:errorclass="is-invalid" type="password"/>
+    </div>
+    <div>
+        <p th:each="err : ${#fields.errors('repeatPassword')}" th:text="${err}" class="is-invalid"></p>
+
+        <input th:field="*{repeatPassword}" th:errorclass="is-invalid" type="password"/>
+    </div>
+    <div th:if="${passwordsDontMatch}">
+        <p class="is-invalid">Passwords don't match!</p>
+    </div>
+    <div>
+        <input type="submit"/>
+    </div>
+</form>
+</body>
+</html>

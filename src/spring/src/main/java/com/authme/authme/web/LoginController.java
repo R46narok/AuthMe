@@ -25,7 +25,7 @@ public class LoginController {
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
         bindingModel.setPassword("");
-        redirectAttributes.addFlashAttribute("org.springframework.BindingResult.loginBindingModel", bindingResult);
+        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.loginBindingModel", bindingResult);
         redirectAttributes.addFlashAttribute("loginBindingModel", bindingModel);
         redirectAttributes.addFlashAttribute("error", true);
         return "redirect:/login";
