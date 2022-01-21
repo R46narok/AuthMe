@@ -17,7 +17,6 @@ public class Init implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println();
         roleService.init();
         userService.init();
     }

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ClassMapper {
     public static UserDetails toUserDetails(AuthMeUserEntity user) {
+        if(user == null)
+            return null;
         return new User(user.getUsername(), user.getPassword(), user.getRoles());
     }
 }

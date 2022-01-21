@@ -20,9 +20,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Transactional
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)  {
         return ClassMapper
                 .toUserDetails(userService.findByUsername(username)
-                .orElseThrow(() -> CommonErrorMessages.username(username)));
+                .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " not found!")));
     }
 }
