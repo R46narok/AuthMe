@@ -14,13 +14,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     }
     
     public DbSet<Identity> Identities { get; set; }
-
-    protected override void ConfigureConventions(ModelConfigurationBuilder builder)
-    {
-        builder.Properties<DateOnly>()
-            .HaveConversion<DateOnlyConverter>()
-            .HaveColumnType("date");
-    }
+    public DbSet<IdentityDocument> IdentityDocuments { get; set; }
 }
 
 /// <summary>
