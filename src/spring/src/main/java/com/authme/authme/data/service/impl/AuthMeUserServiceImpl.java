@@ -5,6 +5,7 @@ import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.RoleRepository;
 import com.authme.authme.data.service.AuthMeUserService;
+import com.authme.authme.data.service.external.PersonalDataService;
 import com.authme.authme.data.service.models.RegisterServiceModel;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,12 +23,18 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final UserDetailsServiceImpl userDetailsService;
+    private final PersonalDataService personalDataService;
 
-    public AuthMeUserServiceImpl(AuthMeUserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, UserDetailsServiceImpl userDetailsService) {
+    public AuthMeUserServiceImpl(AuthMeUserRepository userRepository,
+                                 PasswordEncoder passwordEncoder,
+                                 RoleRepository roleRepository,
+                                 UserDetailsServiceImpl userDetailsService,
+                                 PersonalDataService personalDataService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userDetailsService = userDetailsService;
+        this.personalDataService = personalDataService;
     }
 
     @Override
@@ -41,8 +48,7 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
                 .setUsername(registerServiceModel.getUsername())
                 .setPassword(passwordEncoder.encode(registerServiceModel.getPassword()))
                 .setRoles(List.of(roleRepository.findByName(AuthMeUserRole.USER).get()))
-                // TODO: Get the new data id from ASP.NET service
-                .setDataId(0L);
+                .setDataId(personalDataService.newEntry());
         user = userRepository.saveAndFlush(user);
 
         if(user != null) {

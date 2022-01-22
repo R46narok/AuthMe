@@ -15,7 +15,7 @@
     <a th:href="@{/}">Home</a>
     <a sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a>
     <a sec:authorize="!isAuthenticated()" th:href="@{/register}">Register</a>
-    <a sec:authorize="isAuthenticated()" th:href="@{/profile}">Personal information</a>
+    <a sec:authorize="isAuthenticated()" th:href="@{/profile}">Personal information`</a>
     <form sec:authorize="isAuthenticated()" th:action="@{/logout}" th:method="post">
         <input type="submit" value="Logout">
     </form>
