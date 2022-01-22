@@ -6,6 +6,7 @@ using AuthMe.Application.Common.Models;
 using AuthMe.Application.Identities.Commands.CreateIdentity;
 using AuthMe.Application.Identities.Queries.GetIdentity;
 using AuthMe.Application.IdentityDocuments.Commands.CreateIdentityDocument;
+using AuthMe.Application.IdentityDocuments.Commands.DeleteIdentityDocument;
 using AuthMe.Infrastructure.Data;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -67,7 +68,12 @@ public class IdentityController : ControllerBase
             ExternalId = externalId,
             DocumentId = documentId
         };
-        return await _mediator.Send(createDocumentCmd);
 
+        result = await _mediator.Send(createDocumentCmd);
+
+        var deleteIdentityDocumentCmd = new DeleteIdentityDocumentCommand() {Id = documentId};
+        await _mediator.Send(deleteIdentityDocumentCmd);
+        
+        return result;
     }
 }
