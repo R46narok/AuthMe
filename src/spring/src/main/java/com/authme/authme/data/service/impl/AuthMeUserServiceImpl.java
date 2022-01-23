@@ -1,5 +1,6 @@
 package com.authme.authme.data.service.impl;
 
+import com.authme.authme.data.binding.ProfileBindingModel;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
@@ -7,6 +8,7 @@ import com.authme.authme.data.repository.RoleRepository;
 import com.authme.authme.data.service.AuthMeUserService;
 import com.authme.authme.data.service.external.PersonalDataService;
 import com.authme.authme.data.service.models.RegisterServiceModel;
+import com.authme.authme.exceptions.CommonErrorMessages;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -62,6 +64,23 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
+    }
+
+    @Override
+    public ProfileBindingModel getProfileBindingModel() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.isAuthenticated()){
+            AuthMeUserEntity user =
+                    userRepository
+                    .findByUsername(authentication.getName())
+                            .orElseThrow(() -> CommonErrorMessages.username(authentication.getName()));
+            Long dataId = user.getDataId();
+
+            personalDataService.getData(dataId);
+
+            return new ProfileBindingModel();
+        }
+        return new ProfileBindingModel();
     }
 
 
