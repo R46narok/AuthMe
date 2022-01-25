@@ -31,6 +31,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers(
+                        // TODO: Remove in production
+                        "/dev/**",
                         "/",
                         "/register",
                         "/login")

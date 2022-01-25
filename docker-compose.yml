@@ -20,3 +20,24 @@ services:
       - 5001:443
     depends_on:
       - mssql
+  
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    ports:
+      - 3307:3306
+  
+  spring-worker:
+    image: ${DOCKER_REGISTRY-}spring-worker
+    build:
+      context: ./src/spring
+      dockerfile: ./Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql

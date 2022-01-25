@@ -14,7 +14,6 @@ public class ProfileController {
         this.userService = userService;
     }
 
-
     @ModelAttribute(name = "profileBindingModel")
     public ProfileBindingModel profileBindingModel() {
         return userService.getProfileBindingModel();
