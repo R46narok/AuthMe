@@ -9,7 +9,6 @@ namespace AuthMe.Application.IdentityDocuments.Commands.CreateIdentityDocument;
 
 public class CreateIdentityDocumentCommand : IRequest<ValidatableResponse<int>>
 {
-    public int Length { get; set; }
     public byte[] Image { get; set; }
 }
 

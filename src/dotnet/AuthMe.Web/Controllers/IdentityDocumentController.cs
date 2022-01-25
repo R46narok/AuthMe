@@ -2,6 +2,7 @@
 using AuthMe.Infrastructure.Data;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Template;
 
 namespace AuthMe.Web.Controllers;
 
@@ -20,14 +21,14 @@ public class IdentityDocumentController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet(template: "{identityDocumentId}")]
-    public ActionResult GetIdentityDocument(int identityDocumentId)
+    [HttpGet("{name}", Name = "GetIdentityDocument")]
+    public ActionResult GetIdentityDocument(string name)
     {
-        var entry = _dbContext.IdentityDocuments.FirstOrDefault(x => x.Id == identityDocumentId);
+        /*var entry = _dbContext.IdentityDocuments.FirstOrDefault(x => x.Name == name);
         if (entry != null)
         {
             return File(entry.Image, "image/png");
-        }
+        }*/
 
         return NotFound();
     }
