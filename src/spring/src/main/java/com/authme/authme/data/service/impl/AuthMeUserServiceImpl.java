@@ -1,6 +1,7 @@
 package com.authme.authme.data.service.impl;
 
 import com.authme.authme.data.binding.ProfileBindingModel;
+import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
@@ -76,7 +77,7 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
                             .orElseThrow(() -> CommonErrorMessages.username(authentication.getName()));
             Long dataId = user.getDataId();
 
-            personalDataService.getData(dataId);
+            ProfileDTO data = personalDataService.getData(dataId);
 
             return new ProfileBindingModel();
         }
