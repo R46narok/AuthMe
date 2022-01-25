@@ -1,4 +1,6 @@
-﻿namespace AuthMe.Domain.Entities;
+﻿using System.Data.SqlTypes;
+
+namespace AuthMe.Domain.Entities;
 
 // TODO: Maybe extend
 public class Identity
@@ -10,5 +12,5 @@ public class Identity
     public string MiddleName { get; set; }
     public string LastName { get; set; }
     
-    public DateOnly DateOfBirth { get; set; }
+    public DateTime DateOfBirth { get; set; }
 }

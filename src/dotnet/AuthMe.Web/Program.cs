@@ -3,6 +3,7 @@ using AuthMe.Application.Common.Behaviors;
 using AuthMe.Application.Common.Interfaces;
 using AuthMe.Application.Identities.Commands.CreateIdentity;
 using AuthMe.Infrastructure.Data;
+using AuthMe.Infrastructure.Services.ComputerVision;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.HttpLogging;
@@ -20,9 +21,15 @@ builder.Services.AddSwaggerGen();
 // TODO: Fix when adding dep inj
 var asm = typeof(CreateIdentityCommand).Assembly;
 builder.Services.AddMediatR(asm);
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddValidatorsFromAssembly(asm);
 builder.Services.AddAutoMapper(asm);
+
+var endpoint = builder.Configuration["AzureComputerVisionEndpoint"];
+var key = builder.Configuration["AzureComputerVisionKey"];
+builder.Services.AddTransient<IComputerVision, AzureComputerVision>(x => new AzureComputerVision(endpoint, key));
+builder.Services.AddTransient<IIdentityDocumentReader, IdentityDocumentReader>();
 
 var connString = builder.Configuration.GetConnectionString("MsSQLDb");
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options => options.UseSqlServer(connString));

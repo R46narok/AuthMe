@@ -4,7 +4,7 @@ public class ValidatableResponse
 {
     public List<string>? Errors { get; init; }
 
-    public ValidatableResponse(IEnumerable<string>? errors)
+    public ValidatableResponse(IEnumerable<string>? errors = null)
     {
         Errors = errors?.ToList();
     }
@@ -13,7 +13,6 @@ public class ValidatableResponse
 }
 
 public class ValidatableResponse<TModel> : ValidatableResponse
-    where TModel : class
 {
     public TModel Result { get; init; }
     

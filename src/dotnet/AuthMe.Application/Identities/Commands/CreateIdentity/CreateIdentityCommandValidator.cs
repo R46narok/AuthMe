@@ -7,9 +7,7 @@ public class CreateIdentityCommandValidator : AbstractValidator<CreateIdentityCo
 {
     public CreateIdentityCommandValidator()
     {
-        RuleFor(x => x.FirstName).NotEmpty();
-        RuleFor(x => x.MiddleName).NotEmpty();
-        RuleFor(x => x.LastName).NotEmpty();
-        RuleFor(x => x.DateOfBirth).NotNull();
+        RuleFor(x => x.ExternalId).Must(x => x > -1);
+        RuleFor(x => x.DocumentId).Must(x => x > -1);
     }
 }
