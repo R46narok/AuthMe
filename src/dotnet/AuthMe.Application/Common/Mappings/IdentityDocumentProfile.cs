@@ -1,4 +1,4 @@
-﻿using AuthMe.Application.Common.Models;
+﻿
 using AuthMe.Application.IdentityDocuments.Commands.CreateIdentityDocument;
 using AuthMe.Domain.Entities;
 using AutoMapper;
@@ -10,6 +10,5 @@ public class IdentityDocumentProfile : Profile
     public IdentityDocumentProfile()
     {
         CreateMap<CreateIdentityDocumentCommand, IdentityDocument>();
-        CreateMap<IdentityDocumentModel, Identity>();
     }
 }

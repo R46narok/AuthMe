@@ -1,17 +1,9 @@
-﻿
-using System.Net;
-using AuthMe.Application.Common.Api;
+﻿using AuthMe.Application.Common.Api;
 using AuthMe.Application.Common.Interfaces;
-using AuthMe.Application.Common.Models;
-using AuthMe.Application.Identities.Commands.CreateIdentity;
 using AuthMe.Application.Identities.Queries.GetIdentity;
-using AuthMe.Application.IdentityDocuments.Commands.CreateIdentityDocument;
-using AuthMe.Application.IdentityDocuments.Commands.DeleteIdentityDocument;
 using AuthMe.Infrastructure.Data;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
-using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
 
 namespace AuthMe.Web.Controllers;
 
@@ -20,16 +12,14 @@ namespace AuthMe.Web.Controllers;
 public class IdentityController : ControllerBase
 {
     private readonly ILogger<IdentityController> _logger;
+    private readonly IIdentityService _identityService;
     private readonly IMediator _mediator;
-    private readonly IComputerVision _computerVision;
-    private readonly IIdentityDocumentReader _documentReader;
-    
-    public IdentityController(ApplicationDbContext context, ILogger<IdentityController> logger, IMediator mediator, IComputerVision computerVision, IIdentityDocumentReader documentReader)
+
+    public IdentityController(ApplicationDbContext context, ILogger<IdentityController> logger, IMediator mediator, IIdentityService identityService)
     {
         _logger = logger;
+        _identityService = identityService;
         _mediator = mediator;
-        _computerVision = computerVision;
-        _documentReader = documentReader;
     }
     
     [HttpGet(template: "{externalId}")]
@@ -52,28 +42,9 @@ public class IdentityController : ControllerBase
         var length = (int) stream.Length;
         
         await stream.ReadAsync(bytes, 0, length);
-        
-        var createDocumentCmd = new CreateIdentityDocumentCommand
-        {
-            Image = bytes,
-            Length = length
-        };
 
-        var result = await _mediator.Send(createDocumentCmd);
-        if (!result.IsValid) return BadRequest(result);
+        await _identityService.CreateIdentity(0, bytes);
         
-        var documentId = result.Result;
-        var createIdentityCmd = new CreateIdentityCommand
-        {
-            ExternalId = externalId,
-            DocumentId = documentId
-        };
-
-        result = await _mediator.Send(createDocumentCmd);
-
-        var deleteIdentityDocumentCmd = new DeleteIdentityDocumentCommand() {Id = documentId};
-        await _mediator.Send(deleteIdentityDocumentCmd);
-        
-        return result;
+        return BadRequest();
     }
 }
