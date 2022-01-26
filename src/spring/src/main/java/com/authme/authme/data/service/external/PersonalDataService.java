@@ -8,4 +8,6 @@ public interface PersonalDataService {
     Long newEntry();
 
     ProfileDTO getData(Long dataId);
+
+    void patchData(Long dataId, ProfileDTO toProfileDTO);
 }

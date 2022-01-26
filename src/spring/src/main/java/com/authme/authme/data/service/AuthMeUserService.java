@@ -14,5 +14,7 @@ public interface AuthMeUserService {
 
     ProfileBindingModel getProfileBindingModel();
 
+    void patchProfile(ProfileBindingModel profileBindingModel);
+
     void init();
 }

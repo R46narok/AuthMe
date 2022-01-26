@@ -1,6 +1,7 @@
 package com.authme.authme.data.binding;
 
 import com.authme.authme.data.entity.enums.Gender;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -8,6 +9,7 @@ public class ProfileBindingModel {
     private String firstName;
     private String middleName;
     private String lastName;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     public String getFirstName() {
