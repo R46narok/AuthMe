@@ -1,6 +1,8 @@
-﻿namespace AuthMe.Application.Common.Interfaces;
+﻿using AuthMe.Application.Identities.Queries.GetIdentity;
+
+namespace AuthMe.Application.Common.Interfaces;
 
 public interface IIdentityService
 {
-    public Task<int> CreateIdentity(int externalId, byte[] document);
+    public Task<IdentityDto> ReadIdentityDocument(byte[] document);
 }

@@ -22,13 +22,13 @@ public class IdentityDocumentController : ControllerBase
     }
 
     [HttpGet("{name}", Name = "GetIdentityDocument")]
-    public ActionResult GetIdentityDocument(string name)
+    public ActionResult GetIdentityDocument(int id)
     {
-        /*var entry = _dbContext.IdentityDocuments.FirstOrDefault(x => x.Name == name);
+        var entry = _dbContext.IdentityDocuments.FirstOrDefault(x => x.Id == id);
         if (entry != null)
         {
-            return File(entry.Image, "image/png");
-        }*/
+            return File(entry.Image, "image/png"); // TODO:
+        }
 
         return NotFound();
     }

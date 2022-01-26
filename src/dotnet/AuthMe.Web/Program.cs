@@ -1,15 +1,15 @@
 using System.Net.Http.Headers;
-using System.Reflection;
 using AuthMe.Application.Common.Behaviors;
 using AuthMe.Application.Common.Interfaces;
 using AuthMe.Application.Identities.Commands.CreateIdentity;
 using AuthMe.Infrastructure.Data;
 using AuthMe.Infrastructure.IdentityService;
+using AuthMe.Infrastructure.ImageService;
+using AuthMe.Infrastructure.OcrService;
+
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,12 +29,24 @@ builder.Services.AddValidatorsFromAssembly(asm);
 builder.Services.AddAutoMapper(asm);
 
 builder.Services.AddTransient<IIdentityService, IdentityService>();
+builder.Services.AddTransient<IOcrService, OcrService>();
+builder.Services.AddTransient<IImageService, ImageService>();
 
 builder.Services.AddHttpClient("AzureCognitivePrediction", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["AzureCognitivePredictionEndpoint"]);
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
     client.DefaultRequestHeaders.Add("Prediction-Key", builder.Configuration["AzureCognitivePredictionKey"]);
+});
+builder.Services.AddHttpClient("AzureCognitiveAnalyzer", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["AzureCognitiveAnalyzerEndpoint"]);
+    client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", builder.Configuration["AzureCognitiveAnalyzerKey"]);
+});
+builder.Services.AddHttpClient("AzureCognitiveAnalyzeResults", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["AzureCognitiveAnalyzeResultsEndpoint"]);
+    client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", builder.Configuration["AzureCognitiveAnalyzerKey"]);
 });
 
 var endpoint = builder.Configuration["AzureComputerVisionEndpoint"];
