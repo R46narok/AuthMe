@@ -85,6 +85,17 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
         return new ProfileBindingModel();
     }
 
+    @Override
+    public void patchProfile(ProfileBindingModel profileBindingModel) {
+        String[] username = {SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName()};
+        AuthMeUserEntity user =
+                userRepository.findByUsername(username[0])
+                                .orElseThrow(() -> CommonErrorMessages.username(username[0]));
+        personalDataService.patchData(user.getDataId(), ClassMapper.toProfileDTO(profileBindingModel));
+    }
+
 
     @Override
     public void init() {

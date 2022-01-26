@@ -32,4 +32,12 @@ public class ClassMapper {
                 .setLastName(data.getLastName())
                 .setDateOfBirth(data.getDateOfBirth());
     }
+
+    public static ProfileDTO toProfileDTO(ProfileBindingModel profileBindingModel) {
+        return new ProfileDTO()
+                .setFirstName(profileBindingModel.getFirstName())
+                .setMiddleName(profileBindingModel.getMiddleName())
+                .setLastName(profileBindingModel.getLastName())
+                .setDateOfBirth(profileBindingModel.getDateOfBirth());
+    }
 }

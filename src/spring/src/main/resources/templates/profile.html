@@ -5,17 +5,44 @@
 <head th:replace="fragments/fragments::head"></head>
 <body>
 <div th:replace="fragments/fragments::nav"></div>
-<h1>
-    Profile page!
-</h1>
-<form th:object="${profileBindingModel}" th:action="@{/profile}" th:method="post">
-    <input  type="text" th:field="*{firstName}" id="firstName" />
-    <input  type="text" th:field="*{middleName}" id="middleName" />
-    <input  type="text" th:field="*{lastName}" id="lastName" />
-    <input  type="date" th:field="*{dateOfBirth}" id="dateOfBirth" />
-    <div>
-        <input type="submit"/>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <form th:object="${profileBindingModel}" th:action="@{/profile}" th:method="patch">
+                <div class="mt-5 p-3 bg-light rounded-back">
+                    <div class="my-3 form-group">
+                        <label for="firstName">First name</label>
+                        <input th:field="*{firstName}" type="text" class="form-control" id="firstName"
+                               aria-describedby="firstName"
+                               placeholder="Enter first name"/>
+                    </div>
+                    <div class="my-3 form-group">
+                        <label for="firstName">Middle name</label>
+                        <input th:field="*{middleName}" type="text" class="form-control" id="middleName"
+                               aria-describedby="middleName"
+                               placeholder="Enter middle name"/>
+                    </div>
+                    <div class="my-3 form-group">
+                        <label for="lastName">Last name</label>
+                        <input th:field="*{lastName}" type="text" class="form-control" id="lastName"
+                               aria-describedby="lastName"
+                               placeholder="Enter last name"/>
+                    </div>
+                    <div class="my-3 form-group">
+                        <label for="dateOfBirth">Date of birth</label>
+                        <input th:field="*{dateOfBirth}" type="date" class="form-control" id="dateOfBirth"
+                               aria-describedby="dateOfBirth"
+                               placeholder="Enter date of birth"/>
+                    </div>
+                    <div class="my-3 text-center">
+                        <button type="submit" class="btn btn-primary btn-mydark">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-4"></div>
     </div>
-</form>
+</div>
 </body>
 </html>
