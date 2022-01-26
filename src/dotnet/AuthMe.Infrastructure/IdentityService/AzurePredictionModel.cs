@@ -1,11 +1,11 @@
 ﻿namespace AuthMe.Infrastructure.IdentityService;
 
-public class BoundingBox
+public class AzurePredictionBoundingBox<T> where T : struct
 {
-    public double Left { get; set; }
-    public double Top { get; set; }
-    public double Width { get; set; }
-    public double Height { get; set; }
+    public T Left { get; set; }
+    public T Top { get; set; }
+    public T Width { get; set; }
+    public T Height { get; set; }
 }
 
 public class AzurePrediction
@@ -13,7 +13,7 @@ public class AzurePrediction
     public double Probability { get; set; }
     public string TagId { get; set; }
     public string TagName { get; set; }
-    public BoundingBox BoundingBox { get; set; }
+    public AzurePredictionBoundingBox<double> BoundingBox { get; set; }
 }
 
 public class AzurePredictionModel

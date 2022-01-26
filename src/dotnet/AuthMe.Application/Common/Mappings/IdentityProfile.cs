@@ -11,5 +11,6 @@ public class IdentityProfile : Profile
     {
         CreateMap<CreateIdentityCommand, Identity>();
         CreateMap<Identity, IdentityDto>();
+        CreateMap<IdentityDto, Identity>();
     }
 }

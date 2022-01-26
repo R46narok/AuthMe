@@ -1,6 +1,8 @@
 ﻿using AuthMe.Application.Common.Api;
 using AuthMe.Application.Common.Interfaces;
+using AuthMe.Application.Identities.Commands.CreateIdentity;
 using AuthMe.Application.Identities.Queries.GetIdentity;
+using AuthMe.Application.IdentityDocuments.Commands.CreateIdentityDocument;
 using AuthMe.Infrastructure.Data;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -43,8 +45,15 @@ public class IdentityController : ControllerBase
         
         await stream.ReadAsync(bytes, 0, length);
 
-        await _identityService.CreateIdentity(0, bytes);
-        
-        return BadRequest();
+        var createDocumentCmd = new CreateIdentityDocumentCommand { Image = bytes };
+        var response = await _mediator.Send(createDocumentCmd);
+
+        var createIdentityCmd = new CreateIdentityCommand { ExternalId = externalId, DocumentId = response.Result};
+        response = await _mediator.Send(createIdentityCmd);
+
+        if (response.IsValid)
+            return Created(nameof(CreateIdentity), response.Result);
+
+        return BadRequest(response.Errors);
     }
 }
