@@ -1,3 +1,32 @@
+:root {
+    --mydark: #131C25;
+}
+
 .is-invalid {
     background: #ff4040;
+}
+
+body {
+    background: #161616;
+    background-image: url("/images/background_1_1920x1080.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.bg-dark {
+    background-color: var(--mydark) !important;
+}
+
+.btn-mydark {
+    background-color: var(--mydark);
+    border-color: var(--mydark);
+}
+
+.rounded-back {
+    border-radius: 15px;
+}
+
+.wide {
+    width: 90%;
 }

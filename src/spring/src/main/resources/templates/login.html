@@ -5,14 +5,51 @@
 <head th:replace="fragments/fragments::head"></head>
 <body>
 <div th:replace="fragments/fragments::nav"></div>
-<h1>
-    Login page!
-</h1>
-<form th:object="${loginBindingModel}" th:action="@{/login}" th:method="post">
-    <div style="background: #ff4040" th:if="${error}">Invalid credentials!</div>
-    <input th:field="*{username}"/>
-    <input th:field="*{password}" type="password"/>
-    <input type="submit"/>
-</form>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="mt-5 p-3 bg-light rounded-back">
+                <div class="text-center">
+                    <h4>AuthMe account sign in</h4>
+                </div>
+                <form th:object="${loginBindingModel}" th:action="@{/login}" th:method="post">
+                    <div th:if="${error}" class="my-3 alert alert-danger" role="alert">Invalid credentials!</div>
+                    <div class="my-3 form-group">
+                        <label for="username">Username</label>
+                        <input th:field="*{username}" type="text" class="form-control" id="username"
+                               aria-describedby="username"
+                               placeholder="Enter username">
+                    </div>
+                    <div class="my-3 form-group">
+                        <label for="password">Username</label>
+                        <input th:field="*{password}" type="password" class="form-control" id="password"
+                               aria-describedby="password"
+                               placeholder="Enter password">
+                    </div>
+                    <div class="my-3 text-center">
+                        <button type="submit" class="btn btn-primary btn-mydark">Sign in</button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="mt-5 p-3 bg-light rounded-back">
+                <div class="text-center">
+                    <div>
+                        <h4>
+                            Don't have an AuthMe Account?
+                        </h4>
+                    </div>
+                    <div class="mt-3">
+                        <a th:href="@{/register}" class="btn btn-primary btn-mydark wide">Create account</a>
+                    </div>
+                    <div class="mt-3">
+                        <small>© AuthMe | Terms of use | Privacy Policy</small>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
