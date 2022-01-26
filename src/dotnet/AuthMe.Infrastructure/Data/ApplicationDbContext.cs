@@ -5,11 +5,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AuthMe.Infrastructure.Data;
 
+/// <summary>
+/// Illustrates database schema and connection.
+/// Code-First techniques are used in this project.
+/// </summary>
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
+        // TODO: not here
         Database.EnsureCreated();
     }
     
@@ -18,7 +23,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 }
 
 /// <summary>
-/// Converts <see cref="DateOnly" /> to <see cref="DateTime"/> and vice versa.
+/// Converts DateOnly to DateTime and vice versa.
 /// </summary>
 public class DateOnlyConverter : ValueConverter<DateOnly, DateTime>
 {

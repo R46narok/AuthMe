@@ -21,6 +21,11 @@ public class OcrService : IOcrService
         _httpFactory = httpFactory;
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="image"></param>
+    /// <returns></returns>
     public async Task<string> ReadTextFromImage(byte[] image)
     {
         var client = _httpFactory.CreateClient("AzureCognitiveAnalyzer");

@@ -8,6 +8,9 @@ namespace AuthMe.Application.Identities.Queries.GetIdentity;
 
 public class GetIdentityQuery : IRequest<ValidatableResponse<IdentityDto>>, IValidatable
 {
+    /// <summary>
+    /// A valid id of the associated record in the Spring service.
+    /// </summary>
     public int ExternalId { get; set; }
 }
 
@@ -22,6 +25,16 @@ public class GetIdentityQueryHandler : IRequestHandler<GetIdentityQuery, Validat
         _dbContext = dbContext;
     }
 
+    /// <summary>
+    /// Gets an Identity from the database.
+    /// </summary>
+    /// <param name="request">Fluent-Validated request</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    /// An Identity, if present.
+    /// Errors:
+    /// - Requested Identity does not exist in the database.
+    /// </returns>
     public async Task<ValidatableResponse<IdentityDto>> Handle(GetIdentityQuery request, CancellationToken cancellationToken)
     {
         var entry = _dbContext.Identities.FirstOrDefault(x => x.ExternalId == request.ExternalId);
