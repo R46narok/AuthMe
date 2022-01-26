@@ -3,7 +3,7 @@ package com.authme.authme.web;
 import com.authme.authme.data.binding.RegisterBindingModel;
 import com.authme.authme.data.service.AuthMeUserService;
 import com.authme.authme.data.service.models.RegisterServiceModel;
-import com.authme.authme.utils.impl.ClassMapper;
+import com.authme.authme.utils.ClassMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,9 +1,7 @@
 package com.authme.authme.data.service.impl;
 
 import com.authme.authme.data.repository.AuthMeUserRepository;
-import com.authme.authme.data.service.AuthMeUserService;
-import com.authme.authme.exceptions.CommonErrorMessages;
-import com.authme.authme.utils.impl.ClassMapper;
+import com.authme.authme.utils.ClassMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

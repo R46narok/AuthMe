@@ -1,6 +1,8 @@
-package com.authme.authme.utils.impl;
+package com.authme.authme.utils;
 
+import com.authme.authme.data.binding.ProfileBindingModel;
 import com.authme.authme.data.binding.RegisterBindingModel;
+import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.service.models.RegisterServiceModel;
 import org.springframework.security.core.userdetails.User;
@@ -21,5 +23,13 @@ public class ClassMapper {
                 new RegisterServiceModel()
                 .setUsername(bindingModel.getUsername())
                 .setPassword(bindingModel.getPassword());
+    }
+
+    public static ProfileBindingModel toProfileBindingModel(ProfileDTO data) {
+        return new ProfileBindingModel()
+                .setFirstName(data.getFirstName())
+                .setMiddleName(data.getMiddleName())
+                .setLastName(data.getLastName())
+                .setDateOfBirth(data.getDateOfBirth());
     }
 }
