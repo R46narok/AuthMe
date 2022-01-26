@@ -16,9 +16,11 @@
                 </div>
                 <form th:object="${registerBindingModel}" th:action="@{/register}" th:method="post">
                     <div class="my-3 form-group">
-                        <div th:each="err : ${#fields.errors('username')}" class="is-invalid"><small th:text="${err}"></small></div>
+                        <div th:each="err : ${#fields.errors('username')}" class="is-invalid"><small
+                                th:text="${err}"></small></div>
                         <label for="username">Username</label>
-                        <input th:field="*{username}" th:errorclass="is-invalid" type="text" class="form-control" id="username"
+                        <input th:field="*{username}" th:errorclass="is-invalid" type="text" class="form-control"
+                               id="username"
                                aria-describedby="username"
                                placeholder="Enter username">
                     </div>
@@ -27,16 +29,20 @@
                             <p class="is-invalid">Passwords don't match!</p>
                         </div>
                         <div class="my-3 form-group">
-                            <div th:each="err : ${#fields.errors('password')}" class="is-invalid"><small th:text="${err}"></small></div>
+                            <div th:each="err : ${#fields.errors('password')}" class="is-invalid"><small
+                                    th:text="${err}"></small></div>
                             <label for="password">Password</label>
-                            <input th:field="*{password}" th:errorclass="is-invalid" type="password" class="form-control" id="password"
+                            <input th:field="*{password}" th:errorclass="is-invalid" type="password"
+                                   class="form-control" id="password"
                                    aria-describedby="password"
                                    placeholder="Enter password">
                         </div>
                         <div class="my-3 form-group">
-                            <div th:each="err : ${#fields.errors('repeatPassword')}" class="is-invalid"><small th:text="${err}"></small></div>
+                            <div th:each="err : ${#fields.errors('repeatPassword')}" class="is-invalid"><small
+                                    th:text="${err}"></small></div>
                             <label for="repeatPassword">Repeat password</label>
-                            <input th:field="*{repeatPassword}" th:errorclass="is-invalid" type="password" class="form-control" id="repeatPassword"
+                            <input th:field="*{repeatPassword}" th:errorclass="is-invalid" type="password"
+                                   class="form-control" id="repeatPassword"
                                    aria-describedby="password"
                                    placeholder="Repeat password">
                         </div>
