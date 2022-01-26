@@ -1,9 +1,6 @@
 :root {
     --mydark: #131C25;
-}
-
-.is-invalid {
-    background: #ff4040;
+    --mypurple: #DF18A6;
 }
 
 body {
@@ -29,4 +26,9 @@ body {
 
 .wide {
     width: 90%;
+}
+
+.mylink {
+    text-decoration: none;
+    color: var(--mypurple);
 }

@@ -8,17 +8,17 @@ import javax.validation.constraints.NotNull;
 
 public class RegisterBindingModel {
     @NotNull
-    @NotBlank
-    @UniqueUsername
-    @Length(min = 4, max = 20)
+    @NotBlank(message = "Username cannot be blank!")
+    @UniqueUsername(message = "This username already exists!")
+    @Length(min = 4, max = 20, message = "Username length must be between 4 and 20 symbols!")
     private String username;
     @NotNull
-    @NotBlank
-    @Length(min = 8, max = 40)
+    @NotBlank(message = "Password cannot be blank!")
+    @Length(min = 8, max = 40, message = "Password length must be between 8 and 40 symbols!")
     private String password;
     @NotNull
-    @NotBlank
-    @Length(min = 8, max = 40)
+    @NotBlank(message = "Repeated password cannot be blank!")
+    @Length(min = 8, max = 40, message = "Repeated password length must be between 8 and 40 symbols!")
     private String repeatPassword;
 
     public boolean passwordsDontMatch() {

@@ -5,30 +5,51 @@
 <head th:replace="fragments/fragments::head"></head>
 <body>
 <div th:replace="fragments/fragments::nav"></div>
-<h1>
-    Register page!
-</h1>
-<form th:object="${registerBindingModel}" th:action="@{/register}" th:method="post">
-    <div>
-        <p th:each="err : ${#fields.errors('username')}" th:text="${err}" class="is-invalid"></p>
-        <input th:field="*{username}" th:errorclass="is-invalid" type="text"/>
-    </div>
-    <div>
-        <p th:each="err : ${#fields.errors('password')}" th:text="${err}" class="is-invalid"></p>
+<div class="container">
+    <div class="row">
+        <div class="sol-lg-8"></div>
+        <div class="col-lg-4">
+            <div class="mt-5 p-3 bg-light rounded-back">
+                <div class="text-center">
+                    <h4>Create your AuthMe Account</h4>
+                    <h5>Already have an AuthMe Account? <a class="mylink" th:href="@{/login}">Sign in</a></h5>
+                </div>
+                <form th:object="${registerBindingModel}" th:action="@{/register}" th:method="post">
+                    <div class="my-3 form-group">
+                        <div th:each="err : ${#fields.errors('username')}" class="is-invalid"><small th:text="${err}"></small></div>
+                        <label for="username">Username</label>
+                        <input th:field="*{username}" th:errorclass="is-invalid" type="text" class="form-control" id="username"
+                               aria-describedby="username"
+                               placeholder="Enter username">
+                    </div>
+                    <div class="mt-5">
+                        <div th:if="${passwordsDontMatch}">
+                            <p class="is-invalid">Passwords don't match!</p>
+                        </div>
+                        <div class="my-3 form-group">
+                            <div th:each="err : ${#fields.errors('password')}" class="is-invalid"><small th:text="${err}"></small></div>
+                            <label for="password">Password</label>
+                            <input th:field="*{password}" th:errorclass="is-invalid" type="password" class="form-control" id="password"
+                                   aria-describedby="password"
+                                   placeholder="Enter password">
+                        </div>
+                        <div class="my-3 form-group">
+                            <div th:each="err : ${#fields.errors('repeatPassword')}" class="is-invalid"><small th:text="${err}"></small></div>
+                            <label for="repeatPassword">Repeat password</label>
+                            <input th:field="*{repeatPassword}" th:errorclass="is-invalid" type="password" class="form-control" id="repeatPassword"
+                                   aria-describedby="password"
+                                   placeholder="Repeat password">
+                        </div>
+                    </div>
 
-        <input th:field="*{password}" th:errorclass="is-invalid" type="password"/>
-    </div>
-    <div>
-        <p th:each="err : ${#fields.errors('repeatPassword')}" th:text="${err}" class="is-invalid"></p>
+                    <div class="my-3 text-center">
+                        <button type="submit" class="btn btn-primary btn-mydark">Sign up</button>
+                    </div>
 
-        <input th:field="*{repeatPassword}" th:errorclass="is-invalid" type="password"/>
+                </form>
+            </div>
+        </div>
     </div>
-    <div th:if="${passwordsDontMatch}">
-        <p class="is-invalid">Passwords don't match!</p>
-    </div>
-    <div>
-        <input type="submit"/>
-    </div>
-</form>
+</div>
 </body>
 </html>
