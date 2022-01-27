@@ -122,7 +122,7 @@ public class IdentityService : IIdentityService
             var text = await _ocrService.ReadTextFromImage(value); // OCR
             
             if (prop.Name == "DateOfBirth")
-                prop.SetValue( dto, DateTime.ParseExact(text, "dd/MM/yyyy", CultureInfo.CurrentCulture));
+                prop.SetValue( dto, DateTime.ParseExact(text, "dd.MM.yyyy", CultureInfo.CurrentCulture));
             else
                 prop.SetValue(dto, text.ToTitleCase());
         }
