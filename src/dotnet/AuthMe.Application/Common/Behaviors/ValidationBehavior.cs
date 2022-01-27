@@ -4,6 +4,12 @@ using MediatR;
 
 namespace AuthMe.Application.Common.Behaviors;
 
+/// <summary>
+/// Behavior in the MediatR ecosystem. Performs FluentValidation logic before
+/// proceeding to command/query execution.
+/// </summary>
+/// <typeparam name="TRequest"></typeparam>
+/// <typeparam name="TResponse"></typeparam>
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> 
     where TRequest : IRequest<TResponse> 
     where TResponse : class

@@ -6,6 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace AuthMe.Infrastructure.ImageService;
 
+/// <summary>
+/// A cross-platform implementation of <see cref="IImageService"/>
+/// </summary>
 public class ImageService : IImageService
 {
     private readonly ILogger<ImageService> _logger;

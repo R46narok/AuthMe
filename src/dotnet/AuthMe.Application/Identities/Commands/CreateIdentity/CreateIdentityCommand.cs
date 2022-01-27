@@ -8,7 +8,14 @@ namespace AuthMe.Application.Identities.Commands.CreateIdentity;
 
 public class CreateIdentityCommand : IRequest<ValidatableResponse<int>>, IValidatable
 {
+    /// <summary>
+    /// A valid id of the associated record in the Spring service.
+    /// </summary>
+    
     public int ExternalId { get; set; }
+    /// <summary>
+    /// A valid id of associated identity document record.
+    /// </summary>
     public int DocumentId { get; set; }
 }
 
@@ -25,6 +32,18 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityComman
         _identityService = identityService;
     }
 
+    /// <summary>
+    /// Performs OCR operations on the associated identity document.
+    /// Creates an Identity entry based on the latter. 
+    /// </summary>
+    /// <param name="request">Fluent-Validated request</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    /// Id of the created entity.
+    /// Errors:
+    /// - An Identity with that ExternalId already exists.
+    /// - A valid document could not be found.
+    /// </returns>
     public async Task<ValidatableResponse<int>> Handle(CreateIdentityCommand request, CancellationToken cancellationToken)
     {
         if (_dbContext.Identities.FirstOrDefault(x => x.ExternalId == request.ExternalId) != null)

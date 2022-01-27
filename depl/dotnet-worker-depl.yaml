@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-worker-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnetworker
+  template:
+    metadata:
+      labels:
+        app: dotnetworker
+    spec:
+      containers:
+        - name: dotnetworker
+          image: d3ds3g/authmedotnetworker:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnetworker-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: dotnetworker
+  ports:
+  - name: dotnetworker
+    protocol: TCP
+    port: 80
+    targetPort: 80 
