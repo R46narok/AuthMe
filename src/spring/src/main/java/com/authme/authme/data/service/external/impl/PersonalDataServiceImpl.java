@@ -2,33 +2,25 @@ package com.authme.authme.data.service.external.impl;
 
 import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.service.external.PersonalDataService;
-import com.authme.authme.data.service.external.AuthMeConnector;
+import com.authme.authme.utils.ClassMapper;
 import com.authme.authme.utils.RemoteEndpoints;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.net.URI;
-import java.util.HashMap;
 
 // TODO: Connect with ASP.NET secondary service
 @Service
 public class PersonalDataServiceImpl implements PersonalDataService {
     private final RestTemplate restTemplate;
-    private final AuthMeConnector connector;
 
-    public PersonalDataServiceImpl(RestTemplateBuilder restTemplateBuilder, AuthMeConnector connector) {
+    public PersonalDataServiceImpl(RestTemplateBuilder restTemplateBuilder) {
         restTemplate = restTemplateBuilder.build();
-        this.connector = connector;
     }
 
     @Override
     public Long newEntry() {
-        return Long.valueOf(connector.request(RemoteEndpoints.entry(), HttpMethod.GET, null, String.class, null).getBody());
+        return Long.valueOf(restTemplate.getForObject(RemoteEndpoints.entry(), String.class));
     }
 
     // TODO: change return type to a new DTO type
@@ -36,20 +28,21 @@ public class PersonalDataServiceImpl implements PersonalDataService {
     public ProfileDTO getData(Long dataId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("dataId", dataId.toString());
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<ProfileDTO> response =
-                connector.request(RemoteEndpoints.profile(), HttpMethod.GET, headers, ProfileDTO.class, null);
+                restTemplate.exchange(RemoteEndpoints.profile(), HttpMethod.GET, requestEntity, ProfileDTO.class);
         return response.getBody();
     }
 
     @Override
-    public void patchData(Long dataId, ProfileDTO profileDTO) {
+    public ProfileDTO patchData(Long dataId, ProfileDTO profileDTO) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("dataId", dataId.toString());
 
-        HttpEntity<ProfileDTO> requestEntity = new HttpEntity<ProfileDTO>(profileDTO, headers);
+        HttpEntity<ProfileDTO> requestEntity = new HttpEntity<>(profileDTO, headers);
 
-        ResponseEntity<Void> response = restTemplate.exchange(RemoteEndpoints.profile(), HttpMethod.PATCH, requestEntity, Void.class);
-        System.out.println(response.getStatusCode());
+        ResponseEntity<ProfileDTO> response = restTemplate.exchange(RemoteEndpoints.profile(), HttpMethod.POST, requestEntity, ProfileDTO.class);
+        return response.getBody();
     }
 
 

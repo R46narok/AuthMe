@@ -28,16 +28,24 @@ public class ClassMapper {
     public static ProfileBindingModel toProfileBindingModel(ProfileDTO data) {
         return new ProfileBindingModel()
                 .setFirstName(data.getFirstName())
+                .setFirstNameValidated(data.isFirstNameValidated())
                 .setMiddleName(data.getMiddleName())
+                .setMiddleNameValidated(data.isMiddleNameValidated())
                 .setLastName(data.getLastName())
-                .setDateOfBirth(data.getDateOfBirth());
+                .setLastNameValidated(data.isLastNameValidated())
+                .setDateOfBirth(data.getDateOfBirth())
+                .setDateOfBirthValidated(data.isDateOfBirthValidated());
     }
 
     public static ProfileDTO toProfileDTO(ProfileBindingModel profileBindingModel) {
         return new ProfileDTO()
                 .setFirstName(profileBindingModel.getFirstName())
+                .setFirstNameValidated(profileBindingModel.getFirstNameValidated())
                 .setMiddleName(profileBindingModel.getMiddleName())
+                .setMiddleNameValidated(profileBindingModel.getMiddleNameValidated())
                 .setLastName(profileBindingModel.getLastName())
-                .setDateOfBirth(profileBindingModel.getDateOfBirth());
+                .setLastNameValidated(profileBindingModel.getLastNameValidated())
+                .setDateOfBirth(profileBindingModel.getDateOfBirth())
+                .setDateOfBirthValidated(profileBindingModel.getDateOfBirthValidated());
     }
 }

@@ -13,27 +13,46 @@
                 <div class="mt-5 p-3 bg-light rounded-back">
                     <div class="my-3 form-group">
                         <label for="firstName">First name</label>
-                        <input th:field="*{firstName}" type="text" class="form-control" id="firstName"
+                        <input th:field="*{firstName}" type="text"
+                               th:class="'form-control ' + ${profileBindingModel.firstNameValidated ? '' : 'is-invalid'}"
+                               id="firstName"
                                aria-describedby="firstName"
                                placeholder="Enter first name"/>
+                        <div th:unless="*{firstNameValidated}" class="is-invalid text-danger"><small>This field is not yet
+                            validated!</small></div>
                     </div>
                     <div class="my-3 form-group">
                         <label for="firstName">Middle name</label>
-                        <input th:field="*{middleName}" type="text" class="form-control" id="middleName"
+                        <input th:field="*{middleName}"
+                               th:class="'form-control ' + ${profileBindingModel.middleNameValidated ? '' : 'is-invalid'}"
+                               type="text" class="form-control"
+                               id="middleName"
                                aria-describedby="middleName"
                                placeholder="Enter middle name"/>
+                        <div th:unless="*{middleNameValidated}" class="is-invalid text-danger"><small>This field is not yet
+                            validated!</small></div>
                     </div>
                     <div class="my-3 form-group">
                         <label for="lastName">Last name</label>
-                        <input th:field="*{lastName}" type="text" class="form-control" id="lastName"
+                        <input th:field="*{lastName}"
+                               th:class="'form-control ' + ${profileBindingModel.lastNameValidated ? '' : 'is-invalid'}"
+                               type="text" class="form-control"
+                               id="lastName"
                                aria-describedby="lastName"
                                placeholder="Enter last name"/>
+                        <div th:unless="*{lastNameValidated}" class="is-invalid text-danger"><small>This field is not yet
+                            validated!</small></div>
                     </div>
                     <div class="my-3 form-group">
                         <label for="dateOfBirth">Date of birth</label>
-                        <input th:field="*{dateOfBirth}" type="date" class="form-control" id="dateOfBirth"
+                        <input th:field="*{dateOfBirth}"
+                               th:class="'form-control ' + ${profileBindingModel.dateOfBirthValidated ? '' : 'is-invalid'}"
+                               type="date" class="form-control"
+                               id="dateOfBirth"
                                aria-describedby="dateOfBirth"
                                placeholder="Enter date of birth"/>
+                        <div th:unless="*{dateOfBirthValidated}" class="is-invalid text-danger"><small>This field is not yet
+                            validated!</small></div>
                     </div>
                     <div class="my-3 text-center">
                         <button type="submit" class="btn btn-primary btn-mydark">Submit</button>

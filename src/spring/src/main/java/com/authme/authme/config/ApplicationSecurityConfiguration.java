@@ -38,6 +38,9 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                         "/login")
                 .permitAll()
                 .antMatchers("/**").authenticated()
+                .and()
+                .csrf()
+                .ignoringAntMatchers("/dev/**")
 
                 .and()
                 .formLogin()

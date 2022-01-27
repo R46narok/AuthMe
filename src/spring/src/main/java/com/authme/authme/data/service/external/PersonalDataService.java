@@ -9,5 +9,5 @@ public interface PersonalDataService {
 
     ProfileDTO getData(Long dataId);
 
-    void patchData(Long dataId, ProfileDTO toProfileDTO);
+    ProfileDTO patchData(Long dataId, ProfileDTO toProfileDTO);
 }

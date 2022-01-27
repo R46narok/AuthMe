@@ -18,10 +18,46 @@ public class DevelopmentController {
         return data.get(dataId);
     }
 
+    @PostMapping("/dev/profile")
+    public ProfileDTO patchProfileData(@RequestHeader(name = "dataId") Long dataId,
+                                       @RequestBody ProfileDTO profileDTO) {
+        ProfileDTO oldData = data.get(dataId);
+        if(!oldData.getFirstName().equals(profileDTO.getFirstName())){
+            profileDTO.setFirstNameValidated(false);
+        }
+        if(profileDTO.getFirstName().equals("")){
+            profileDTO.setFirstNameValidated(true);
+        }
+
+        if(!oldData.getMiddleName().equals(profileDTO.getMiddleName())){
+            profileDTO.setMiddleNameValidated(false);
+        }
+        if(profileDTO.getMiddleName().equals("")){
+            profileDTO.setMiddleNameValidated(true);
+        }
+
+        if(!oldData.getLastName().equals(profileDTO.getLastName())){
+            profileDTO.setLastNameValidated(false);
+        }
+        if(profileDTO.getLastName().equals("")){
+            profileDTO.setLastNameValidated(true);
+        }
+
+        if(!oldData.getDateOfBirth().equals(profileDTO.getDateOfBirth())){
+            profileDTO.setDateOfBirthValidated(false);
+        }
+        if(profileDTO.getDateOfBirth().equals(LocalDate.MIN)){
+            profileDTO.setDateOfBirthValidated(true);
+        }
+
+        data.put(dataId, profileDTO);
+        return data.get(dataId);
+    }
+
     @GetMapping("/dev/entry")
     public String createEntry() {
         Long dataId = random.nextLong();
-        data.put(dataId, new ProfileDTO().setDateOfBirth(LocalDate.now()).setLastName("Serverov"));
+        data.put(dataId, new ProfileDTO());
         return dataId.toString();
     }
 }
