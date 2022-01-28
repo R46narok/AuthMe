@@ -1,6 +1,10 @@
 package com.authme.authme.data.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ProfileDTO {
     private String firstName = "";
@@ -83,4 +87,5 @@ public class ProfileDTO {
         this.dateOfBirthValidated = dateOfBirthValidated;
         return this;
     }
+
 }

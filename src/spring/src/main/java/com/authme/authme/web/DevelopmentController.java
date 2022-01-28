@@ -2,9 +2,11 @@ package com.authme.authme.web;
 
 import com.authme.authme.data.dto.ProfileDTO;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
+import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -13,48 +15,27 @@ public class DevelopmentController {
     private Map<Long, ProfileDTO> data = new LinkedHashMap<>();
     Random random = new Random();
 
+//    @PostMapping("/dev/test")
+//    public void test(@RequestPart("images") List<MultipartFile> images) {
+//        System.out.println();
+//    }
+
     @GetMapping("/dev/profile")
     public ProfileDTO getProfileData(@RequestHeader(name = "dataId") Long dataId) {
         return data.get(dataId);
     }
 
-    @PostMapping("/dev/profile")
+    @RequestMapping(method = RequestMethod.POST, path = "/dev/profile", consumes = {"multipart/form-data"})
     public ProfileDTO patchProfileData(@RequestHeader(name = "dataId") Long dataId,
-                                       @RequestBody ProfileDTO profileDTO) {
-        ProfileDTO oldData = data.get(dataId);
-        if(!oldData.getFirstName().equals(profileDTO.getFirstName())){
-            profileDTO.setFirstNameValidated(false);
-        }
-        if(profileDTO.getFirstName().equals("")){
-            profileDTO.setFirstNameValidated(true);
-        }
-
-        if(!oldData.getMiddleName().equals(profileDTO.getMiddleName())){
-            profileDTO.setMiddleNameValidated(false);
-        }
-        if(profileDTO.getMiddleName().equals("")){
-            profileDTO.setMiddleNameValidated(true);
-        }
-
-        if(!oldData.getLastName().equals(profileDTO.getLastName())){
-            profileDTO.setLastNameValidated(false);
-        }
-        if(profileDTO.getLastName().equals("")){
-            profileDTO.setLastNameValidated(true);
-        }
-
-        if(profileDTO.getDateOfBirth() == null)
-            profileDTO.setDateOfBirthValidated(true);
-        else if(!profileDTO.getDateOfBirth().equals(oldData.getDateOfBirth())){
-            profileDTO.setDateOfBirthValidated(false);
-        }
-    
+                                       @RequestPart("body") ProfileDTO profileDTO,
+                                       @RequestPart(value = "pictures", required = false) List<MultipartFile> pictures) {
+        
         data.put(dataId, profileDTO);
         return data.get(dataId);
     }
 
     @GetMapping("/dev/entry")
-    public String createEntry() {
+    public String createEntry() throws FileNotFoundException {
         Long dataId = random.nextLong();
         data.put(dataId, new ProfileDTO());
         return dataId.toString();
