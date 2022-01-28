@@ -43,13 +43,12 @@ public class DevelopmentController {
             profileDTO.setLastNameValidated(true);
         }
 
-        if(!oldData.getDateOfBirth().equals(profileDTO.getDateOfBirth())){
+        if(profileDTO.getDateOfBirth() == null)
+            profileDTO.setDateOfBirthValidated(true);
+        else if(!profileDTO.getDateOfBirth().equals(oldData.getDateOfBirth())){
             profileDTO.setDateOfBirthValidated(false);
         }
-        if(profileDTO.getDateOfBirth().equals(LocalDate.MIN)){
-            profileDTO.setDateOfBirthValidated(true);
-        }
-
+    
         data.put(dataId, profileDTO);
         return data.get(dataId);
     }

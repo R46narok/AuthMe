@@ -9,7 +9,7 @@ public class ProfileDTO {
     private boolean middleNameValidated = true;
     private String lastName = "";
     private boolean lastNameValidated = true;
-    private LocalDate dateOfBirth = LocalDate.MIN;
+    private LocalDate dateOfBirth = null;
     private boolean dateOfBirthValidated = true;
 
     public String getFirstName() {
