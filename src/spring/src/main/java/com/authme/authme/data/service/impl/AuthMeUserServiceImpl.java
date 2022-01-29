@@ -7,7 +7,7 @@ import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.RoleRepository;
 import com.authme.authme.data.service.AuthMeUserService;
-import com.authme.authme.data.service.external.PersonalDataService;
+import com.authme.authme.data.service.PersonalDataService;
 import com.authme.authme.data.service.models.RegisterServiceModel;
 import com.authme.authme.exceptions.CommonErrorMessages;
 import com.authme.authme.utils.ClassMapper;
@@ -55,7 +55,7 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
                 .setDataId(personalDataService.newEntry());
         user = userRepository.saveAndFlush(user);
 
-        if(user != null) {
+        if (user != null) {
             UserDetails principal = this.userDetailsService.loadUserByUsername(user.getUsername());
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(
@@ -71,10 +71,10 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
     @Override
     public ProfileBindingModel getProfileBindingModel() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication.isAuthenticated()){
+        if (authentication.isAuthenticated()) {
             AuthMeUserEntity user =
                     userRepository
-                    .findByUsername(authentication.getName())
+                            .findByUsername(authentication.getName())
                             .orElseThrow(() -> CommonErrorMessages.username(authentication.getName()));
             Long dataId = user.getDataId();
 
@@ -92,8 +92,12 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
                 .getName()};
         AuthMeUserEntity user =
                 userRepository.findByUsername(username[0])
-                                .orElseThrow(() -> CommonErrorMessages.username(username[0]));
-        personalDataService.patchData(user.getDataId(), ClassMapper.toProfileDTO(profileBindingModel));
+                        .orElseThrow(() -> CommonErrorMessages.username(username[0]));
+        personalDataService.patchData(
+                user.getDataId(),
+                ClassMapper.toProfileDTO(profileBindingModel),
+                List.of(profileBindingModel.getPicture())
+        );
     }
 
 

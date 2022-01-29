@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ProfileController {
@@ -25,7 +26,7 @@ public class ProfileController {
         return "profile";
     }
 
-    @PatchMapping("/profile")
+    @PostMapping("/profile")
     public String patchProfile(ProfileBindingModel profileBindingModel) {
         userService.patchProfile(profileBindingModel);
         return "redirect:/";

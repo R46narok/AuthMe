@@ -1,6 +1,7 @@
 package com.authme.authme.data.binding;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -14,6 +15,7 @@ public class ProfileBindingModel {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
     private Boolean dateOfBirthValidated;
+    private MultipartFile picture;
 
     public String getFirstName() {
         return firstName;
@@ -84,6 +86,15 @@ public class ProfileBindingModel {
 
     public ProfileBindingModel setDateOfBirthValidated(Boolean dateOfBirthValidated) {
         this.dateOfBirthValidated = dateOfBirthValidated;
+        return this;
+    }
+
+    public MultipartFile getPicture() {
+        return picture;
+    }
+
+    public ProfileBindingModel setPicture(MultipartFile picture) {
+        this.picture = picture;
         return this;
     }
 }

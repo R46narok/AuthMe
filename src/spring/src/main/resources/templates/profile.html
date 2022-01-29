@@ -5,11 +5,12 @@
 <head th:replace="fragments/fragments::head"></head>
 <body>
 <div th:replace="fragments/fragments::nav"></div>
+<script type="module" src="/js/profilePage.js"></script>
 <div class="container">
     <div class="row">
         <div class="col-lg-4"></div>
         <div class="col-lg-4">
-            <form th:object="${profileBindingModel}" th:action="@{/profile}" th:method="patch">
+            <form th:object="${profileBindingModel}" enctype="multipart/form-data" th:action="@{/profile}" th:method="post">
                 <div class="mt-5 p-3 bg-light rounded-back">
                     <div class="my-3 form-group">
                         <label for="firstName">First name</label>
@@ -54,6 +55,11 @@
                         <div th:unless="*{dateOfBirthValidated}" class="is-invalid text-danger"><small>This field is not yet
                             validated!</small></div>
                     </div>
+
+                    <div id="imageUploadContainer">
+                        <input type="file" name="picture" />
+                    </div>
+
                     <div class="my-3 text-center">
                         <button type="submit" class="btn btn-primary btn-mydark">Submit</button>
                     </div>
