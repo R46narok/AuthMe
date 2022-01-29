@@ -39,11 +39,7 @@ public class IdentityController : ControllerBase
     [HttpPost(Name = "CreateIdentity")]
     public async Task<ActionResult<ValidatableResponse<int>>> CreateIdentity([FromForm] int externalId, [FromForm] IFormFile file)
     {
-        var stream = file.OpenReadStream();
-        var bytes = new byte[stream.Length];
-        var length = (int) stream.Length;
-        
-        await stream.ReadAsync(bytes, 0, length);
+        var bytes = await ReadFileAsBytesAsync(file);
 
         var createDocumentCmd = new CreateIdentityDocumentCommand { Image = bytes };
         var response = await _mediator.Send(createDocumentCmd);
@@ -52,8 +48,19 @@ public class IdentityController : ControllerBase
         response = await _mediator.Send(createIdentityCmd);
 
         if (response.IsValid)
-            return Created(nameof(CreateIdentity), response.Result);
+            return Ok(new ValidatableResponse<int>(response.Result));
 
-        return BadRequest(response.Errors);
+        return BadRequest(response);
+    }
+
+    private async Task<byte[]> ReadFileAsBytesAsync(IFormFile file)
+    {
+        var stream = file.OpenReadStream();
+        var bytes = new byte[stream.Length];
+        var length = (int) stream.Length;
+        
+        await stream.ReadAsync(bytes, 0, length);
+
+        return bytes;
     }
 }

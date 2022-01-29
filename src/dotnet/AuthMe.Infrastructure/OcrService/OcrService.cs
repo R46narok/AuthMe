@@ -13,7 +13,7 @@ public class OcrService : IOcrService
     private readonly ILogger<OcrService> _logger;
     private readonly IHttpClientFactory _httpFactory;
 
-    private const int TimeoutMs = 2000;
+    private const int TimeoutMs = 5000;
     
     public OcrService(ILogger<OcrService> logger, IHttpClientFactory httpFactory)
     {
@@ -45,6 +45,8 @@ public class OcrService : IOcrService
             
             while (model.Status != "succeeded")
             {
+                if (response.StatusCode == HttpStatusCode.TooManyRequests) return string.Empty;
+                
                 response = await client.SendAsync(CreateAnalyzeResultsRequest(operationLocation));
                 var str = await response.Content.ReadAsStringAsync();
                 model = await response.Content.ReadFromJsonAsync<AzureOcrModel>();

@@ -49,14 +49,10 @@ builder.Services.AddHttpClient("AzureCognitiveAnalyzeResults", client =>
     client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", builder.Configuration["AzureCognitiveAnalyzerKey"]);
 });
 
-var endpoint = builder.Configuration["AzureComputerVisionEndpoint"];
-var key = builder.Configuration["AzureComputerVisionKey"];
-
 var connString = builder.Configuration.GetConnectionString("MsSQLDb");
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options => options.UseSqlServer(connString));
 var app = builder.Build();
 
-// ConfialidationBehaviorgure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

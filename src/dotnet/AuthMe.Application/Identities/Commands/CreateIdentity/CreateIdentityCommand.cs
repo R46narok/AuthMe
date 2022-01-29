@@ -56,7 +56,8 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityComman
         
         var identityDto = await _identityService.ReadIdentityDocument(document.Image);
         var identity = _mapper.Map<Identity>(identityDto);
-
+        identity.ExternalId = request.ExternalId;
+        
         var entry = _dbContext.Identities.Add(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
