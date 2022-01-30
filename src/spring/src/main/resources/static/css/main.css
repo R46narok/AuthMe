@@ -32,3 +32,8 @@ body {
     text-decoration: none;
     color: var(--mypurple);
 }
+
+.file {
+    visibility: hidden;
+    position: absolute;
+}
