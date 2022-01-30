@@ -1,3 +1,7 @@
+FROM gradle:latest AS build
+COPY . .
+RUN ["./gradlew", "build"]
+
 FROM openjdk:17-alpine
 COPY . .
 ARG JAR_FILE=./build/libs/authme-0.0.1-SNAPSHOT.jar

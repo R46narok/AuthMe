@@ -27,7 +27,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example
     ports:
-      - 3306:3306
+      - 3307:3306
     cap_add:
       - SYS_NICE
   
