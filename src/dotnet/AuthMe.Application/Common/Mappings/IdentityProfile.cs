@@ -1,4 +1,5 @@
 ﻿using AuthMe.Application.Identities.Commands.CreateIdentity;
+using AuthMe.Application.Identities.Commands.UpdateIdentity;
 using AuthMe.Application.Identities.Queries.GetIdentity;
 using AuthMe.Domain.Entities;
 using AutoMapper;

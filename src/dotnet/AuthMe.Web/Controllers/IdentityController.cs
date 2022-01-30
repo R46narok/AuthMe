@@ -1,6 +1,8 @@
 ﻿using AuthMe.Application.Common.Api;
 using AuthMe.Application.Common.Interfaces;
 using AuthMe.Application.Identities.Commands.CreateIdentity;
+using AuthMe.Application.Identities.Commands.DeleteIdentity;
+using AuthMe.Application.Identities.Commands.UpdateIdentity;
 using AuthMe.Application.Identities.Queries.GetIdentity;
 using AuthMe.Application.IdentityDocuments.Commands.CreateIdentityDocument;
 using AuthMe.Infrastructure.Data;
@@ -51,6 +53,24 @@ public class IdentityController : ControllerBase
             return Ok(new ValidatableResponse<int>(response.Result));
 
         return BadRequest(response);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<ValidatableResponse>> UpdateIdentity([FromBody] UpdateIdentityCommand command)
+    {
+        var response = await _mediator.Send(command);
+        return Ok(response);
+    }
+
+    [HttpDelete("{externalId}")]
+    public async Task<ActionResult<ValidatableResponse>> DeleteIdentity(int externalId)
+    {
+        var command = new DeleteIdentityCommand {ExternalId = externalId};
+        var response = await _mediator.Send(command);
+
+        if (response.IsValid)
+            return Ok(response);
+        return NotFound(response);
     }
 
     private async Task<byte[]> ReadFileAsBytesAsync(IFormFile file)
