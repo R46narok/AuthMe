@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ProfileBindingModel {
     private String firstName;
@@ -15,7 +16,8 @@ public class ProfileBindingModel {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
     private Boolean dateOfBirthValidated;
-    private MultipartFile picture;
+    private List<String> savedPictures;
+    private List<MultipartFile> pictures;
 
     public String getFirstName() {
         return firstName;
@@ -89,12 +91,20 @@ public class ProfileBindingModel {
         return this;
     }
 
-    public MultipartFile getPicture() {
-        return picture;
+    public List<MultipartFile> getPictures() {
+        return pictures;
     }
 
-    public ProfileBindingModel setPicture(MultipartFile picture) {
-        this.picture = picture;
+    public void setPictures(List<MultipartFile> pictures) {
+        this.pictures = pictures;
+    }
+
+    public List<String> getSavedPictures() {
+        return savedPictures;
+    }
+
+    public ProfileBindingModel setSavedPictures(List<String> savedPictures) {
+        this.savedPictures = savedPictures;
         return this;
     }
 }

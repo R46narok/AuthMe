@@ -55,19 +55,24 @@
                         <div th:unless="*{dateOfBirthValidated}" class="is-invalid text-danger"><small>This field is not yet
                             validated!</small></div>
                     </div>
-
-                    <div id="imageUploadContainer">
-                        <input id="fileInput" type="file" accept="image/*" class="file" name="pictures" multiple>
-                        <button id="uploadImageButton">Upload</button>
-                    </div>
-
                     <div class="my-3 text-center">
                         <button type="submit" class="btn btn-primary btn-mydark">Submit</button>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <div class="mt-5 p-3 bg-light rounded-back">
+                <div id="uploadedImagesContainer">
+                    <img th:each="picture : ${profileBindingModel.pictures}" th:src="">
+                </div>
+
+                <div id="imageUploadContainer">
+                    <input id="fileInput" type="file" accept="image/*" class="file" name="pictures" multiple>
+                    <button id="uploadImageButton">Upload</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

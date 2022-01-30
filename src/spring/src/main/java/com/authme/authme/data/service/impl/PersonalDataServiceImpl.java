@@ -10,9 +10,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 // TODO: Connect with ASP.NET secondary service
 @Service
@@ -37,6 +37,20 @@ public class PersonalDataServiceImpl implements PersonalDataService {
         ResponseEntity<ProfileDTO> response =
                 restTemplate.exchange(RemoteEndpoints.profile(), HttpMethod.GET, requestEntity, ProfileDTO.class);
         return response.getBody();
+    }
+
+    @Override
+    public File getPicture(Long userId, Integer pictureId) {
+        MultipartFile response =
+                restTemplate.getForObject(RemoteEndpoints.image(userId, pictureId), MultipartFile.class);
+        try {
+            File temp = File.createTempFile(userId + "-", "-" + pictureId);
+            temp.deleteOnExit();
+            return temp;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

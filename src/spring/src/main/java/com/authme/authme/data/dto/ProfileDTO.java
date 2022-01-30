@@ -3,18 +3,32 @@ package com.authme.authme.data.dto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ProfileDTO {
-    private String firstName = "";
-    private boolean firstNameValidated = true;
-    private String middleName = "";
-    private boolean middleNameValidated = true;
-    private String lastName = "";
-    private boolean lastNameValidated = true;
-    private LocalDate dateOfBirth = null;
-    private boolean dateOfBirthValidated = true;
+    private String firstName;
+    private boolean firstNameValidated;
+    private String middleName;
+    private boolean middleNameValidated;
+    private String lastName;
+    private boolean lastNameValidated;
+    private LocalDate dateOfBirth;
+    private boolean dateOfBirthValidated;
+    private List<MultipartFile> pictures;
+
+    public ProfileDTO() {
+        firstName = "";
+        firstNameValidated = true;
+        middleName = "";
+        middleNameValidated = true;
+        lastName = "";
+        lastNameValidated = true;
+        dateOfBirth = null;
+        dateOfBirthValidated = true;
+        pictures = new ArrayList<>();
+    }
 
     public String getFirstName() {
         return firstName;
@@ -88,4 +102,11 @@ public class ProfileDTO {
         return this;
     }
 
+    public List<MultipartFile> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<MultipartFile> pictures) {
+        this.pictures = pictures;
+    }
 }

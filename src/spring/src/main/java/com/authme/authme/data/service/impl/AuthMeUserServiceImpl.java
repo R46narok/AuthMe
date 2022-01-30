@@ -12,12 +12,14 @@ import com.authme.authme.data.service.models.RegisterServiceModel;
 import com.authme.authme.exceptions.CommonErrorMessages;
 import com.authme.authme.utils.ClassMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,8 +98,15 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
         personalDataService.patchData(
                 user.getDataId(),
                 ClassMapper.toProfileDTO(profileBindingModel),
-                List.of(profileBindingModel.getPicture())
-        );
+                profileBindingModel.getPictures());
+    }
+
+    @Override
+    public File getImage(AuthenticatedPrincipal principal, Integer pictureId) {
+        AuthMeUserEntity user = userRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> CommonErrorMessages.username(principal.getName()));
+
+        return personalDataService.getPicture(user.getDataId(), pictureId);
     }
 
 
