@@ -1,10 +1,12 @@
-﻿namespace AuthMe.Application.Identities.Queries.GetIdentity;
+﻿using AuthMe.Domain.Entities;
+
+namespace AuthMe.Application.Identities.Queries.GetIdentity;
 
 public class IdentityDto
 {
-    public string Name { get; set; }
-    public string MiddleName { get; set; }
-    public string Surname { get; set; }
+    public IdentityProperty<string> Name { get; set; }
+    public IdentityProperty<string> MiddleName { get; set; }
+    public IdentityProperty<string> Surname { get; set; }
     
-    public DateTime DateOfBirth { get; set; }
+    public IdentityProperty<DateTime> DateOfBirth { get; set; }
 }

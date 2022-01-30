@@ -114,17 +114,39 @@ public class IdentityService : IIdentityService
         foreach (var prop in _identityDtoProps)
         {
             var name = prop.Name;
-            
-            var keyBox = _matches[$"{name}-Key"];
-            var box = _matches[name];
 
-            var value = await ProcessImage(document, box, keyBox); // value image
-            var text = await _ocrService.ReadTextFromImage(value); // OCR
+            var type = prop.PropertyType;
+            var valueProp = type.GetProperty("Value");
+            var isValidProp = type.GetProperty("IsValidated");
+            var lastUpdatedProp = type.GetProperty("LastUpdated");
+            var instance = Activator.CreateInstance(type);
             
-            if (prop.Name == "DateOfBirth")
-                prop.SetValue( dto, DateTime.ParseExact(text, "dd.MM.yyyy", CultureInfo.CurrentCulture));
+            if (_matches.ContainsKey($"{name}-Key") && _matches.ContainsKey(name))
+            {
+                var keyBox = _matches[$"{name}-Key"];
+                var box = _matches[name];
+
+                var value = await ProcessImage(document, box, keyBox); // value image
+                var text =  await _ocrService.ReadTextFromImage(value); // OCR
+
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    // TODO: Value setter
+                    if (prop.Name == "DateOfBirth")
+                        valueProp!.SetValue( instance, DateTime.ParseExact(text, "dd.MM.yyyy", CultureInfo.CurrentCulture));
+                    else
+                        valueProp!.SetValue(instance, text.ToTitleCase());
+                
+                    lastUpdatedProp!.SetValue(instance, DateTime.Now);
+                    isValidProp!.SetValue(instance, true);
+                }
+            }
             else
-                prop.SetValue(dto, text.ToTitleCase());
+            {
+                isValidProp!.SetValue(instance, false);
+            }
+            
+            prop.SetValue(dto, instance);
         }
 
         return dto;

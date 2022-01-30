@@ -1,7 +1,9 @@
-﻿using AuthMe.Application.Common.Interfaces;
+﻿using System.Text.Json;
+using AuthMe.Application.Common.Interfaces;
 using AuthMe.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
 
 namespace AuthMe.Infrastructure.Data;
 
@@ -11,15 +13,39 @@ namespace AuthMe.Infrastructure.Data;
 /// </summary>
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
+        
+    public DbSet<Identity> Identities { get; set; }
+    public DbSet<IdentityDocument> IdentityDocuments { get; set; }
+    
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
         // TODO: not here
         Database.EnsureCreated();
     }
-    
-    public DbSet<Identity> Identities { get; set; }
-    public DbSet<IdentityDocument> IdentityDocuments { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Identity>().Property(p => p.Name)
+            .HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<IdentityProperty<string>>(v));
+        
+        modelBuilder.Entity<Identity>().Property(p => p.MiddleName)
+            .HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<IdentityProperty<string>>(v));
+        
+        modelBuilder.Entity<Identity>().Property(p => p.Surname)
+            .HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<IdentityProperty<string>>(v));
+        
+        modelBuilder.Entity<Identity>().Property(p => p.DateOfBirth)
+            .HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<IdentityProperty<DateTime>>(v));
+    }
 }
 
 /// <summary>

@@ -1,8 +1,16 @@
 ﻿using System.Data.SqlTypes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AuthMe.Domain.Entities;
 
 // TODO: Maybe extend
+
+public class IdentityProperty<T>
+{
+    public T? Value { get; set; }
+    public bool IsValidated { get; set; }
+    public DateTime? LastUpdated { get; set; }
+}
 
 /// <summary>
 /// Represents a digital identity of a human.
@@ -16,9 +24,9 @@ public class Identity
     /// </summary>
     public int ExternalId { get; set; }
     
-    public string FirstName { get; set; }
-    public string MiddleName { get; set; }
-    public string LastName { get; set; }
+    public IdentityProperty<string> Name { get; set; }
+    public IdentityProperty<string> MiddleName { get; set; }
+    public IdentityProperty<string> Surname { get; set; }
     
-    public DateTime DateOfBirth { get; set; }
+    public IdentityProperty<DateTime> DateOfBirth { get; set; }
 }
