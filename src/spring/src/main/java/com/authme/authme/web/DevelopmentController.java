@@ -1,100 +1,78 @@
 package com.authme.authme.web;
 
 import com.authme.authme.data.dto.ProfileDTO;
+import com.authme.authme.utils.Picture;
 import com.authme.authme.utils.Profile;
-import org.apache.commons.io.IOUtils;
-import org.aspectj.apache.bcel.util.ClassPath;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URI;
 import java.util.*;
 
 @RestController
 public class DevelopmentController {
     private Map<Long, Profile> data = new LinkedHashMap<>();
-    Random random = new Random();
+    private Long dataId = 0L;
 
-//    @PostMapping("/dev/test")
-//    public void test(@RequestPart("images") List<MultipartFile> images) {
-//        pictures = new LinkedList<>();
-//        for (MultipartFile image : images) {
-//            try {
-//                System.out.println(ClassPath.getClassPath());
-//                File filePath = new File("/images/");
-//                filePath.mkdirs();
-//                File dest = new File(filePath.getAbsolutePath(), fileCounter + ".tmp");
-//                dest.createNewFile();
-//                fileCounter++;
-//                image.transferTo(dest);
-//                pictures.add(dest);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-//
-//    @GetMapping("/dev/test")
-//    public void getImageTest(HttpServletResponse response) {
-//        try {
-//            StreamUtils.copy(new FileInputStream(pictures.get(0)), response.getOutputStream());
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @GetMapping(path = "/dev/picture")
-//    public void getPictureTest(Long userId, Long pictureId, HttpServletResponse response) throws IOException {
-//        StreamUtils.copy(new FileInputStream(pictures.get(Integer.parseInt(pictureId.toString()))), response.getOutputStream());
-//    }
+    private Long getDataId() {
+        return dataId++;
+    }
+
+    @GetMapping("/dev/entry")
+    public String createEntry() {
+        Long dataId = getDataId();
+        data.put(dataId, new Profile());
+        return dataId.toString();
+    }
 
     @GetMapping("/dev/profile")
     public ProfileDTO getProfileData(@RequestHeader(name = "dataId") Long dataId) {
         return data.get(dataId).getProfileDTO();
     }
 
-    @GetMapping("/dev/profile/image/{userId}/{pictureId}")
+    @PostMapping("/dev/profile/picture/{userId}")
+    public ResponseEntity<String> uploadPicture(@PathVariable(name = "userId") Long userId,
+                                                @RequestParam("pictures") List<MultipartFile> pictures) throws IOException {
+        Profile profile = data.get(userId);
+        for (MultipartFile picture : pictures) {
+            File temp = File.createTempFile("user" + userId + "-", ".tmp");
+            temp.deleteOnExit();
+            picture.transferTo(temp);
+            profile.getPictures().add(new Picture().setPicture(temp).setContentType(picture.getContentType()));
+        }
+        return ResponseEntity.created(URI.create("/dev/profile/picture/" + userId)).build();
+    }
+
+    @GetMapping("/dev/profile/picture/{userId}")
+    public List<String> getPictures(@PathVariable(name = "userId") Long userId) {
+        Profile profile = data.get(userId);
+        List<String> paths = new ArrayList<>();
+        for (int i = 0; i < profile.getPictures().size(); ++i) {
+            paths.add(String.valueOf(i));
+        }
+        return paths;
+    }
+
+    @GetMapping("/dev/profile/picture/{userId}/{pictureId}")
     public void getPicture(@PathVariable("userId") Long userId,
                            @PathVariable("pictureId") Integer pictureId,
                            HttpServletResponse response) throws IOException {
-        StreamUtils.copy(new FileInputStream(data.get(userId).getPictures().get(pictureId)), response.getOutputStream());
+        Picture picture = data.get(userId).getPictures().get(pictureId);
+        response.setContentType(picture.getContentType());
+        StreamUtils.copy(new FileInputStream(picture.getPicture()), response.getOutputStream());
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/dev/profile", consumes = {"multipart/form-data"})
     public ProfileDTO patchProfileData(@RequestHeader(name = "dataId") Long dataId,
-                                       @RequestPart("body") ProfileDTO profileDTO,
-                                       @RequestPart(value = "pictures", required = false) List<MultipartFile> pictures) {
+                                       @RequestPart("body") ProfileDTO profileDTO) {
         Profile profile = data.get(dataId);
         profile.setProfileDTO(profileDTO);
-        for (MultipartFile picture : pictures) {
-            try {
-                File filePath = new File("/images/" + dataId + "/");
-                if (!filePath.exists()) {
-                    filePath.mkdirs();
-                }
-                File dest = new File(filePath.getAbsolutePath(), profile.getImageCounter() + ".tmp");
-                profile.incrementImageCounter();
-                if(!dest.exists())
-                    dest.createNewFile();
-                picture.transferTo(dest);
-                profile.getPictures().add(dest);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         return data.get(dataId).getProfileDTO();
-    }
-
-    @GetMapping("/dev/entry")
-    public String createEntry() {
-        Long dataId = random.nextLong();
-        data.put(dataId, new Profile());
-        return dataId.toString();
     }
 }

@@ -1,5 +1,6 @@
 package com.authme.authme.data.service.impl;
 
+import com.authme.authme.data.binding.PicturesBindingModel;
 import com.authme.authme.data.binding.ProfileBindingModel;
 import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.entity.AuthMeUserEntity;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,18 +99,23 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
                         .orElseThrow(() -> CommonErrorMessages.username(username[0]));
         personalDataService.patchData(
                 user.getDataId(),
-                ClassMapper.toProfileDTO(profileBindingModel),
-                profileBindingModel.getPictures());
+                ClassMapper.toProfileDTO(profileBindingModel));
     }
 
     @Override
-    public File getImage(AuthenticatedPrincipal principal, Integer pictureId) {
+    public File getPicture(Principal principal, Long pictureId) {
         AuthMeUserEntity user = userRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> CommonErrorMessages.username(principal.getName()));
 
         return personalDataService.getPicture(user.getDataId(), pictureId);
     }
 
+    @Override
+    public PicturesBindingModel getPicturesBindingModel(Principal principal) {
+        AuthMeUserEntity user = userRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> CommonErrorMessages.username(principal.getName()));
+        return new PicturesBindingModel().setSavedPictures(personalDataService.getPictures(user.getDataId()));
+    }
 
     @Override
     public void init() {

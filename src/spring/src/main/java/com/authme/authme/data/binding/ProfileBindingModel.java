@@ -17,7 +17,6 @@ public class ProfileBindingModel {
     private LocalDate dateOfBirth;
     private Boolean dateOfBirthValidated;
     private List<String> savedPictures;
-    private List<MultipartFile> pictures;
 
     public String getFirstName() {
         return firstName;
@@ -89,14 +88,6 @@ public class ProfileBindingModel {
     public ProfileBindingModel setDateOfBirthValidated(Boolean dateOfBirthValidated) {
         this.dateOfBirthValidated = dateOfBirthValidated;
         return this;
-    }
-
-    public List<MultipartFile> getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(List<MultipartFile> pictures) {
-        this.pictures = pictures;
     }
 
     public List<String> getSavedPictures() {

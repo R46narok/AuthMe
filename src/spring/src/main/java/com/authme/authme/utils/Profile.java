@@ -9,7 +9,7 @@ import java.util.List;
 public class Profile {
     private Long id;
     private ProfileDTO profileDTO;
-    private List<File> pictures;
+    private List<Picture> pictures;
     private Long imageCounter;
 
     public Profile() {
@@ -36,11 +36,11 @@ public class Profile {
         return this;
     }
 
-    public List<File> getPictures() {
+    public List<Picture> getPictures() {
         return pictures;
     }
 
-    public Profile setPictures(List<File> pictures) {
+    public Profile setPictures(List<Picture> pictures) {
         this.pictures = pictures;
         return this;
     }

@@ -1,5 +1,6 @@
 package com.authme.authme.web;
 
+import com.authme.authme.data.binding.PicturesBindingModel;
 import com.authme.authme.data.binding.ProfileBindingModel;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.service.AuthMeUserService;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.Principal;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
@@ -31,6 +33,9 @@ public class ProfileController {
         return userService.getProfileBindingModel();
     }
 
+    @ModelAttribute(name = "picturesBindingModel")
+    public PicturesBindingModel picturesBindingModel(Principal principal) { return userService.getPicturesBindingModel(principal); }
+
     @GetMapping("/profile")
     public String getProfilePage() {
         return "profile";
@@ -42,11 +47,10 @@ public class ProfileController {
         return "redirect:/";
     }
 
-    @GetMapping(value = "/profile/pictures/{id}")
-    public void getPicture(AuthenticatedPrincipal principal,
-                           @PathVariable("id") Integer pictureId,
+    @GetMapping(value = "/profile/picture/{id}")
+    public void getPicture(Principal principal,
+                           @PathVariable("id") Long pictureId,
                            HttpServletResponse response) throws IOException {
-        File temp = userService.getImage(principal, pictureId);
-        StreamUtils.copy(new FileInputStream(temp), response.getOutputStream());
+        StreamUtils.copy(new FileInputStream(userService.getPicture(principal, pictureId)), response.getOutputStream());
     }
 }

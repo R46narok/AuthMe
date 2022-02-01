@@ -64,13 +64,16 @@
         <div class="col-lg-4">
             <div class="mt-5 p-3 bg-light rounded-back">
                 <div id="uploadedImagesContainer">
-                    <img th:each="picture : ${profileBindingModel.pictures}" th:src="">
+                    <img th:each="savedPicture : ${picturesBindingModel.savedPictures}" th:src="@{/profile/picture/{id}(id = ${savedPicture})}">
                 </div>
 
-                <div id="imageUploadContainer">
-                    <input id="fileInput" type="file" accept="image/*" class="file" name="pictures" multiple>
-                    <button id="uploadImageButton">Upload</button>
-                </div>
+<!--                <div id="imageUploadContainer">-->
+<!--                    <form th:action="@{}">-->
+<!--                        <input id="fileInput" type="file" accept="image/*" name="pictures" multiple>-->
+<!--                        <input type="submit">-->
+<!--                    </form>-->
+
+<!--                </div>-->
             </div>
         </div>
     </div>

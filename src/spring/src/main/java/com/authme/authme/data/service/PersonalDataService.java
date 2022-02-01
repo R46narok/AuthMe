@@ -12,8 +12,11 @@ public interface PersonalDataService {
     Long newEntry();
 
     ProfileDTO getData(Long dataId);
+    void patchData(Long dataId, ProfileDTO toProfileDTO);
 
-    File getPicture(Long userId, Integer pictureId);
+    File getPicture(Long userId, Long pictureId);
+    List<String> getPictures(Long userId);
+    void uploadPictures(Long userId, List<File> picture);
+    void deletePicture(Long userId, Long pictureId);
 
-    ProfileDTO patchData(Long dataId, ProfileDTO toProfileDTO, List<MultipartFile> images);
 }
