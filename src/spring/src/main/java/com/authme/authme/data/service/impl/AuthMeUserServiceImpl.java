@@ -1,8 +1,5 @@
 package com.authme.authme.data.service.impl;
 
-import com.authme.authme.data.binding.PicturesBindingModel;
-import com.authme.authme.data.binding.ProfileBindingModel;
-import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
@@ -10,18 +7,13 @@ import com.authme.authme.data.repository.RoleRepository;
 import com.authme.authme.data.service.AuthMeUserService;
 import com.authme.authme.data.service.PersonalDataService;
 import com.authme.authme.data.service.models.RegisterServiceModel;
-import com.authme.authme.exceptions.CommonErrorMessages;
-import com.authme.authme.utils.ClassMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,51 +62,6 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-    }
-
-    @Override
-    public ProfileBindingModel getProfileBindingModel() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            AuthMeUserEntity user =
-                    userRepository
-                            .findByUsername(authentication.getName())
-                            .orElseThrow(() -> CommonErrorMessages.username(authentication.getName()));
-            Long dataId = user.getDataId();
-
-            ProfileDTO data = personalDataService.getData(dataId);
-
-            return ClassMapper.toProfileBindingModel(data);
-        }
-        return new ProfileBindingModel();
-    }
-
-    @Override
-    public void patchProfile(ProfileBindingModel profileBindingModel) {
-        String[] username = {SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName()};
-        AuthMeUserEntity user =
-                userRepository.findByUsername(username[0])
-                        .orElseThrow(() -> CommonErrorMessages.username(username[0]));
-        personalDataService.patchData(
-                user.getDataId(),
-                ClassMapper.toProfileDTO(profileBindingModel));
-    }
-
-    @Override
-    public File getPicture(Principal principal, Long pictureId) {
-        AuthMeUserEntity user = userRepository.findByUsername(principal.getName())
-                .orElseThrow(() -> CommonErrorMessages.username(principal.getName()));
-
-        return personalDataService.getPicture(user.getDataId(), pictureId);
-    }
-
-    @Override
-    public PicturesBindingModel getPicturesBindingModel(Principal principal) {
-        AuthMeUserEntity user = userRepository.findByUsername(principal.getName())
-                .orElseThrow(() -> CommonErrorMessages.username(principal.getName()));
-        return new PicturesBindingModel().setSavedPictures(personalDataService.getPictures(user.getDataId()));
     }
 
     @Override

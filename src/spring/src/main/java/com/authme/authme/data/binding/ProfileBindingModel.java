@@ -1,101 +1,48 @@
 package com.authme.authme.data.binding;
 
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
+import com.authme.authme.data.dto.objects.ProfileEntryObject;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class ProfileBindingModel {
-    private String firstName;
-    private Boolean firstNameValidated;
-    private String middleName;
-    private Boolean middleNameValidated;
-    private String lastName;
-    private Boolean lastNameValidated;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateOfBirth;
-    private Boolean dateOfBirthValidated;
-    private List<String> savedPictures;
+    private ProfileEntryObject<String> firstName;
+    private ProfileEntryObject<String> middleName;
+    private ProfileEntryObject<String> lastName;
+    private ProfileEntryObject<LocalDate> dateOfBirth;
 
-    public String getFirstName() {
+    public ProfileEntryObject<String> getFirstName() {
         return firstName;
     }
 
-    public ProfileBindingModel setFirstName(String firstName) {
+    public ProfileBindingModel setFirstName(ProfileEntryObject<String> firstName) {
         this.firstName = firstName;
         return this;
     }
 
-    public Boolean getFirstNameValidated() {
-        return firstNameValidated;
-    }
-
-    public ProfileBindingModel setFirstNameValidated(Boolean firstNameValidated) {
-        this.firstNameValidated = firstNameValidated;
-        return this;
-    }
-
-    public String getMiddleName() {
+    public ProfileEntryObject<String> getMiddleName() {
         return middleName;
     }
 
-    public ProfileBindingModel setMiddleName(String middleName) {
+    public ProfileBindingModel setMiddleName(ProfileEntryObject<String> middleName) {
         this.middleName = middleName;
         return this;
     }
 
-    public Boolean getMiddleNameValidated() {
-        return middleNameValidated;
-    }
-
-    public ProfileBindingModel setMiddleNameValidated(Boolean middleNameValidated) {
-        this.middleNameValidated = middleNameValidated;
-        return this;
-    }
-
-    public String getLastName() {
+    public ProfileEntryObject<String> getLastName() {
         return lastName;
     }
 
-    public ProfileBindingModel setLastName(String lastName) {
+    public ProfileBindingModel setLastName(ProfileEntryObject<String> lastName) {
         this.lastName = lastName;
         return this;
     }
 
-    public Boolean getLastNameValidated() {
-        return lastNameValidated;
-    }
-
-    public ProfileBindingModel setLastNameValidated(Boolean lastNameValidated) {
-        this.lastNameValidated = lastNameValidated;
-        return this;
-    }
-
-    public LocalDate getDateOfBirth() {
+    public ProfileEntryObject<LocalDate> getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public ProfileBindingModel setDateOfBirth(LocalDate dateOfBirth) {
+    public ProfileBindingModel setDateOfBirth(ProfileEntryObject<LocalDate> dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-        return this;
-    }
-
-    public Boolean getDateOfBirthValidated() {
-        return dateOfBirthValidated;
-    }
-
-    public ProfileBindingModel setDateOfBirthValidated(Boolean dateOfBirthValidated) {
-        this.dateOfBirthValidated = dateOfBirthValidated;
-        return this;
-    }
-
-    public List<String> getSavedPictures() {
-        return savedPictures;
-    }
-
-    public ProfileBindingModel setSavedPictures(List<String> savedPictures) {
-        this.savedPictures = savedPictures;
         return this;
     }
 }

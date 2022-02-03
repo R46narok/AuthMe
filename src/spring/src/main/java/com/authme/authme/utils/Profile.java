@@ -2,58 +2,19 @@ package com.authme.authme.utils;
 
 import com.authme.authme.data.dto.ProfileDTO;
 
-import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
-
 public class Profile {
-    private Long id;
-    private ProfileDTO profileDTO;
-    private List<Picture> pictures;
-    private Long imageCounter;
+    private ProfileDTO data;
 
     public Profile() {
-        profileDTO = new ProfileDTO();
-        imageCounter = 0L;
-        pictures = new LinkedList<>();
+        this.data = new ProfileDTO();
     }
 
-    public Long getId() {
-        return id;
+    public ProfileDTO getData() {
+        return data;
     }
 
-    public Profile setId(Long id) {
-        this.id = id;
+    public Profile setData(ProfileDTO data) {
+        this.data = data;
         return this;
-    }
-
-    public ProfileDTO getProfileDTO() {
-        return profileDTO;
-    }
-
-    public Profile setProfileDTO(ProfileDTO profileDTO) {
-        this.profileDTO = profileDTO;
-        return this;
-    }
-
-    public List<Picture> getPictures() {
-        return pictures;
-    }
-
-    public Profile setPictures(List<Picture> pictures) {
-        this.pictures = pictures;
-        return this;
-    }
-
-    public Long getImageCounter() {
-        return imageCounter;
-    }
-
-    public void setImageCounter(Long imageCounter) {
-        this.imageCounter = imageCounter;
-    }
-
-    public void incrementImageCounter() {
-        this.imageCounter++;
     }
 }

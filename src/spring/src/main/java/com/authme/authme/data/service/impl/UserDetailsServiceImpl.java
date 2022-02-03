@@ -12,15 +12,17 @@ import javax.transaction.Transactional;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final AuthMeUserRepository userRepository;
+    private final ClassMapper classMapper;
 
-    public UserDetailsServiceImpl(AuthMeUserRepository userRepository) {
+    public UserDetailsServiceImpl(AuthMeUserRepository userRepository, ClassMapper classMapper) {
         this.userRepository = userRepository;
+        this.classMapper = classMapper;
     }
 
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username)  {
-        return ClassMapper
+        return classMapper
                 .toUserDetails(userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " not found!")));
     }

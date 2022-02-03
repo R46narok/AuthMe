@@ -16,9 +16,11 @@ import javax.validation.Valid;
 @Controller
 public class RegisterController {
     private final AuthMeUserService userService;
+    private final ClassMapper classMapper;
 
-    public RegisterController(AuthMeUserService userService) {
+    public RegisterController(AuthMeUserService userService, ClassMapper classMapper) {
         this.userService = userService;
+        this.classMapper = classMapper;
     }
 
     @ModelAttribute(name = "registerBindingModel")
@@ -45,7 +47,7 @@ public class RegisterController {
             return "redirect:/register";
         }
 
-        RegisterServiceModel registerServiceModel = ClassMapper.registerBindingToService(bindingModel);
+        RegisterServiceModel registerServiceModel = classMapper.registerBindingToService(bindingModel);
         userService.registerAndLogin(registerServiceModel);
 
         return "redirect:/";
