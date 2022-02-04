@@ -1,7 +1,5 @@
 package com.authme.authme.data.service.impl;
 
-import com.authme.authme.data.binding.ProfileBindingModel;
-import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
@@ -9,8 +7,6 @@ import com.authme.authme.data.repository.RoleRepository;
 import com.authme.authme.data.service.AuthMeUserService;
 import com.authme.authme.data.service.PersonalDataService;
 import com.authme.authme.data.service.models.RegisterServiceModel;
-import com.authme.authme.exceptions.CommonErrorMessages;
-import com.authme.authme.utils.ClassMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -67,39 +63,6 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
         }
 
     }
-
-    @Override
-    public ProfileBindingModel getProfileBindingModel() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            AuthMeUserEntity user =
-                    userRepository
-                            .findByUsername(authentication.getName())
-                            .orElseThrow(() -> CommonErrorMessages.username(authentication.getName()));
-            Long dataId = user.getDataId();
-
-            ProfileDTO data = personalDataService.getData(dataId);
-
-            return ClassMapper.toProfileBindingModel(data);
-        }
-        return new ProfileBindingModel();
-    }
-
-    @Override
-    public void patchProfile(ProfileBindingModel profileBindingModel) {
-        String[] username = {SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName()};
-        AuthMeUserEntity user =
-                userRepository.findByUsername(username[0])
-                        .orElseThrow(() -> CommonErrorMessages.username(username[0]));
-        personalDataService.patchData(
-                user.getDataId(),
-                ClassMapper.toProfileDTO(profileBindingModel),
-                List.of(profileBindingModel.getPicture())
-        );
-    }
-
 
     @Override
     public void init() {

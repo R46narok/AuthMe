@@ -1,5 +1,6 @@
 package com.authme.authme.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.session.SessionRegistry;
@@ -19,6 +20,11 @@ public class ApplicationConfig {
     @Bean
     public SessionRegistry sessionRegistry(){
         return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public ModelMapper modelMapper () {
+        return new ModelMapper();
     }
 
     @Bean

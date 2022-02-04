@@ -5,6 +5,8 @@ import com.authme.authme.data.service.RoleService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Locale;
+
 @Component
 public class Init implements CommandLineRunner {
     private final RoleService roleService;
@@ -17,6 +19,7 @@ public class Init implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        Locale.setDefault(Locale.US);
         roleService.init();
         userService.init();
     }

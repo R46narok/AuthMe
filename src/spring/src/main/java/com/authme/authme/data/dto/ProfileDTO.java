@@ -1,91 +1,73 @@
 package com.authme.authme.data.dto;
 
-import org.springframework.web.multipart.MultipartFile;
+import com.authme.authme.data.dto.objects.ProfileEntryObject;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
 
 public class ProfileDTO {
-    private String firstName = "";
-    private boolean firstNameValidated = true;
-    private String middleName = "";
-    private boolean middleNameValidated = true;
-    private String lastName = "";
-    private boolean lastNameValidated = true;
-    private LocalDate dateOfBirth = null;
-    private boolean dateOfBirthValidated = true;
+    private ProfileEntryObject<String> firstName;
+    private ProfileEntryObject<String> middleName;
+    private ProfileEntryObject<String> lastName;
+    private ProfileEntryObject<LocalDate> dateOfBirth;
 
-    public String getFirstName() {
+    public ProfileDTO() {
+        this.firstName = new ProfileEntryObject<>();
+        this.middleName = new ProfileEntryObject<>();
+        this.lastName = new ProfileEntryObject<>();
+        this.dateOfBirth = new ProfileEntryObject<>();
+    }
+
+    public ProfileEntryObject<String> getFirstName() {
         return firstName;
     }
 
-    public ProfileDTO setFirstName(String firstName) {
+    public ProfileDTO setFirstName(ProfileEntryObject<String> firstName) {
         this.firstName = firstName;
         return this;
     }
 
-    public boolean isFirstNameValidated() {
-        return firstNameValidated;
-    }
-
-    public ProfileDTO setFirstNameValidated(boolean firstNameValidated) {
-        this.firstNameValidated = firstNameValidated;
-        return this;
-    }
-
-    public String getMiddleName() {
+    public ProfileEntryObject<String> getMiddleName() {
         return middleName;
     }
 
-    public ProfileDTO setMiddleName(String middleName) {
+    public ProfileDTO setMiddleName(ProfileEntryObject<String> middleName) {
         this.middleName = middleName;
         return this;
     }
 
-    public boolean isMiddleNameValidated() {
-        return middleNameValidated;
-    }
-
-    public ProfileDTO setMiddleNameValidated(boolean middleNameValidated) {
-        this.middleNameValidated = middleNameValidated;
-        return this;
-    }
-
-    public String getLastName() {
+    public ProfileEntryObject<String> getLastName() {
         return lastName;
     }
 
-    public ProfileDTO setLastName(String lastName) {
+    public ProfileDTO setLastName(ProfileEntryObject<String> lastName) {
         this.lastName = lastName;
         return this;
     }
 
-    public boolean isLastNameValidated() {
-        return lastNameValidated;
-    }
-
-    public ProfileDTO setLastNameValidated(boolean lastNameValidated) {
-        this.lastNameValidated = lastNameValidated;
-        return this;
-    }
-
-    public LocalDate getDateOfBirth() {
+    public ProfileEntryObject<LocalDate> getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public ProfileDTO setDateOfBirth(LocalDate dateOfBirth) {
+    public ProfileDTO setDateOfBirth(ProfileEntryObject<LocalDate> dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         return this;
     }
 
-    public boolean isDateOfBirthValidated() {
-        return dateOfBirthValidated;
+    public void update(ProfileDTO body) {
+        Field[] fields = ProfileDTO.class.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                ProfileEntryObject<Object> currentField = (ProfileEntryObject<Object>) field.get(this);
+                ProfileEntryObject<Object> newField = (ProfileEntryObject<Object>) field.get(body);
+                if(!currentField.getValue().equals(newField)) {
+                    currentField.setValue(newField.getValue());
+                    currentField.setValidated(false);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
-
-    public ProfileDTO setDateOfBirthValidated(boolean dateOfBirthValidated) {
-        this.dateOfBirthValidated = dateOfBirthValidated;
-        return this;
-    }
-
 }

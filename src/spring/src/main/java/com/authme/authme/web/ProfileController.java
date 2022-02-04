@@ -1,24 +1,28 @@
 package com.authme.authme.web;
 
 import com.authme.authme.data.binding.ProfileBindingModel;
-import com.authme.authme.data.service.AuthMeUserService;
+import com.authme.authme.data.service.PersonalDataService;
+import com.authme.authme.utils.Picture;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.Principal;
 
 @Controller
 public class ProfileController {
-    private final AuthMeUserService userService;
+    private final PersonalDataService personalDataService;
 
-    public ProfileController(AuthMeUserService userService) {
-        this.userService = userService;
+    public ProfileController(PersonalDataService personalDataService) {
+        this.personalDataService = personalDataService;
     }
 
     @ModelAttribute(name = "profileBindingModel")
     public ProfileBindingModel profileBindingModel() {
-        return userService.getProfileBindingModel();
+        return personalDataService.getBindingModel();
     }
 
     @GetMapping("/profile")
@@ -28,7 +32,7 @@ public class ProfileController {
 
     @PostMapping("/profile")
     public String patchProfile(ProfileBindingModel profileBindingModel) {
-        userService.patchProfile(profileBindingModel);
+        personalDataService.patchProfile(profileBindingModel);
         return "redirect:/";
     }
 }

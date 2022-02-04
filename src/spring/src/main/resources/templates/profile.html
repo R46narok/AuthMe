@@ -14,60 +14,56 @@
                 <div class="mt-5 p-3 bg-light rounded-back">
                     <div class="my-3 form-group">
                         <label for="firstName">First name</label>
-                        <input th:field="*{firstName}" type="text"
-                               th:class="'form-control ' + ${profileBindingModel.firstNameValidated ? '' : 'is-invalid'}"
+                        <input th:field="*{firstName.value}" type="text"
+                               th:class="'form-control ' + ${profileBindingModel.firstName.validated ? '' : 'is-invalid'}"
                                id="firstName"
                                aria-describedby="firstName"
                                placeholder="Enter first name"/>
-                        <div th:unless="*{firstNameValidated}" class="is-invalid text-danger"><small>This field is not yet
+                        <div th:unless="*{firstName.validated}" class="is-invalid text-danger"><small>This field is not yet
                             validated!</small></div>
                     </div>
                     <div class="my-3 form-group">
                         <label for="firstName">Middle name</label>
-                        <input th:field="*{middleName}"
-                               th:class="'form-control ' + ${profileBindingModel.middleNameValidated ? '' : 'is-invalid'}"
+                        <input th:field="*{middleName.value}"
+                               th:class="'form-control ' + ${profileBindingModel.middleName.validated ? '' : 'is-invalid'}"
                                type="text" class="form-control"
                                id="middleName"
                                aria-describedby="middleName"
                                placeholder="Enter middle name"/>
-                        <div th:unless="*{middleNameValidated}" class="is-invalid text-danger"><small>This field is not yet
+                        <div th:unless="*{middleName.validated}" class="is-invalid text-danger"><small>This field is not yet
                             validated!</small></div>
                     </div>
                     <div class="my-3 form-group">
                         <label for="lastName">Last name</label>
-                        <input th:field="*{lastName}"
-                               th:class="'form-control ' + ${profileBindingModel.lastNameValidated ? '' : 'is-invalid'}"
+                        <input th:field="*{lastName.value}"
+                               th:class="'form-control ' + ${profileBindingModel.lastName.validated ? '' : 'is-invalid'}"
                                type="text" class="form-control"
                                id="lastName"
                                aria-describedby="lastName"
                                placeholder="Enter last name"/>
-                        <div th:unless="*{lastNameValidated}" class="is-invalid text-danger"><small>This field is not yet
+                        <div th:unless="*{lastName.validated}" class="is-invalid text-danger"><small>This field is not yet
                             validated!</small></div>
                     </div>
                     <div class="my-3 form-group">
                         <label for="dateOfBirth">Date of birth</label>
-                        <input th:field="*{dateOfBirth}"
-                               th:class="'form-control ' + ${profileBindingModel.dateOfBirthValidated ? '' : 'is-invalid'}"
+                        <input th:field="*{dateOfBirth.value}"
+                               th:class="'form-control ' + ${profileBindingModel.dateOfBirth.validated ? '' : 'is-invalid'}"
                                type="date" class="form-control"
                                id="dateOfBirth"
                                aria-describedby="dateOfBirth"
                                placeholder="Enter date of birth"/>
-                        <div th:unless="*{dateOfBirthValidated}" class="is-invalid text-danger"><small>This field is not yet
+                        <div th:unless="*{dateOfBirth.validated}" class="is-invalid text-danger"><small>This field is not yet
                             validated!</small></div>
-                    </div>
+                        <div th:text="*{dateOfBirth.value}">
 
-                    <div id="imageUploadContainer">
-                        <input id="fileInput" type="file" accept="image/*" class="file" name="pictures" multiple>
-                        <button id="uploadImageButton">Upload</button>
+                        </div>
                     </div>
-
                     <div class="my-3 text-center">
                         <button type="submit" class="btn btn-primary btn-mydark">Submit</button>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="col-lg-4"></div>
     </div>
 </div>
 </body>
