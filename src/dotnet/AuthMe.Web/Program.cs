@@ -1,14 +1,10 @@
 using System.Net.Http.Headers;
-using AuthMe.Application.Common.Behaviors;
+using AuthMe.Application;
 using AuthMe.Application.Common.Interfaces;
-using AuthMe.Application.Identities.Commands.CreateIdentity;
 using AuthMe.Infrastructure.Data;
 using AuthMe.Infrastructure.IdentityService;
 using AuthMe.Infrastructure.ImageService;
 using AuthMe.Infrastructure.OcrService;
-
-using FluentValidation;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,12 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // TODO: Fix when adding dep inj
-var asm = typeof(CreateIdentityCommand).Assembly;
-builder.Services.AddMediatR(asm);
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-builder.Services.AddValidatorsFromAssembly(asm);
-builder.Services.AddAutoMapper(asm);
+builder.Services.AddApplication();
 
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<IOcrService, OcrService>();
@@ -50,8 +41,16 @@ builder.Services.AddHttpClient("AzureCognitiveAnalyzeResults", client =>
 });
 
 var connString = builder.Configuration.GetConnectionString("MsSQLDb");
+Console.WriteLine(connString);
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options => options.UseSqlServer(connString));
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<IApplicationDbContext>();
+    context.Database.EnsureCreated();
+}
 
 if (app.Environment.IsDevelopment())
 {
