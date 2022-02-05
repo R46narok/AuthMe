@@ -28,6 +28,8 @@ resource "azurerm_virtual_network" "vnet" {
     resource_group_name = azurerm_resource_group.rg.name
 }
 
+# TODO: Azure Service Fabric
+
 resource "azurerm_app_service" "name" {
   
 }
