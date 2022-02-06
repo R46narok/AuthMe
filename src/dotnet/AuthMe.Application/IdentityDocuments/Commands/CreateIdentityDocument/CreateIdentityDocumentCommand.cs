@@ -29,7 +29,6 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityDocume
     
     /// <summary>
     /// Adds an identity document to the database.
-    /// TODO:
     /// </summary>
     /// <param name="request">Fluent-Validated request</param>
     /// <param name="cancellationToken"></param>

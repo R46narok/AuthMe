@@ -27,7 +27,7 @@ public class IdentityDocumentController : ControllerBase
         var entry = _dbContext.IdentityDocuments.FirstOrDefault(x => x.Id == id);
         if (entry != null)
         {
-            return File(entry.Image, "image/png"); // TODO:
+            return File(entry.Image, "image/png");
         }
 
         return NotFound();
