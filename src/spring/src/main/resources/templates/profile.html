@@ -48,15 +48,13 @@
                         <label for="dateOfBirth">Date of birth</label>
                         <input th:field="*{dateOfBirth.value}"
                                th:class="'form-control ' + ${profileBindingModel.dateOfBirth.validated ? '' : 'is-invalid'}"
-                               type="date" class="form-control"
+                               type="date"
+                               class="form-control"
                                id="dateOfBirth"
                                aria-describedby="dateOfBirth"
                                placeholder="Enter date of birth"/>
                         <div th:unless="*{dateOfBirth.validated}" class="is-invalid text-danger"><small>This field is not yet
                             validated!</small></div>
-                        <div th:text="*{dateOfBirth.value}">
-
-                        </div>
                     </div>
                     <div class="my-3 text-center">
                         <button type="submit" class="btn btn-primary btn-mydark">Submit</button>
