@@ -22,7 +22,8 @@ public class ProfileController {
 
     @ModelAttribute(name = "profileBindingModel")
     public ProfileBindingModel profileBindingModel() {
-        return personalDataService.getBindingModel();
+        ProfileBindingModel bindingModel = personalDataService.getBindingModel();
+        return bindingModel;
     }
 
     @GetMapping("/profile")
