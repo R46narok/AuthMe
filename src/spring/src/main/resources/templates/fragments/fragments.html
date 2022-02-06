@@ -30,6 +30,9 @@
                             <li sec:authorize="isAuthenticated()" class="nav-item">
                                 <a class="nav-link active" aria-current="page" th:href="@{/profile}">Profile</a>
                             </li>
+                            <li sec:authorize="isAuthenticated()" class="nav-item">
+                                <a class="nav-link active" aria-current="page" th:href="@{/data}">Data panel</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="col-sm-6 d-flex flex-row-reverse">
@@ -42,7 +45,7 @@
                             </li>
                         </ul>
                         <form sec:authorize="isAuthenticated()" th:action="@{/logout}" th:method="post">
-                            <input type="submit" class="btn btn-link nav-link active" aria-current="page" value="Logout">
+                            <input type="submit" class="btn btn-link nav-link active text-light" aria-current="page" value="Logout">
                         </form>
                     </div>
             </div>

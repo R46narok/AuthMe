@@ -21,5 +21,7 @@ public interface AuthMeUserService {
 
     void registerAndLogin(RegisterServiceModel registerServiceModel);
 
+    void getDataMonitorViewModel();
+
     void init();
 }

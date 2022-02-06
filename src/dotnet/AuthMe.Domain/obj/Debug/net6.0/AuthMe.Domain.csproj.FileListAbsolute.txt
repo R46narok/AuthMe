@@ -1,0 +1,12 @@
+E:\AuthMe\src\dotnet\AuthMe.Domain\bin\Debug\net6.0\AuthMe.Domain.deps.json
+E:\AuthMe\src\dotnet\AuthMe.Domain\bin\Debug\net6.0\AuthMe.Domain.dll
+E:\AuthMe\src\dotnet\AuthMe.Domain\bin\Debug\net6.0\ref\AuthMe.Domain.dll
+E:\AuthMe\src\dotnet\AuthMe.Domain\bin\Debug\net6.0\AuthMe.Domain.pdb
+E:\AuthMe\src\dotnet\AuthMe.Domain\obj\Debug\net6.0\AuthMe.Domain.csproj.AssemblyReference.cache
+E:\AuthMe\src\dotnet\AuthMe.Domain\obj\Debug\net6.0\AuthMe.Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\AuthMe\src\dotnet\AuthMe.Domain\obj\Debug\net6.0\AuthMe.Domain.AssemblyInfoInputs.cache
+E:\AuthMe\src\dotnet\AuthMe.Domain\obj\Debug\net6.0\AuthMe.Domain.AssemblyInfo.cs
+E:\AuthMe\src\dotnet\AuthMe.Domain\obj\Debug\net6.0\AuthMe.Domain.csproj.CoreCompileInputs.cache
+E:\AuthMe\src\dotnet\AuthMe.Domain\obj\Debug\net6.0\AuthMe.Domain.dll
+E:\AuthMe\src\dotnet\AuthMe.Domain\obj\Debug\net6.0\ref\AuthMe.Domain.dll
+E:\AuthMe\src\dotnet\AuthMe.Domain\obj\Debug\net6.0\AuthMe.Domain.pdb

@@ -37,3 +37,13 @@ body {
     visibility: hidden;
     position: absolute;
 }
+
+.image-upload {
+    max-height: 25vh;
+    max-width: 100%;
+}
+
+.file-upload {
+    position: absolute;
+    opacity: 0;
+}

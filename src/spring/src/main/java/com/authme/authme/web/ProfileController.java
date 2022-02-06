@@ -6,6 +6,7 @@ import com.authme.authme.utils.Picture;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
@@ -22,8 +23,7 @@ public class ProfileController {
 
     @ModelAttribute(name = "profileBindingModel")
     public ProfileBindingModel profileBindingModel() {
-        ProfileBindingModel bindingModel = personalDataService.getBindingModel();
-        return bindingModel;
+        return personalDataService.getBindingModel();
     }
 
     @GetMapping("/profile")
@@ -34,6 +34,12 @@ public class ProfileController {
     @PostMapping("/profile")
     public String patchProfile(ProfileBindingModel profileBindingModel) {
         personalDataService.patchProfile(profileBindingModel);
-        return "redirect:/";
+        return "redirect:/profile";
+    }
+
+    @PostMapping("/profile/validation")
+    public String uploadPictures(@RequestPart MultipartFile frontImage, @RequestPart MultipartFile backImage) {
+        personalDataService.uploadIdCardPictures(frontImage, backImage);
+        return "redirect:/profile";
     }
 }

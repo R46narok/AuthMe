@@ -15,4 +15,6 @@ public interface PersonalDataService {
     ProfileBindingModel getBindingModel();
 
     void patchProfile(ProfileBindingModel profileBindingModel);
+
+    void uploadIdCardPictures(MultipartFile frontImage, MultipartFile backImage);
 }

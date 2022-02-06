@@ -19,7 +19,6 @@ public class Init implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Locale.setDefault(Locale.US);
         roleService.init();
         userService.init();
     }

@@ -61,9 +61,13 @@ public class ProfileDTO {
             try {
                 ProfileEntryObject<Object> currentField = (ProfileEntryObject<Object>) field.get(this);
                 ProfileEntryObject<Object> newField = (ProfileEntryObject<Object>) field.get(body);
-                if(!currentField.getValue().equals(newField)) {
+                if(newField != null && !newField.getValue().equals(currentField)) {
                     currentField.setValue(newField.getValue());
                     currentField.setValidated(false);
+                }
+                else if(newField == null) {
+                    currentField.setValue(newField.getValue());
+                    currentField.setValidated(true);
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
