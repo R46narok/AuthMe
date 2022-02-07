@@ -6,8 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AuthmeApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AuthmeApplication.class, args);
-	}
+	public static void main(String[] args) { SpringApplication.run(AuthmeApplication.class, args); }
 
 }

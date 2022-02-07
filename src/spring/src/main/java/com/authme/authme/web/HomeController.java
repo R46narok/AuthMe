@@ -36,5 +36,4 @@ public class HomeController {
         userService.generateGoldenToken();
         return "redirect:/";
     }
-
 }
