@@ -20,7 +20,7 @@ resource "kubernetes_deployment_v1" "dotnet-worker" {
       spec {
         container {
           name  = "dotnet-worker"
-          image = "d3ds3g/authmedotnetworker:latest"
+          image = "authme.azurecr.io/identity-service:latest"
           port {
             container_port = 80
             protocol       = "TCP"

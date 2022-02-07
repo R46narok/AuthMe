@@ -3,6 +3,9 @@ terraform {
       kubernetes = {
           source = "hashicorp/kubernetes"
       }
+      azurerm = {
+        source = "hashicorp/azurerm"
+      }
   }
 }
 
@@ -15,4 +18,8 @@ provider "kubernetes" {
   host = var.host
   insecure = true
   config_path = "C:/Users/Acer/.kube/config"
+}
+
+provider "azurerm" {
+  features {}
 }
