@@ -20,4 +20,10 @@ public class CurrentUserServiceImpl implements CurrentUserService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByUsername(username).orElseThrow(() -> CommonErrorMessages.username(username));
     }
+
+    @Override
+    public AuthMeUserEntity getCurrentLoggedUserOrNull() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username).orElse(null);
+    }
 }

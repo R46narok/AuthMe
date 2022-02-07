@@ -2,6 +2,7 @@ package com.authme.authme.data.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -15,6 +16,8 @@ public class AuthMeUserEntity extends BaseEntity {
     private String password;
     @NotNull
     private Long dataId;
+    @OneToOne(mappedBy = "user")
+    private GoldenToken goldenToken;
     @ManyToMany
     @NotNull
     private List<Role> roles;
@@ -52,6 +55,15 @@ public class AuthMeUserEntity extends BaseEntity {
 
     public AuthMeUserEntity setRoles(List<Role> roles) {
         this.roles = roles;
+        return this;
+    }
+
+    public GoldenToken getGoldenToken() {
+        return goldenToken;
+    }
+
+    public AuthMeUserEntity setGoldenToken(GoldenToken goldenToken) {
+        this.goldenToken = goldenToken;
         return this;
     }
 }

@@ -6,8 +6,10 @@ import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.RoleRepository;
 import com.authme.authme.data.service.AuthMeUserService;
 import com.authme.authme.data.service.CurrentUserService;
+import com.authme.authme.data.service.GoldenTokenService;
 import com.authme.authme.data.service.PersonalDataService;
 import com.authme.authme.data.service.models.RegisterServiceModel;
+import com.authme.authme.data.view.DataMonitorViewModel;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,18 +29,20 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
     private final UserDetailsServiceImpl userDetailsService;
     private final PersonalDataService personalDataService;
     private final CurrentUserService currentUserService;
+    private final GoldenTokenService goldenTokenService;
 
     public AuthMeUserServiceImpl(AuthMeUserRepository userRepository,
                                  PasswordEncoder passwordEncoder,
                                  RoleRepository roleRepository,
                                  UserDetailsServiceImpl userDetailsService,
-                                 PersonalDataService personalDataService, CurrentUserService currentUserService) {
+                                 PersonalDataService personalDataService, CurrentUserService currentUserService, GoldenTokenService goldenTokenService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userDetailsService = userDetailsService;
         this.personalDataService = personalDataService;
         this.currentUserService = currentUserService;
+        this.goldenTokenService = goldenTokenService;
     }
 
     @Override
@@ -68,9 +73,36 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
     }
 
     @Override
-    public void getDataMonitorViewModel() {
-        AuthMeUserEntity user = currentUserService.getCurrentLoggedUser();
+    public DataMonitorViewModel getDataMonitorViewModel() {
+        return null;
+    }
 
+    @Override
+    public String generateGoldenToken() {
+        AuthMeUserEntity user = currentUserService.getCurrentLoggedUser();
+        if (user.getGoldenToken() != null) {
+            goldenTokenService.deleteToken(user.getGoldenToken().getId());
+        }
+        return goldenTokenService.generateFor(user);
+    }
+
+    @Override
+    public Boolean goldenTokenActive() {
+        AuthMeUserEntity user = currentUserService.getCurrentLoggedUserOrNull();
+        if(user == null)
+            return null;
+        return (user.getGoldenToken() != null && user.getGoldenToken().getExpiry().isAfter(LocalDateTime.now()));
+    }
+
+    @Override
+    public String getCurrentUserGoldenToken() {
+        AuthMeUserEntity user = currentUserService.getCurrentLoggedUserOrNull();
+        if(user == null)
+            return null;
+        if(user.getGoldenToken() != null && user.getGoldenToken().getExpiry().isAfter(LocalDateTime.now())){
+            return user.getGoldenToken().getId();
+        }
+        return null;
     }
 
     @Override

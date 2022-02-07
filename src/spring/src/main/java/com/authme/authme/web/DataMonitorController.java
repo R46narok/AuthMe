@@ -3,6 +3,8 @@ package com.authme.authme.web;
 import com.authme.authme.data.service.AuthMeUserService;
 import com.authme.authme.data.view.DataMonitorViewModel;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class DataMonitorController {
@@ -12,10 +14,12 @@ public class DataMonitorController {
         this.userService = userService;
     }
 
+    @ModelAttribute("dataMonitorViewModel")
     public DataMonitorViewModel getViewModel() {
-        userService.getDataMonitorViewModel();
+        return userService.getDataMonitorViewModel();
     }
 
+    @GetMapping("/data")
     public String getPage() {
         return "data-monitor";
     }

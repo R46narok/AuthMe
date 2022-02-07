@@ -5,8 +5,15 @@
 <head th:replace="fragments/fragments::head"></head>
 <body>
 <div th:replace="fragments/fragments::nav"></div>
-<h1>
-    Home page!
-</h1>
+<h1>Home page</h1>
+<div sec:authorize="isAuthenticated()">
+    <h1>Current golden token</h1>
+    <div th:if="${activeToken}" th:text="${goldenToken}">
+
+    </div>
+    <div th:unless="${activeToken}">
+        <a th:href="@{/token/golden}">Create new</a>
+    </div>
+</div>
 </body>
 </html>
