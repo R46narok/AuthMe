@@ -1,18 +1,15 @@
 package com.authme.authme.web;
+
 import com.authme.authme.data.service.AuthMeUserService;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class HomeController {
-    private final RestTemplate restTemplate;
     private final AuthMeUserService userService;
 
-    public HomeController(RestTemplateBuilder restTemplateBuilder, AuthMeUserService userService) {
-        this.restTemplate = restTemplateBuilder.build();
+    public HomeController(AuthMeUserService userService) {
         this.userService = userService;
     }
 

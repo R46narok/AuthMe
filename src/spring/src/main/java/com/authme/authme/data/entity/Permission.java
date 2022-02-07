@@ -18,4 +18,11 @@ public class Permission extends BaseEntity {
         this.fieldName = fieldName;
         return this;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Permission))
+            return false;
+        return ((Permission)obj).getFieldName().equals(this.fieldName);
+    }
 }

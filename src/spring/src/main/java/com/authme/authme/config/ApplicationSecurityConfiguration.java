@@ -33,6 +33,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .antMatchers(
                         // TODO: Remove in production
                         "/dev/**",
+                        "/check",
                         "/",
                         "/register",
                         "/login")

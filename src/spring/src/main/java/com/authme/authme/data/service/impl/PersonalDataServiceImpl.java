@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @Service
 public class PersonalDataServiceImpl implements PersonalDataService {
     private final RestTemplate restTemplate;
@@ -46,5 +48,11 @@ public class PersonalDataServiceImpl implements PersonalDataService {
     @Override
     public void uploadIdCardPictures(MultipartFile frontImage, MultipartFile backImage) {
 
+    }
+
+    @Override
+    public Boolean checkDataValid(AuthMeUserEntity user, Map<String, String> data) {
+
+        return true;
     }
 }

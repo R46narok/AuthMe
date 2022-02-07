@@ -4,6 +4,7 @@ import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.service.models.RegisterServiceModel;
 import com.authme.authme.data.view.DataMonitorViewModel;
 
+import java.util.Map;
 import java.util.Optional;
 
 public interface AuthMeUserService {
@@ -19,6 +20,9 @@ public interface AuthMeUserService {
 
     String getCurrentUserGoldenToken();
 
-    void init();
+    AuthMeUserEntity getAssociatedUserByGoldenTokenOrNull(String goldenToken);
 
+    String checkDataValidForUser(AuthMeUserEntity user, String requesterName, String remoteAddress, Map<String, String> data);
+
+    void init();
 }
