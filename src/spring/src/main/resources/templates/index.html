@@ -8,8 +8,15 @@
 <h1>Home page</h1>
 <div sec:authorize="isAuthenticated()">
     <h1>Current golden token</h1>
-    <div th:if="${activeToken}" th:text="${goldenToken}">
-
+    <div th:if="${activeToken}">
+        <span th:text="${goldenToken}"></span>
+        <form th:action="@{/token/golden/permission}" th:method="post">
+            <div th:each="p : ${permissions}">
+                <input type="checkbox" name="permission" th:id="${p.id}" th:value="${p.fieldName}">
+                <label th:for="${p.id}" th:text="${p.fieldName}"></label>
+            </div>
+            <input type="submit" class="btn btn-primary btn-mydark" value="Submit">
+        </form>
     </div>
     <div th:unless="${activeToken}">
         <a th:href="@{/token/golden}">Create new</a>

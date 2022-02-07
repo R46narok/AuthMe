@@ -5,13 +5,17 @@ import com.authme.authme.data.binding.RegisterBindingModel;
 import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.dto.objects.ProfileEntryObject;
 import com.authme.authme.data.entity.AuthMeUserEntity;
+import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.service.models.RegisterServiceModel;
+import com.authme.authme.data.view.PermissionViewModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Component
@@ -45,5 +49,13 @@ public class ClassMapper extends ModelMapper {
                 .setMiddleName(new ProfileEntryObject<String>().setValue(profileBindingModel.getMiddleName()).setValidated(profileBindingModel.getMiddleNameValidated()))
                 .setLastName(new ProfileEntryObject<String>().setValue(profileBindingModel.getLastName()).setValidated(profileBindingModel.getLastNameValidated()))
                 .setDateOfBirth(new ProfileEntryObject<LocalDate>().setValue(profileBindingModel.getDateOfBirth()).setValidated(profileBindingModel.getDateOfBirthValidated()));
+    }
+
+    public List<PermissionViewModel> toPermissionViewModelList(List<Permission> all) {
+        List<PermissionViewModel> permissions = new ArrayList<>();
+        for (Permission permission : all) {
+            permissions.add(super.map(permission, PermissionViewModel.class));
+        }
+        return permissions;
     }
 }
