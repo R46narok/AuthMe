@@ -5,6 +5,7 @@ import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.RoleRepository;
 import com.authme.authme.data.service.AuthMeUserService;
+import com.authme.authme.data.service.CurrentUserService;
 import com.authme.authme.data.service.PersonalDataService;
 import com.authme.authme.data.service.models.RegisterServiceModel;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,17 +25,19 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
     private final RoleRepository roleRepository;
     private final UserDetailsServiceImpl userDetailsService;
     private final PersonalDataService personalDataService;
+    private final CurrentUserService currentUserService;
 
     public AuthMeUserServiceImpl(AuthMeUserRepository userRepository,
                                  PasswordEncoder passwordEncoder,
                                  RoleRepository roleRepository,
                                  UserDetailsServiceImpl userDetailsService,
-                                 PersonalDataService personalDataService) {
+                                 PersonalDataService personalDataService, CurrentUserService currentUserService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userDetailsService = userDetailsService;
         this.personalDataService = personalDataService;
+        this.currentUserService = currentUserService;
     }
 
     @Override
@@ -61,6 +64,12 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
                     );
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
+    }
+
+    @Override
+    public void getDataMonitorViewModel() {
+        AuthMeUserEntity user = currentUserService.getCurrentLoggedUser();
 
     }
 

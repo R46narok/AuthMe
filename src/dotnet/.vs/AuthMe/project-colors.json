@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "591d7386-4cf1-4614-bc46-853ebcd407af": {
+      "ProjectGuid": "591d7386-4cf1-4614-bc46-853ebcd407af",
+      "DisplayName": "AuthMe.Application",
+      "ColorIndex": 0
+    },
+    "abd9316d-16e8-47b1-97ed-a88d4f835eed": {
+      "ProjectGuid": "abd9316d-16e8-47b1-97ed-a88d4f835eed",
+      "DisplayName": "AuthMe.Domain",
+      "ColorIndex": 1
+    },
+    "b52bbff0-9e0c-4ba3-b910-8985fc4be93a": {
+      "ProjectGuid": "b52bbff0-9e0c-4ba3-b910-8985fc4be93a",
+      "DisplayName": "AuthMe.Infrastructure",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}
