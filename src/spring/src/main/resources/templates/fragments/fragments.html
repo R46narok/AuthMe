@@ -28,40 +28,71 @@
 </span>
 <body>
 <div th:fragment="nav">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/}">Home</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse row" id="navbarNav">
-                    <div class="col-sm-6">
-                        <ul class="navbar-nav">
-                            <li sec:authorize="isAuthenticated()" class="nav-item">
-                                <a class="nav-link active" aria-current="page" th:href="@{/profile}">Profile</a>
-                            </li>
-                            <li sec:authorize="isAuthenticated()" class="nav-item">
-                                <a class="nav-link active" aria-current="page" th:href="@{/data}">Data panel</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-6 d-flex flex-row-reverse">
-                        <ul class="navbar-nav">
-                            <li sec:authorize="!isAuthenticated()" class="nav-item">
-                                <a class="nav-link active" aria-current="page" th:href="@{/login}">Login</a>
-                            </li>
-                            <li sec:authorize="!isAuthenticated()" class="nav-item">
-                                <a class="nav-link active" aria-current="page" th:href="@{/register}">Register</a>
-                            </li>
-                        </ul>
-                        <form sec:authorize="isAuthenticated()" th:action="@{/logout}" th:method="post">
-                            <input type="submit" class="btn btn-link nav-link active text-light" aria-current="page" value="Logout">
-                        </form>
-                    </div>
+    <nav class="navbar navbar-light navbar-expand-md navbar-fixed-top navigation-clean-button"
+         style="background: rgb(34, 34, 34);border-radius: 20;border-top-left-radius: 20;border-top-right-radius: 20;border-bottom-right-radius: 20;border-bottom-left-radius: 20;border-style: none;padding-top: 0;padding-bottom: 10px;">
+        <div class="container">
+            <button class="navbar-toggler" data-bs-target="#navcol-1" data-bs-toggle="collapse"><span
+                    class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div><a class="navbar-brand" th:href="@{/}"><span>Creativarian </span> </a></div>
+            <div class="collapse navbar-collapse" id="navcol-1" style="color: rgb(255,255,255);">
+                <ul class="navbar-nav nav-right">
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/}" style="color: rgba(224,217,217,0.9);">Home</a>
+                    </li>
+                    <li class="nav-item dropdown"><a aria-expanded="false" class="dropdown-toggle nav-link"
+                                                     data-bs-toggle="dropdown" href="#"
+                                                     style="color: rgba(224,217,217,0.9);">Services </a>
+                        <div class="dropdown-menu"><a class="dropdown-item" href="services.html">Price Packages</a><a
+                                class="dropdown-item" href="#">Order Services</a><a class="dropdown-item" href="#">Custom
+                            Request</a></div>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="about.html"
+                                            style="color: rgba(224,217,217,0.9);">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="faq.html"
+                                            style="color: rgba(224,217,217,0.9);">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html"
+                                            style="color: rgba(224,217,217,0.9);">FAQ</a></li>
+                </ul>
+                <p class="ms-auto navbar-text actions"><a class="login" href="login.html"
+                                                          style="color: rgba(224,217,217,0.9);">Log In</a> <a
+                        class="btn btn-light action-button" href="signup.html" role="button"
+                        style="color: rgba(0,0,0,0.9);background: var(--bs-gray-200);border-radius: 10px;border-style: solid;border-color: rgba(0,0,0,0.9);font-size: 16px;padding: 5px 8px;">Sign
+                    Up</a></p>
             </div>
         </div>
     </nav>
+</div>
+<div th:fragment="footer">
+    <footer class="footer-dark">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-3 item">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Identity Portal</a></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-3 item">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="#">Project</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 item text">
+                    <h3>AuthMe</h3>
+                    <p>Bringing innovation into the digital world and providing a convenient, reliable and secure way to
+                        authenticate into your apps.<br><br></p>
+                </div>
+                <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i
+                        class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a
+                        href="#"><i class="icon ion-social-instagram"></i></a></div>
+            </div>
+            <p class="copyright">AuthMe © 2022</p>
+        </div>
+    </footer>
 </div>
 </body>
 </html>
