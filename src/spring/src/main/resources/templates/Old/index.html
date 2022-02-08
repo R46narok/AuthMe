@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/fragments::head"></head>
+<body>
+<div th:replace="fragments/fragments::nav"></div>
+<h1>Home page</h1>
+<div sec:authorize="isAuthenticated()">
+    <h1>Current golden token</h1>
+    <div th:if="${activeToken}">
+        <span th:text="${goldenToken}"></span>
+        <form th:action="@{/token/golden/permission}" th:method="post">
+            <div th:each="p : ${permissions}">
+                <input type="checkbox" name="permission" th:id="${p.id}" th:value="${p.id}">
+                <label th:for="${p.id}" th:text="${p.fieldName}"></label>
+            </div>
+            <input type="submit" class="btn btn-primary btn-mydark" value="Submit">
+        </form>
+    </div>
+    <div th:unless="${activeToken}">
+        <a th:href="@{/token/golden}">Create new</a>
+    </div>
+</div>
+</body>
+</html>

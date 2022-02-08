@@ -3,6 +3,7 @@ package com.authme.authme.data.service.impl;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.DataValidationRecord;
 import com.authme.authme.data.entity.GoldenToken;
+import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.RoleRepository;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -121,6 +123,12 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
             return null;
         DataValidationRecord record = validationService.generateRecord(user, requesterName, remoteAddress);
         return record.getPlatinumToken();
+    }
+
+    @Override
+    public void setTokenPermissions(List<String> permissionsStrings) {
+        AuthMeUserEntity user = currentUserService.getCurrentLoggedUser();
+        goldenTokenService.setPermissionsForToken(user.getGoldenToken(), permissionsStrings);
     }
 
     @Override

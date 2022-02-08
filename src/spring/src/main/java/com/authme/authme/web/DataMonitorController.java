@@ -21,6 +21,6 @@ public class DataMonitorController {
 
     @GetMapping("/data")
     public String getPage() {
-        return "data-monitor";
+        return "monitor";
     }
 }

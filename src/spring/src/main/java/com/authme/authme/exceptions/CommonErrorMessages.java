@@ -10,4 +10,8 @@ public class CommonErrorMessages {
     public static EntityNotFoundException token(String tokenId) {
         return new EntityNotFoundException("Token with id: " + tokenId + " not found!");
     }
+
+    public static EntityNotFoundException permission(Long permissionId) {
+        return new EntityNotFoundException("Permission with id: " + permissionId + " not found!");
+    }
 }

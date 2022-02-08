@@ -40,4 +40,11 @@ public class DataVerificationController {
             return ResponseEntity.ok("{\"valid\":false}");
         return ResponseEntity.ok("{\"valid\":true}");
     }
+
+    @GetMapping("/data/trigger")
+    public ResponseEntity<String> firstVerificationRequest(@RequestHeader String goldenToken) {
+        if(goldenTokenService.findById(goldenToken).isEmpty())
+            return ResponseEntity.notFound().build();
+        return goldenTokenService.triggerDataValidationProcess(goldenToken);
+    }
 }

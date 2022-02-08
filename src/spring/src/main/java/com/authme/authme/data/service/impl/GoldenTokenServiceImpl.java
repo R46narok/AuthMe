@@ -5,14 +5,14 @@ import com.authme.authme.data.entity.GoldenToken;
 import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.GoldenTokenRepository;
+import com.authme.authme.data.repository.PermissionRepository;
 import com.authme.authme.data.service.GoldenTokenService;
 import com.authme.authme.exceptions.CommonErrorMessages;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class GoldenTokenServiceImpl implements GoldenTokenService {
@@ -20,10 +20,12 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
 
     private final GoldenTokenRepository goldenTokenRepository;
     private final AuthMeUserRepository userRepository;
+    private final PermissionRepository permissionRepository;
 
-    public GoldenTokenServiceImpl(GoldenTokenRepository goldenTokenRepository, AuthMeUserRepository userRepository) {
+    public GoldenTokenServiceImpl(GoldenTokenRepository goldenTokenRepository, AuthMeUserRepository userRepository, PermissionRepository permissionRepository) {
         this.goldenTokenRepository = goldenTokenRepository;
         this.userRepository = userRepository;
+        this.permissionRepository = permissionRepository;
     }
 
     @Override
@@ -60,4 +62,28 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
         }
         return true;
     }
+
+    @Override
+    public void setPermissionsForToken(GoldenToken goldenToken, List<String> permissionsStrings) {
+        List<Permission> permissions = new ArrayList<>();
+
+        for (String permissionString : permissionsStrings) {
+            Long permissionId = Long.parseLong(permissionString);
+            Permission permission = permissionRepository.findById(permissionId)
+                    .orElseThrow(() -> CommonErrorMessages.permission(permissionId));
+            permissions.add(permission);
+        }
+
+        goldenToken.setPermissions(permissions);
+        goldenTokenRepository.saveAndFlush(goldenToken);
+    }
+
+    @Override
+    public ResponseEntity<String> triggerDataValidationProcess(String goldenToken) {
+        GoldenToken token = goldenTokenRepository.findById(goldenToken)
+                .orElseThrow(() -> CommonErrorMessages.token(goldenToken));
+
+        return null;
+    }
+
 }

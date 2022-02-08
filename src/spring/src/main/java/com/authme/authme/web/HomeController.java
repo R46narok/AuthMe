@@ -52,7 +52,7 @@ public class HomeController {
 
     @PostMapping("/token/golden/permission")
     public String changeCurrentTokenPermissions(@RequestParam("permission") List<String> permissionsStrings) {
-        System.out.println();
+        userService.setTokenPermissions(permissionsStrings);
         return "redirect:/";
     }
 }
