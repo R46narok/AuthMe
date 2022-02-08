@@ -43,19 +43,10 @@ resource "kubernetes_deployment_v1" "mysql" {
             name  = "MYSQL_ROOT_PASSWORD"
             value = "example"
           }
-          volume_mount {
-            mount_path = "/var/lib/mysql"
-            name       = "mysqldb"
-          }
-        }
-        volume {
-          name = "mysqldb"
-          persistent_volume_claim {
-            claim_name = "mysql-claim"
-          }
-        }
+          
       }
     }
+  }
   }
 }
 

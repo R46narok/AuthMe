@@ -9,15 +9,9 @@ terraform {
   }
 }
 
-variable "host" {
-  type = string
-  default = "https://kubernetes.docker.internal:6443"
-}
 
 provider "kubernetes" {
-  host = var.host
-  insecure = true
-  config_path = "C:/Users/Acer/.kube/config"
+  config_path = "authme-cluster-kubeconfig.yaml"
 }
 
 provider "azurerm" {

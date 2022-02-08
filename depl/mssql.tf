@@ -46,18 +46,8 @@ resource "kubernetes_deployment_v1" "mssql" {
             name  = "SA_PASSWORD"
             value = "AuthMeSuperSecurePassword123"
           }
-          volume_mount {
-            mount_path = "/var/opt/mssql/data"
-            name       = "mssqldb"
-          }
-        }
-        volume {
-          name = "mssqldb"
-          persistent_volume_claim {
-            claim_name = "mssql-claim"
-          }
-        }
       }
+    }
     }
   }
 }
