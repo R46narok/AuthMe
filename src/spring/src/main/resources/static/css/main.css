@@ -3,7 +3,7 @@
     --mypurple: #DF18A6;
 }
 
-body {
+.legion-background {
     background: #161616;
     background-image: url("/images/background_1_1920x1080.jpg");
     background-repeat: no-repeat;

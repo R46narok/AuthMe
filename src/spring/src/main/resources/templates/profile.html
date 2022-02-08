@@ -2,103 +2,111 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="fragments/fragments::head"></head>
-<body>
+<head>
+    <span th:replace="fragments/fragments::imports"></span>
+</head>
+<body class="legion-background">
 <div th:replace="fragments/fragments::nav"></div>
 <script type="module" src="/js/profilePage.js"></script>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-4">
-            <form th:object="${profileBindingModel}" enctype="multipart/form-data" th:action="@{/profile}"
-                  th:method="post">
+<div id="layoutSidenav">
+    <div th:replace="fragments/fragments::sideNav"></div>
+    <div id="layoutSidenav_content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-4">
+                    <form th:object="${profileBindingModel}" enctype="multipart/form-data" th:action="@{/profile}"
+                          th:method="post">
 
-                <div class="mt-5 p-3 bg-light rounded-back">
-                    <div class="text-center">
-                        <h4>Personal data</h4>
-                    </div>
-                    <div class="my-3 form-group">
-                        <label for="firstName">First name</label>
-                        <input th:field="*{firstName}" type="text"
-                               th:class="'form-control ' + ${profileBindingModel.firstNameValidated ? '' : 'is-invalid'}"
-                               id="firstName"
-                               aria-describedby="firstName"
-                               placeholder="Enter first name"/>
-                        <div th:unless="*{firstNameValidated}" class="is-invalid text-danger"><small>This field is not
-                            yet
-                            validated!</small></div>
-                    </div>
-                    <div class="my-3 form-group">
-                        <label for="middleName">Middle name</label>
-                        <input th:field="*{middleName}"
-                               th:class="'form-control ' + ${profileBindingModel.middleNameValidated ? '' : 'is-invalid'}"
-                               type="text" class="form-control"
-                               id="middleName"
-                               aria-describedby="middleName"
-                               placeholder="Enter middle name"/>
-                        <div th:unless="*{middleNameValidated}" class="is-invalid text-danger"><small>This field is not
-                            yet
-                            validated!</small></div>
-                    </div>
-                    <div class="my-3 form-group">
-                        <label for="lastName">Last name</label>
-                        <input th:field="*{lastName}"
-                               th:class="'form-control ' + ${profileBindingModel.lastNameValidated ? '' : 'is-invalid'}"
-                               type="text" class="form-control"
-                               id="lastName"
-                               aria-describedby="lastName"
-                               placeholder="Enter last name"/>
-                        <div th:unless="*{lastNameValidated}" class="is-invalid text-danger"><small>This field is not
-                            yet
-                            validated!</small></div>
-                    </div>
-                    <div class="my-3 form-group">
-                        <label for="dateOfBirth">Date of birth</label>
-                        <input th:field="*{dateOfBirth}"
-                               th:class="'form-control ' + ${profileBindingModel.dateOfBirthValidated ? '' : 'is-invalid'}"
-                               type="date"
-                               class="form-control"
-                               id="dateOfBirth"
-                               aria-describedby="dateOfBirth"
-                               placeholder="Enter date of birth"/>
-                        <div th:unless="*{dateOfBirthValidated}" class="is-invalid text-danger"><small>This field is
-                            not yet
-                            validated!</small></div>
-                    </div>
-                    <div class="my-3 text-center">
-                        <button type="submit" class="btn btn-primary btn-mydark">Submit</button>
+                        <div class="mt-5 p-3 bg-light rounded-back">
+                            <div class="text-center">
+                                <h4>Personal data</h4>
+                            </div>
+                            <div class="my-3 form-group">
+                                <label for="firstName">First name</label>
+                                <input th:field="*{firstName}" type="text"
+                                       th:class="'form-control ' + ${profileBindingModel.firstNameValidated ? '' : 'is-invalid'}"
+                                       id="firstName"
+                                       aria-describedby="firstName"
+                                       placeholder="Enter first name"/>
+                                <div th:unless="*{firstNameValidated}" class="is-invalid text-danger"><small>This field is not
+                                    yet
+                                    validated!</small></div>
+                            </div>
+                            <div class="my-3 form-group">
+                                <label for="middleName">Middle name</label>
+                                <input th:field="*{middleName}"
+                                       th:class="'form-control ' + ${profileBindingModel.middleNameValidated ? '' : 'is-invalid'}"
+                                       type="text" class="form-control"
+                                       id="middleName"
+                                       aria-describedby="middleName"
+                                       placeholder="Enter middle name"/>
+                                <div th:unless="*{middleNameValidated}" class="is-invalid text-danger"><small>This field is not
+                                    yet
+                                    validated!</small></div>
+                            </div>
+                            <div class="my-3 form-group">
+                                <label for="lastName">Last name</label>
+                                <input th:field="*{lastName}"
+                                       th:class="'form-control ' + ${profileBindingModel.lastNameValidated ? '' : 'is-invalid'}"
+                                       type="text" class="form-control"
+                                       id="lastName"
+                                       aria-describedby="lastName"
+                                       placeholder="Enter last name"/>
+                                <div th:unless="*{lastNameValidated}" class="is-invalid text-danger"><small>This field is not
+                                    yet
+                                    validated!</small></div>
+                            </div>
+                            <div class="my-3 form-group">
+                                <label for="dateOfBirth">Date of birth</label>
+                                <input th:field="*{dateOfBirth}"
+                                       th:class="'form-control ' + ${profileBindingModel.dateOfBirthValidated ? '' : 'is-invalid'}"
+                                       type="date"
+                                       class="form-control"
+                                       id="dateOfBirth"
+                                       aria-describedby="dateOfBirth"
+                                       placeholder="Enter date of birth"/>
+                                <div th:unless="*{dateOfBirthValidated}" class="is-invalid text-danger"><small>This field is
+                                    not yet
+                                    validated!</small></div>
+                            </div>
+                            <div class="my-3 text-center">
+                                <button type="submit" class="btn btn-primary btn-mydark">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-2"></div>
+                <div class="col-lg-4">
+                    <div class="mt-5 p-3 bg-light rounded-back text-center">
+                        <form th:action="@{/profile/validation}" th:method="post" enctype="multipart/form-data">
+                            <div id="frontIdPicture" class="mt-4">
+                                <h4>Front of id card image</h4>
+                                <div>
+                                    <label for="frontImageInput" class="mt-3"><img id="frontImagePreview" class="image-upload"
+                                                                                   src="/images/uploadImage.jpg"></label>
+                                </div>
+                                <input id="frontImageInput" class="file-upload" type="file" accept="image/jpeg, image/png"
+                                       name="frontImage"/>
+                            </div>
+                            <div id="backIdPicture" class="mt-4">
+                                <h4>Back of id card image</h4>
+                                <div>
+                                    <label for="backImageInput" class="mt-3"><img id="backImagePreview" class="image-upload"
+                                                                                  src="/images/uploadImage.jpg"></label>
+                                </div>
+                                <input id="backImageInput" class="file-upload" type="file" accept="image/jpeg, image/png"
+                                       name="backImage"/>
+                            </div>
+                            <input type="submit" class="mt-4 btn btn-primary btn-mydark" value="Submit"/>
+                        </form>
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="col-lg-2"></div>
-        <div class="col-lg-4">
-            <div class="mt-5 p-3 bg-light rounded-back text-center">
-                <form th:action="@{/profile/validation}" th:method="post" enctype="multipart/form-data">
-                    <div id="frontIdPicture" class="mt-4">
-                        <h4>Front of id card image</h4>
-                        <div>
-                            <label for="frontImageInput" class="mt-3"><img id="frontImagePreview" class="image-upload"
-                                                                           src="/images/uploadImage.jpg"></label>
-                        </div>
-                        <input id="frontImageInput" class="file-upload" type="file" accept="image/jpeg, image/png"
-                               name="frontImage"/>
-                    </div>
-                    <div id="backIdPicture" class="mt-4">
-                        <h4>Back of id card image</h4>
-                        <div>
-                            <label for="backImageInput" class="mt-3"><img id="backImagePreview" class="image-upload"
-                                                                          src="/images/uploadImage.jpg"></label>
-                        </div>
-                        <input id="backImageInput" class="file-upload" type="file" accept="image/jpeg, image/png"
-                               name="backImage"/>
-                    </div>
-                    <input type="submit" class="mt-4 btn btn-primary btn-mydark" value="Submit"/>
-                </form>
+                <div class="col-lg-1"></div>
             </div>
         </div>
-        <div class="col-lg-1"></div>
     </div>
 </div>
+
 </body>
 </html>
