@@ -37,10 +37,10 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .antMatchers(
                         // TODO: Remove in production
                         "/dev/**",
-                        "/check",
                         "/",
-                        "/register",
-                        "/login")
+                        "/identity/check",
+                        "/login",
+                        "/register")
                 .permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
