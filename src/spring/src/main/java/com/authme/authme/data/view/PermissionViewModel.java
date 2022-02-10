@@ -3,6 +3,20 @@ package com.authme.authme.data.view;
 public class PermissionViewModel {
     private Long id;
     private String fieldName;
+    private Boolean allowed;
+
+    public PermissionViewModel() {
+        allowed = false;
+    }
+
+    public Boolean getAllowed() {
+        return allowed;
+    }
+
+    public PermissionViewModel setAllowed(Boolean allowed) {
+        this.allowed = allowed;
+        return this;
+    }
 
     public Long getId() {
         return id;

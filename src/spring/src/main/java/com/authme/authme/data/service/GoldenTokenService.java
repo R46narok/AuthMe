@@ -2,6 +2,7 @@ package com.authme.authme.data.service;
 
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.GoldenToken;
+import com.authme.authme.data.view.PermissionViewModel;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -21,4 +22,5 @@ public interface GoldenTokenService {
 
     ResponseEntity<String> triggerDataValidationProcess(String goldenToken);
 
+    List<PermissionViewModel> getAllPermissionsTagged();
 }

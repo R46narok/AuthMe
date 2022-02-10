@@ -6,8 +6,11 @@ import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.GoldenTokenRepository;
 import com.authme.authme.data.repository.PermissionRepository;
+import com.authme.authme.data.service.CurrentUserService;
 import com.authme.authme.data.service.GoldenTokenService;
+import com.authme.authme.data.view.PermissionViewModel;
 import com.authme.authme.exceptions.CommonErrorMessages;
+import com.authme.authme.utils.ClassMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +24,15 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
     private final GoldenTokenRepository goldenTokenRepository;
     private final AuthMeUserRepository userRepository;
     private final PermissionRepository permissionRepository;
+    private final CurrentUserService currentUserService;
+    private final ClassMapper classMapper;
 
-    public GoldenTokenServiceImpl(GoldenTokenRepository goldenTokenRepository, AuthMeUserRepository userRepository, PermissionRepository permissionRepository) {
+    public GoldenTokenServiceImpl(GoldenTokenRepository goldenTokenRepository, AuthMeUserRepository userRepository, PermissionRepository permissionRepository, CurrentUserService currentUserService, ClassMapper classMapper) {
         this.goldenTokenRepository = goldenTokenRepository;
         this.userRepository = userRepository;
         this.permissionRepository = permissionRepository;
+        this.currentUserService = currentUserService;
+        this.classMapper = classMapper;
     }
 
     @Override
@@ -84,6 +91,25 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
                 .orElseThrow(() -> CommonErrorMessages.token(goldenToken));
 
         return null;
+    }
+
+    @Override
+    public List<PermissionViewModel> getAllPermissionsTagged() {
+        List<Permission> allPermissions = permissionRepository.findAll();
+        AuthMeUserEntity currentUser = currentUserService.getCurrentLoggedUser();
+        GoldenToken goldenToken = currentUser.getGoldenToken();
+        if(goldenToken == null)
+            return null;
+        List<Permission> currentTokenPermissions = goldenToken.getPermissions();
+
+        List<PermissionViewModel> viewModelList = classMapper.toPermissionViewModelList(allPermissions);
+
+        for (PermissionViewModel model : viewModelList) {
+            if(currentTokenPermissions.stream().anyMatch(p -> p.getId().equals(model.getId()))){
+                model.setAllowed(true);
+            }
+        }
+        return viewModelList;
     }
 
 }

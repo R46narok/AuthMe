@@ -22,29 +22,33 @@
                 <div class="row" style="padding-top: 50px;">
                     <div class="col-6">
                         <p style="margin-top: 5px;font-size: 20px;font-style: italic;font-weight: bold;padding-left: 25px;/*padding-top: 50px;*/">
-                            <span style="font-weight: normal;font-style: normal;padding-right: 15px;">Your token:</span>1f273f28-c7e3-4760-ae48-c271e12d2909<br>
+                            <span style="font-weight: normal;font-style: normal;padding-right: 15px;">Your token:</span>
+                            <span th:if="${activeToken}" th:text="${goldenToken}"></span>
+                            <span th:unless="${activeToken}">Expired</span>
+                            <br>
                         </p>
                     </div>
-                    <div class="col">
+                    <div th:if="${activeToken}" class="col">
                         <button class="btn btn-primary btn-dark" type="button"
                                 style="border-radius: 10px;font-size: 15px;">Copy
                         </button>
                     </div>
+                    <div th:unless="${activeToken}" class="col">
+                        <a class="btn btn-primary btn-dark"
+                           th:href="@{/token/golden/generate}"
+                           style="border-radius: 10px;font-size: 15px;">Generate a new one</a>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <p style="margin-top: 5px;font-size: 17px;font-style: italic;font-weight: bold;padding-left: 25px;/*padding-top: 50px;*/">
-                            <span style="font-weight: normal;font-style: normal;padding-right: 15px;">Expires:</span>expired<br>
-                        </p>
+                        <form th:if="${activeToken}" th:action="@{/token/golden/permission}" th:method="post">
+                            <div th:each="p : ${permissions}">
+                                <input type="checkbox" th:id="${p.id}" th:value="${p.id}" name="permission" th:checked="${p.allowed}">
+                                <label th:for="${p.id}" th:text="${p.fieldName}"></label>
+                            </div>
+                            <input type="submit" class="btn btn-primary btn-dark" value="Alter">
+                        </form>
                     </div>
-                    <div class="col">
-                        <button class="btn btn-primary btn-dark" type="button"
-                                style="border-radius: 10px;font-size: 15px;">Generate a new one
-                        </button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6"></div>
                     <div class="col"></div>
                 </div>
             </div>
