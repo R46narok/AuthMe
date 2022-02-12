@@ -5,6 +5,7 @@
 <head>
     <span th:replace="fragments/fragments::imports"></span>
     <link rel="stylesheet" href="/css/token/styles.min.css">
+    <script type="module" src="/js/token/app.js"></script>
 </head>
 
 <body class="legion-background">
@@ -23,15 +24,21 @@
                     <div class="col-6">
                         <p style="margin-top: 5px;font-size: 20px;font-style: italic;font-weight: bold;padding-left: 25px;/*padding-top: 50px;*/">
                             <span style="font-weight: normal;font-style: normal;padding-right: 15px;">Your token:</span>
-                            <span th:if="${activeToken}" th:text="${goldenToken}"></span>
+                            <span id="goldenTokenField" th:if="${activeToken}" th:text="${goldenToken}"></span>
                             <span th:unless="${activeToken}">Expired</span>
                             <br>
                         </p>
+                        <p style="margin-top: 5px;font-size: 20px;font-style: italic;font-weight: bold;padding-left: 25px;/*padding-top: 50px;*/" th:if="${activeToken}">
+                            <span style="font-weight: normal;font-style: normal;padding-right: 15px;">Expires:</span>
+                            <span th:text="${#temporals.format(goldenTokenExpiry, 'HH:mm:ss')}">Expiry</span>
+                        </p>
                     </div>
                     <div th:if="${activeToken}" class="col">
-                        <button class="btn btn-primary btn-dark" type="button"
+                        <button id="copyTokenButton"
+                                class="btn btn-primary btn-dark" type="button"
                                 style="border-radius: 10px;font-size: 15px;">Copy
                         </button>
+                        <span id="copiedMessage" hidden>Copied</span>
                     </div>
                     <div th:unless="${activeToken}" class="col">
                         <a class="btn btn-primary btn-dark"

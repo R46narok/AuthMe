@@ -20,7 +20,7 @@ public interface GoldenTokenService {
 
     void setPermissionsForToken(GoldenToken goldenToken, List<String> permissionsStrings);
 
-    ResponseEntity<String> triggerDataValidationProcess(String goldenToken);
+    String triggerDataValidationProcess(String goldenToken, String issuer, String issuerIP);
 
     List<PermissionViewModel> getAllPermissionsTagged();
 }

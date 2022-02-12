@@ -38,7 +38,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                         // TODO: Remove in production
                         "/dev/**",
                         "/",
-                        "/identity/check",
+                        "/identity/check/**",
                         "/login",
                         "/register")
                 .permitAll()

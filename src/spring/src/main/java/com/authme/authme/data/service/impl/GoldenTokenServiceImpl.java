@@ -1,17 +1,18 @@
 package com.authme.authme.data.service.impl;
 
 import com.authme.authme.data.entity.AuthMeUserEntity;
+import com.authme.authme.data.entity.DataValidationRecord;
 import com.authme.authme.data.entity.GoldenToken;
 import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.GoldenTokenRepository;
 import com.authme.authme.data.repository.PermissionRepository;
 import com.authme.authme.data.service.CurrentUserService;
+import com.authme.authme.data.service.DataValidationRecordService;
 import com.authme.authme.data.service.GoldenTokenService;
 import com.authme.authme.data.view.PermissionViewModel;
 import com.authme.authme.exceptions.CommonErrorMessages;
 import com.authme.authme.utils.ClassMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,13 +27,15 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
     private final PermissionRepository permissionRepository;
     private final CurrentUserService currentUserService;
     private final ClassMapper classMapper;
+    private final DataValidationRecordService dataValidationRecordService;
 
-    public GoldenTokenServiceImpl(GoldenTokenRepository goldenTokenRepository, AuthMeUserRepository userRepository, PermissionRepository permissionRepository, CurrentUserService currentUserService, ClassMapper classMapper) {
+    public GoldenTokenServiceImpl(GoldenTokenRepository goldenTokenRepository, AuthMeUserRepository userRepository, PermissionRepository permissionRepository, CurrentUserService currentUserService, ClassMapper classMapper, DataValidationRecordService dataValidationRecordService) {
         this.goldenTokenRepository = goldenTokenRepository;
         this.userRepository = userRepository;
         this.permissionRepository = permissionRepository;
         this.currentUserService = currentUserService;
         this.classMapper = classMapper;
+        this.dataValidationRecordService = dataValidationRecordService;
     }
 
     @Override
@@ -42,6 +45,7 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
         }
     }
 
+    //TODO: There's a bug where if you generate a token the already started validation process becomes unable to finish
     @Override
     public String generateFor(AuthMeUserEntity user) {
         GoldenToken newToken =
@@ -86,11 +90,15 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
     }
 
     @Override
-    public ResponseEntity<String> triggerDataValidationProcess(String goldenToken) {
+    public String triggerDataValidationProcess(String goldenToken, String issuer, String issuerIP) {
         GoldenToken token = goldenTokenRepository.findById(goldenToken)
                 .orElseThrow(() -> CommonErrorMessages.token(goldenToken));
-
-        return null;
+        if(token.getExpiry().isBefore(LocalDateTime.now()))
+            return null;
+        DataValidationRecord record = dataValidationRecordService.generateRecord(token.getUser(), issuer, issuerIP);
+        token.setExpiry(LocalDateTime.now());
+        goldenTokenRepository.saveAndFlush(token);
+        return record.getPlatinumToken().substring(0,  record.getPlatinumToken().length() / 2);
     }
 
     @Override

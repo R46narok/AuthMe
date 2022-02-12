@@ -110,6 +110,15 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
     }
 
     @Override
+    public LocalDateTime getCurrentUserGoldenTokenExpiry() {
+        if (currentUserService.getCurrentLoggedUserOrNull() == null)
+            return null;
+        if (currentUserService.getCurrentLoggedUser().getGoldenToken() == null)
+            return null;
+        return currentUserService.getCurrentLoggedUser().getGoldenToken().getExpiry();
+    }
+
+    @Override
     public AuthMeUserEntity getAssociatedUserByGoldenTokenOrNull(String goldenToken) {
         GoldenToken token = goldenTokenService.findById(goldenToken).orElse(null);
         if(token == null)
@@ -127,6 +136,8 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
 
     @Override
     public void setTokenPermissions(List<String> permissionsStrings) {
+        if(permissionsStrings == null)
+            return;
         AuthMeUserEntity user = currentUserService.getCurrentLoggedUser();
         goldenTokenService.setPermissionsForToken(user.getGoldenToken(), permissionsStrings);
     }

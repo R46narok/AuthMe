@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -38,6 +40,11 @@ public class GoldenTokenController {
         return userService.getCurrentUserGoldenToken();
     }
 
+    @ModelAttribute("goldenTokenExpiry")
+    public LocalDateTime goldenTokenExpiry() {
+        return userService.getCurrentUserGoldenTokenExpiry();
+    }
+
     @Transactional
     @ModelAttribute("permissions")
     public List<PermissionViewModel> getPermission() {
@@ -58,7 +65,9 @@ public class GoldenTokenController {
 
 
     @PostMapping("/token/golden/permission")
-    public String changeCurrentTokenPermissions(@RequestParam("permission") List<String> permissionsStrings) {
+    public String changeCurrentTokenPermissions(@RequestParam(value = "permission", required = false) List<String> permissionsStrings) {
+        if(permissionsStrings == null)
+            permissionsStrings = new ArrayList<>();
         userService.setTokenPermissions(permissionsStrings);
         return "redirect:/token";
     }
