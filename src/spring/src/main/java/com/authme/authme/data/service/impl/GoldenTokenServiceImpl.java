@@ -40,12 +40,14 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
 
     @Override
     public void deleteToken(String goldenToken) {
-        if(goldenTokenRepository.existsById(goldenToken)){
+        if (goldenTokenRepository.existsById(goldenToken)) {
             goldenTokenRepository.deleteById(goldenToken);
         }
     }
 
-    //TODO: There's a bug where if you generate a token the already started validation process becomes unable to finish
+    //TODO: There's a bug where if you generate a token the
+    // already started validation process becomes unable to finish
+    // because the new token overwrites the previous
     @Override
     public String generateFor(AuthMeUserEntity user) {
         GoldenToken newToken =
@@ -68,7 +70,7 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
     public boolean hasPermission(Map<String, String> data, String tokenId) {
         GoldenToken token = goldenTokenRepository.findById(tokenId).orElseThrow(() -> CommonErrorMessages.token(tokenId));
         for (String field : data.keySet()) {
-            if(!token.getPermissions().contains(new Permission().setFieldName(field)))
+            if (!token.getPermissions().contains(new Permission().setFieldName(field)))
                 return false;
         }
         return true;
@@ -93,12 +95,12 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
     public String triggerDataValidationProcess(String goldenToken, String issuer, String issuerIP) {
         GoldenToken token = goldenTokenRepository.findById(goldenToken)
                 .orElseThrow(() -> CommonErrorMessages.token(goldenToken));
-        if(token.getExpiry().isBefore(LocalDateTime.now()))
+        if (token.getExpiry().isBefore(LocalDateTime.now()))
             return null;
         DataValidationRecord record = dataValidationRecordService.generateRecord(token.getUser(), issuer, issuerIP);
         token.setExpiry(LocalDateTime.now());
         goldenTokenRepository.saveAndFlush(token);
-        return record.getPlatinumToken().substring(0,  record.getPlatinumToken().length() / 2);
+        return record.getPlatinumToken().substring(0, record.getPlatinumToken().length() / 2);
     }
 
     @Override
@@ -106,14 +108,14 @@ public class GoldenTokenServiceImpl implements GoldenTokenService {
         List<Permission> allPermissions = permissionRepository.findAll();
         AuthMeUserEntity currentUser = currentUserService.getCurrentLoggedUser();
         GoldenToken goldenToken = currentUser.getGoldenToken();
-        if(goldenToken == null)
+        if (goldenToken == null)
             return null;
         List<Permission> currentTokenPermissions = goldenToken.getPermissions();
 
         List<PermissionViewModel> viewModelList = classMapper.toPermissionViewModelList(allPermissions);
 
         for (PermissionViewModel model : viewModelList) {
-            if(currentTokenPermissions.stream().anyMatch(p -> p.getId().equals(model.getId()))){
+            if (currentTokenPermissions.stream().anyMatch(p -> p.getId().equals(model.getId()))) {
                 model.setAllowed(true);
             }
         }

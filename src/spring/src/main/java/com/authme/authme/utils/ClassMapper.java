@@ -5,8 +5,11 @@ import com.authme.authme.data.binding.RegisterBindingModel;
 import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.dto.objects.ProfileEntryObject;
 import com.authme.authme.data.entity.AuthMeUserEntity;
+import com.authme.authme.data.entity.DataValidationRecord;
 import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.service.models.RegisterServiceModel;
+import com.authme.authme.data.view.DataAccessRequestRecordViewModel;
+import com.authme.authme.data.view.DataMonitorViewModel;
 import com.authme.authme.data.view.PermissionViewModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.User;
@@ -57,5 +60,17 @@ public class ClassMapper extends ModelMapper {
             permissions.add(super.map(permission, PermissionViewModel.class));
         }
         return permissions;
+    }
+
+    public DataAccessRequestRecordViewModel toDataAccessRequestRecordViewModel(DataValidationRecord validationRecord) {
+        return super.map(validationRecord, DataAccessRequestRecordViewModel.class);
+    }
+
+    public DataMonitorViewModel toDataMonitorViewModel(List<DataValidationRecord> records) {
+        DataMonitorViewModel viewModel = new DataMonitorViewModel();
+        for (DataValidationRecord record : records) {
+            viewModel.getRequests().add(toDataAccessRequestRecordViewModel(record));
+        }
+        return viewModel;
     }
 }

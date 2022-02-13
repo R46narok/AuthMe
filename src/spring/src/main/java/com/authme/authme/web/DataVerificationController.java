@@ -4,11 +4,13 @@ import com.authme.authme.data.service.AuthMeUserService;
 import com.authme.authme.data.service.GoldenTokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @RestController
 public class DataVerificationController {
@@ -27,6 +29,14 @@ public class DataVerificationController {
                                                            HttpServletRequest request) {
         if(goldenTokenService.findById(goldenToken).isEmpty())
             return ResponseEntity.notFound().build();
+        if(goldenTokenService.findById(goldenToken).get().getExpiry().isBefore(LocalDateTime.now()))
+            return ResponseEntity.notFound().build();
         return ResponseEntity.ok(goldenTokenService.triggerDataValidationProcess(goldenToken, issuer, request.getRemoteAddr()));
     }
+
+//    @Transactional
+//    @GetMapping
+//    public ResponseEntity<Boolean> secondVerificationRequest(@RequestHeader String goldenToken,
+//                                                             @RequestHeader String platinumToken,
+//                                                             @RequestBody )
 }

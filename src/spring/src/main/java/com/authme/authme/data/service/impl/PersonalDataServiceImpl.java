@@ -20,8 +20,8 @@ public class PersonalDataServiceImpl implements PersonalDataService {
     private final ClassMapper classMapper;
     private final CurrentUserService currentUser;
 
-    public PersonalDataServiceImpl(RestTemplateBuilder restTemplateBuilder, ClassMapper classMapper, CurrentUserService currentUser) {
-        restTemplate = restTemplateBuilder.build();
+    public PersonalDataServiceImpl(RestTemplate restTemplate, ClassMapper classMapper, CurrentUserService currentUser) {
+        this.restTemplate = restTemplate;
         this.classMapper = classMapper;
         this.currentUser = currentUser;
     }
