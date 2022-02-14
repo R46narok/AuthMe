@@ -1,0 +1,226 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Infrastructure\\AuthMe.IdentityDocument.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj",
+        "projectName": "AuthMe.Domain",
+        "projectPath": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj",
+        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
+        "outputPath": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Application\\AuthMe.IdentityDocument.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Application\\AuthMe.IdentityDocument.Application.csproj",
+        "projectName": "AuthMe.IdentityDocument.Application",
+        "projectPath": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Application\\AuthMe.IdentityDocument.Application.csproj",
+        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
+        "outputPath": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj": {
+                "projectPath": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[10.3.6, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[10.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Infrastructure\\AuthMe.IdentityDocument.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Infrastructure\\AuthMe.IdentityDocument.Infrastructure.csproj",
+        "projectName": "AuthMe.IdentityDocument.Infrastructure",
+        "projectPath": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Infrastructure\\AuthMe.IdentityDocument.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
+        "outputPath": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Application\\AuthMe.IdentityDocument.Application.csproj": {
+                "projectPath": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.IdentityDocument\\AuthMe.IdentityDocument.Application\\AuthMe.IdentityDocument.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Azure.Messaging.ServiceBus": {
+              "target": "Package",
+              "version": "[7.6.0, )"
+            },
+            "GrapeCity.Documents.Imaging": {
+              "target": "Package",
+              "version": "[5.0.0.770, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[6.0.2-mauipre.1.22054.8, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[10.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

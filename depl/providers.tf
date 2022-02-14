@@ -11,7 +11,7 @@ terraform {
 
 
 provider "kubernetes" {
-  config_path = "authme-cluster-kubeconfig.yaml"
+  config_path = "C:/Users/Acer/.kube/config"
 }
 
 provider "azurerm" {

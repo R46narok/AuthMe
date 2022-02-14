@@ -1,0 +1,15 @@
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\bin\Debug\net6.0\AuthMe.Identity.Application.deps.json
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\bin\Debug\net6.0\AuthMe.Identity.Application.dll
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\bin\Debug\net6.0\ref\AuthMe.Identity.Application.dll
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\bin\Debug\net6.0\AuthMe.Identity.Application.pdb
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\bin\Debug\net6.0\AuthMe.Domain.dll
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\bin\Debug\net6.0\AuthMe.Domain.pdb
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\obj\Debug\net6.0\AuthMe.Identity.Application.csproj.AssemblyReference.cache
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\obj\Debug\net6.0\AuthMe.Identity.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\obj\Debug\net6.0\AuthMe.Identity.Application.AssemblyInfoInputs.cache
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\obj\Debug\net6.0\AuthMe.Identity.Application.AssemblyInfo.cs
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\obj\Debug\net6.0\AuthMe.Identity.Application.csproj.CoreCompileInputs.cache
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\obj\Debug\net6.0\AuthMe.Identity.Application.csproj.CopyComplete
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\obj\Debug\net6.0\AuthMe.Identity.Application.dll
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\obj\Debug\net6.0\ref\AuthMe.Identity.Application.dll
+D:\Development\Projects\AuthMe\src\dotnet\AuthMe.Identity\AuthMe.Identity.Application\obj\Debug\net6.0\AuthMe.Identity.Application.pdb

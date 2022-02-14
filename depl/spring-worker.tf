@@ -51,3 +51,4 @@ resource "kubernetes_service_v1" "spring-worker-loadbalancer" {
     }
   }
 } 
+

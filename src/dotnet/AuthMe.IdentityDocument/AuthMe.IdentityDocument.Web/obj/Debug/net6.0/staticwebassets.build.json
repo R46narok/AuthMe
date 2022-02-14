@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "OGILkZJ++oOm7VbPqJKSQG+RMoYMnlQWs/fFfGI9KaU=",
+  "Source": "AuthMe.IdentityDocument.Web",
+  "BasePath": "_content/AuthMe.IdentityDocument.Web",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

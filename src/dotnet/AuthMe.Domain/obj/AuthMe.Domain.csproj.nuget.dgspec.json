@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj": {}
+    "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj": {}
   },
   "projects": {
-    "E:\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj": {
+    "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj",
+        "projectUniqueName": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj",
         "projectName": "AuthMe.Domain",
-        "projectPath": "E:\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj",
-        "packagesPath": "C:\\Users\\mitko\\.nuget\\packages\\",
-        "outputPath": "E:\\AuthMe\\src\\dotnet\\AuthMe.Domain\\obj\\",
+        "projectPath": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\AuthMe.Domain.csproj",
+        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
+        "outputPath": "D:\\Development\\Projects\\AuthMe\\src\\dotnet\\AuthMe.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\mitko\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
