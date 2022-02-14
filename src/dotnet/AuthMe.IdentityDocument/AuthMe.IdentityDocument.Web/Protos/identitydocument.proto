@@ -1,0 +1,15 @@
+﻿syntax = "proto3";
+package authme;
+
+message GetIdentityDocumentRequest {
+  int32 id = 1;
+}
+
+message GetIdentityDocumentResponse {
+  int32 id = 1;
+  bytes image = 2;
+}
+
+service IdentityDocument {
+  rpc GetIdentityDocument (GetIdentityDocumentRequest) returns (GetIdentityDocumentResponse) {}
+}

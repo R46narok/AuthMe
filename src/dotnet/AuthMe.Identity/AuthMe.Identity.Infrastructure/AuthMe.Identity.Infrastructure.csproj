@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>AuthMe.IdentityService.Infrastructure</RootNamespace>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="11.0.0" />
+      <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.6.0" />
+      <PackageReference Include="GrapeCity.Documents.Imaging" Version="5.0.0.770" />
+      <PackageReference Include="Microsoft.Azure.CognitiveServices.Vision.ComputerVision" Version="7.0.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.2-mauipre.1.22054.8" />
+      <PackageReference Include="System.Globalization" Version="4.3.0" />
+      <PackageReference Include="System.Globalization.Extensions" Version="4.3.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\AuthMe.Domain\AuthMe.Domain.csproj" />
+      <ProjectReference Include="..\AuthMe.Identity.Application\AuthMe.Identity.Application.csproj" />
+    </ItemGroup>
+
+</Project>
