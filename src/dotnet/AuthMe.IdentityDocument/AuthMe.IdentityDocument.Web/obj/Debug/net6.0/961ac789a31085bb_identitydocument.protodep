@@ -1,2 +1,0 @@
-obj\Debug\net6.0\.\Protos/Identitydocument.cs \
-obj\Debug\net6.0\.\Protos/IdentitydocumentGrpc.cs: Protos/identitydocument.proto
