@@ -1,9 +1,10 @@
 package com.authme.authme.data.view;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataMonitorViewModel {
-    private List<DataAccessRequestRecordViewModel> requests;
+    private List<DataAccessRequestRecordViewModel> requests = new ArrayList<>();
 
     public List<DataAccessRequestRecordViewModel> getRequests() {
         return requests;

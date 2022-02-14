@@ -37,15 +37,15 @@
                                         <th>Name</th>
                                         <th class="sorter-false">IP address</th>
                                         <th class="filter-false">Location</th>
-                                        <th class="filter-false sorter-false">Platinum key</th>
+                                        <th class="filter-false sorter-false">Platinum token</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>Facebook</td>
-                                        <td>157.240.9.35</td>
-                                        <td>Sofia, Bulgaria</td>
-                                        <td>qwertyuiopasdfghjklzxcvbnm</td>
+                                    <tr th:each="r : ${dataMonitorViewModel.requests}" >
+                                        <td th:text="${r.name}">Facebook</td>
+                                        <td th:text="${r.ip}">157.240.9.35</td>
+                                        <td th:text="${r.location}">Sofia, Bulgaria</td>
+                                        <td th:text="${r.platinumToken.substring(r.platinumToken.length() / 2)}">qwertyuiopasdfghjklzxcvbnm</td>
                                     </tr>
                                     </tbody>
                                 </table>

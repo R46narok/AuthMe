@@ -3,13 +3,13 @@ package com.authme.authme.data.service.impl;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.DataValidationRecord;
 import com.authme.authme.data.entity.GoldenToken;
-import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.RoleRepository;
 import com.authme.authme.data.service.*;
 import com.authme.authme.data.service.models.RegisterServiceModel;
 import com.authme.authme.data.view.DataMonitorViewModel;
+import com.authme.authme.utils.ClassMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,12 +32,13 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
     private final CurrentUserService currentUserService;
     private final GoldenTokenService goldenTokenService;
     private final DataValidationRecordService validationService;
+    private final ClassMapper classMapper;
 
     public AuthMeUserServiceImpl(AuthMeUserRepository userRepository,
                                  PasswordEncoder passwordEncoder,
                                  RoleRepository roleRepository,
                                  UserDetailsServiceImpl userDetailsService,
-                                 PersonalDataService personalDataService, CurrentUserService currentUserService, GoldenTokenService goldenTokenService, DataValidationRecordService validationService) {
+                                 PersonalDataService personalDataService, CurrentUserService currentUserService, GoldenTokenService goldenTokenService, DataValidationRecordService validationService, ClassMapper classMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
@@ -47,6 +47,7 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
         this.currentUserService = currentUserService;
         this.goldenTokenService = goldenTokenService;
         this.validationService = validationService;
+        this.classMapper = classMapper;
     }
 
     @Override
@@ -78,7 +79,8 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
 
     @Override
     public DataMonitorViewModel getDataMonitorViewModel() {
-        return null;
+        List<DataValidationRecord> records = currentUserService.getCurrentLoggedUser().getValidationRecords();
+        return classMapper.toDataMonitorViewModel(records);
     }
 
     @Override

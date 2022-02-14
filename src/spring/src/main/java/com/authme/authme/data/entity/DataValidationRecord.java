@@ -7,8 +7,10 @@ import java.util.List;
 public class DataValidationRecord extends BaseEntity {
     @ManyToOne
     private AuthMeUserEntity user;
-    private String requesterName;
-    private String requesterIpAddress;
+    // Requester
+    private String name;
+    private String ip;
+    private String location;
     private String platinumToken;
     @ManyToMany
     @JoinTable(
@@ -17,6 +19,7 @@ public class DataValidationRecord extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private List<Permission> allowedPermissions;
+
 
     public AuthMeUserEntity getUser() {
         return user;
@@ -27,21 +30,30 @@ public class DataValidationRecord extends BaseEntity {
         return this;
     }
 
-    public String getRequesterName() {
-        return requesterName;
+    public String getName() {
+        return name;
     }
 
-    public DataValidationRecord setRequesterName(String requesterName) {
-        this.requesterName = requesterName;
+    public DataValidationRecord setName(String name) {
+        this.name = name;
         return this;
     }
 
-    public String getRequesterIpAddress() {
-        return requesterIpAddress;
+    public String getIp() {
+        return ip;
     }
 
-    public DataValidationRecord setRequesterIpAddress(String requesterIpAddress) {
-        this.requesterIpAddress = requesterIpAddress;
+    public DataValidationRecord setIp(String ip) {
+        this.ip = ip;
+        return this;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public DataValidationRecord setLocation(String location) {
+        this.location = location;
         return this;
     }
 
