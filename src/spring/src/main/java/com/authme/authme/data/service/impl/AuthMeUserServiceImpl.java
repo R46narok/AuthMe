@@ -9,6 +9,7 @@ import com.authme.authme.data.repository.RoleRepository;
 import com.authme.authme.data.service.*;
 import com.authme.authme.data.service.models.RegisterServiceModel;
 import com.authme.authme.data.view.DataMonitorViewModel;
+import com.authme.authme.data.view.GoldenTokenView;
 import com.authme.authme.utils.ClassMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,9 +19,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthMeUserServiceImpl implements AuthMeUserService {
@@ -31,14 +33,17 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
     private final PersonalDataService personalDataService;
     private final CurrentUserService currentUserService;
     private final GoldenTokenService goldenTokenService;
-    private final DataValidationRecordService validationService;
     private final ClassMapper classMapper;
+    private final PermissionService permissionService;
 
     public AuthMeUserServiceImpl(AuthMeUserRepository userRepository,
                                  PasswordEncoder passwordEncoder,
                                  RoleRepository roleRepository,
                                  UserDetailsServiceImpl userDetailsService,
-                                 PersonalDataService personalDataService, CurrentUserService currentUserService, GoldenTokenService goldenTokenService, DataValidationRecordService validationService, ClassMapper classMapper) {
+                                 PersonalDataService personalDataService,
+                                 CurrentUserService currentUserService,
+                                 GoldenTokenService goldenTokenService,
+                                 ClassMapper classMapper, PermissionService permissionService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
@@ -46,13 +51,8 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
         this.personalDataService = personalDataService;
         this.currentUserService = currentUserService;
         this.goldenTokenService = goldenTokenService;
-        this.validationService = validationService;
         this.classMapper = classMapper;
-    }
-
-    @Override
-    public Optional<AuthMeUserEntity> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        this.permissionService = permissionService;
     }
 
     @Override
@@ -86,62 +86,29 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
     @Override
     public String generateGoldenToken() {
         AuthMeUserEntity user = currentUserService.getCurrentLoggedUser();
-        if (user.getGoldenToken() != null) {
-            goldenTokenService.deleteToken(user.getGoldenToken().getId());
-        }
         return goldenTokenService.generateFor(user);
     }
 
     @Override
-    public Boolean goldenTokenActive() {
+    public List<GoldenTokenView> getCurrentUserGoldenTokens() {
         AuthMeUserEntity user = currentUserService.getCurrentLoggedUserOrNull();
-        if(user == null)
-            return false;
-        return (user.getGoldenToken() != null && user.getGoldenToken().getExpiry().isAfter(LocalDateTime.now()));
-    }
-
-    @Override
-    public String getCurrentUserGoldenToken() {
-        AuthMeUserEntity user = currentUserService.getCurrentLoggedUserOrNull();
-        if(user == null)
-            return "";
-        if(user.getGoldenToken() != null && user.getGoldenToken().getExpiry().isAfter(LocalDateTime.now())){
-            return user.getGoldenToken().getId();
+        if (user == null)
+            return new ArrayList<>();
+        if (user.getGoldenTokens() != null && user.getGoldenTokens().stream().anyMatch(t -> t.getExpiry().isAfter(LocalDateTime.now()))) {
+            return classMapper.toGoldenTokenViewList(
+                    user.getGoldenTokens()
+                            .stream()
+                            .filter(t -> t.getExpiry().isAfter(LocalDateTime.now()))
+                            .sorted(Comparator.comparing(GoldenToken::getExpiry))
+                            .collect(Collectors.toList()),
+                    permissionService.getAll());
         }
-        return "";
+        return new ArrayList<>();
     }
 
     @Override
-    public LocalDateTime getCurrentUserGoldenTokenExpiry() {
-        if (currentUserService.getCurrentLoggedUserOrNull() == null)
-            return null;
-        if (currentUserService.getCurrentLoggedUser().getGoldenToken() == null)
-            return null;
-        return currentUserService.getCurrentLoggedUser().getGoldenToken().getExpiry();
-    }
-
-    @Override
-    public AuthMeUserEntity getAssociatedUserByGoldenTokenOrNull(String goldenToken) {
-        GoldenToken token = goldenTokenService.findById(goldenToken).orElse(null);
-        if(token == null)
-            return null;
-        return token.getUser();
-    }
-
-    @Override
-    public String checkDataValidForUser(AuthMeUserEntity user, String requesterName, String remoteAddress, Map<String, String> data) {
-        if(!personalDataService.checkDataValid(user, data))
-            return null;
-        DataValidationRecord record = validationService.generateRecord(user, requesterName, remoteAddress);
-        return record.getPlatinumToken();
-    }
-
-    @Override
-    public void setTokenPermissions(List<String> permissionsStrings) {
-        if(permissionsStrings == null)
-            return;
-        AuthMeUserEntity user = currentUserService.getCurrentLoggedUser();
-        goldenTokenService.setPermissionsForToken(user.getGoldenToken(), permissionsStrings);
+    public boolean tokenBelongsToCurrentUser(String goldenToken) {
+        return currentUserService.getCurrentLoggedUser().getGoldenTokens().stream().anyMatch(t -> t.getId().equals(goldenToken));
     }
 
     @Override

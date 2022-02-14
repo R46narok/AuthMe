@@ -4,7 +4,6 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <span th:replace="fragments/fragments::imports"></span>
-    <link rel="stylesheet" href="/css/token/styles.min.css">
     <script type="module" src="/js/token/app.js"></script>
 </head>
 
@@ -15,48 +14,56 @@
     <div id="layoutSidenav_content">
         <main style="padding-bottom: 10px;margin: 25px;width: 96%;background-color: white;border-radius: 10px;">
             <div class="container">
-                <h1 style="padding-left: 25px;padding-top: 25px;">Golden token</h1>
-                <p style="padding-left: 25px;max-width: 450px;">Be sure to keep your golden token safe from others, it's
-                    your primary way of authentication.</p>
+                <h1 style="padding-left: 25px;padding-top: 25px;">Golden tokens</h1>
+                <div class="col-6">
+                    <p style="padding-left: 25px;max-width: 450px;">Be sure to keep your golden tokens safe from others,
+                        they are
+                        your primary way of authentication.</p>
+                </div>
+                <div class="col-6">
+                    <p style="padding-left: 25px;max-width: 450px;">Select the permissions to your token which an
+                        authority can check!</p>
+                </div>
             </div>
             <div class="container">
-                <div class="row" style="padding-top: 50px;">
-                    <div class="col-6">
-                        <p style="margin-top: 5px;font-size: 20px;font-style: italic;font-weight: bold;padding-left: 25px;/*padding-top: 50px;*/">
-                            <span style="font-weight: normal;font-style: normal;padding-right: 15px;">Your token:</span>
-                            <span id="goldenTokenField" th:if="${activeToken}" th:text="${goldenToken}"></span>
-                            <span th:unless="${activeToken}">Expired</span>
-                            <br>
-                        </p>
-                        <p style="margin-top: 5px;font-size: 20px;font-style: italic;font-weight: bold;padding-left: 25px;/*padding-top: 50px;*/" th:if="${activeToken}">
-                            <span style="font-weight: normal;font-style: normal;padding-right: 15px;">Expires:</span>
-                            <span th:text="${#temporals.format(goldenTokenExpiry, 'HH:mm:ss')}">Expiry</span>
-                        </p>
-                    </div>
-                    <div th:if="${activeToken}" class="col">
-                        <button id="copyTokenButton"
-                                class="btn btn-primary btn-dark" type="button"
-                                style="border-radius: 10px;font-size: 15px;">Copy
-                        </button>
-                        <span id="copiedMessage" hidden>Copied</span>
-                    </div>
-                    <div th:unless="${activeToken}" class="col">
-                        <a class="btn btn-primary btn-dark"
-                           th:href="@{/token/golden/generate}"
-                           style="border-radius: 10px;font-size: 15px;">Generate a new one</a>
-                    </div>
-                </div>
                 <div class="row">
-                    <div class="col-6">
-                        <form th:if="${activeToken}" th:action="@{/token/golden/permission}" th:method="post">
-                            <div th:each="p : ${permissions}">
-                                <input type="checkbox" th:id="${p.id}" th:value="${p.id}" name="permission" th:checked="${p.allowed}">
-                                <label th:for="${p.id}" th:text="${p.fieldName}"></label>
+                    <div class="col-12">
+                        <div style="text-align: center;">
+                            <table class="table table tablesorter" id="ipi-table">
+                                <thead class="thead-dark">
+                                <tr style="background-color: rgb(60,60,60);">
+                                    <th class="filter-false"></th>
+                                    <th>Token</th>
+                                    <th class="sorter-false">Expiry</th>
+                                    <th class="filter-false" th:each="p : ${permissions}" th:text="${p.fieldName}"></th>
+                                    <th class="filter-false"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="token : ${tokens}">
+                                    <td>
+                                        <button class="btn btn-primary btn-dark copy-btn">Copy</button>
+                                    </td>
+                                    <td th:text="${token.id}" class="token-id"></td>
+                                    <td th:text="${#temporals.format(token.expiry, 'HH:mm:ss')}"></td>
+                                    <form th:action="@{/token/golden/permission}" th:method="post">
+                                        <input name="goldenToken" th:value="${token.id}" hidden>
+                                        <td th:each="p : ${token.permissions}">
+                                            <input type="checkbox" th:checked="${p.allowed}" name="permission"
+                                                   th:value="${p.id}">
+                                        </td>
+                                        <td><input class="btn btn-primary btn-dark" type="submit" value="Alter"></td>
+                                    </form>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <a class="btn btn-primary btn-dark"
+                                   th:href="@{/token/golden/generate}"
+                                   style="font-size: 15px;">Generate a new one</a>
                             </div>
-                            <input type="submit" class="btn btn-primary btn-dark" value="Alter">
-                        </form>
+                        </div>
                     </div>
-                    <div class="col"></div>
                 </div>
             </div>
         </main>

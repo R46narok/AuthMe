@@ -10,7 +10,7 @@ public class GoldenToken {
     @Id
     @Column(nullable = false)
     private String id;
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private AuthMeUserEntity user;
     @Column(nullable = false)
     private LocalDateTime expiry;

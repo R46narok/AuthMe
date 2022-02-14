@@ -8,4 +8,6 @@ public interface PermissionService {
     void init();
 
     List<Permission> getAll();
+
+    Permission findById(Long valueOf);
 }

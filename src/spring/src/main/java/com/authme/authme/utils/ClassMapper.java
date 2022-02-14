@@ -6,10 +6,12 @@ import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.dto.objects.ProfileEntryObject;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.DataValidationRecord;
+import com.authme.authme.data.entity.GoldenToken;
 import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.service.models.RegisterServiceModel;
 import com.authme.authme.data.view.DataAccessRequestRecordViewModel;
 import com.authme.authme.data.view.DataMonitorViewModel;
+import com.authme.authme.data.view.GoldenTokenView;
 import com.authme.authme.data.view.PermissionViewModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.User;
@@ -72,5 +74,40 @@ public class ClassMapper extends ModelMapper {
             viewModel.getRequests().add(toDataAccessRequestRecordViewModel(record));
         }
         return viewModel;
+    }
+
+    public List<GoldenTokenView> toGoldenTokenViewList(List<GoldenToken> tokens, List<Permission> allPermissions) {
+        List<GoldenTokenView> goldenTokenViews = new ArrayList<>();
+        for (GoldenToken token : tokens) {
+            goldenTokenViews.add(toGoldenTokenView(token, allPermissions));
+        }
+        return goldenTokenViews;
+    }
+
+    public GoldenTokenView toGoldenTokenView(GoldenToken token, List<Permission> allPermissions) {
+        List<PermissionViewModel> allPermissionViews = new ArrayList<>();
+        for (Permission permission : allPermissions) {
+            allPermissionViews.add(
+                    new PermissionViewModel()
+                            .setId(permission.getId())
+                            .setFieldName(permission.getFieldName())
+                            .setAllowed(false)
+            );
+        }
+
+        for (Permission permission : token.getPermissions()) {
+            allPermissionViews
+                    .stream()
+                    .filter(p -> p.getId().equals(permission.getId()))
+                    .findFirst()
+                    .get()
+                    .setAllowed(true);
+        }
+
+        GoldenTokenView goldenTokenView = new GoldenTokenView()
+                .setId(token.getId())
+                .setExpiry(token.getExpiry())
+                .setPermissions(allPermissionViews);
+        return goldenTokenView;
     }
 }

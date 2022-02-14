@@ -13,8 +13,8 @@ public class AuthMeUserEntity extends BaseEntity {
     private String password;
     @NotNull
     private Long dataId;
-    @OneToOne(mappedBy = "user")
-    private GoldenToken goldenToken;
+    @OneToMany(mappedBy = "user")
+    private List<GoldenToken> goldenTokens;
     @ManyToMany
     @NotNull
     private List<Role> roles;
@@ -57,21 +57,21 @@ public class AuthMeUserEntity extends BaseEntity {
         return this;
     }
 
-    public GoldenToken getGoldenToken() {
-        return goldenToken;
-    }
-
-    public AuthMeUserEntity setGoldenToken(GoldenToken goldenToken) {
-        this.goldenToken = goldenToken;
-        return this;
-    }
-
     public List<DataValidationRecord> getValidationRecords() {
         return validationRecords;
     }
 
     public AuthMeUserEntity setValidationRecords(List<DataValidationRecord> validationRecords) {
         this.validationRecords = validationRecords;
+        return this;
+    }
+
+    public List<GoldenToken> getGoldenTokens() {
+        return goldenTokens;
+    }
+
+    public AuthMeUserEntity setGoldenTokens(List<GoldenToken> goldenTokens) {
+        this.goldenTokens = goldenTokens;
         return this;
     }
 }
