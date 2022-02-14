@@ -3,6 +3,7 @@ using AuthMe.Application;
 using AuthMe.Application.Common.Interfaces;
 using AuthMe.Infrastructure.Data;
 using AuthMe.Infrastructure.IdentityService;
+using AuthMe.Infrastructure.IdentityValidityService;
 using AuthMe.Infrastructure.ImageService;
 using AuthMe.Infrastructure.OcrService;
 using Microsoft.EntityFrameworkCore;
@@ -63,5 +64,12 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+string busString = "Endpoint=sb://authme.servicebus.windows.net/;SharedAccessKeyName=ReadWrite;SharedAccessKey=wPQ2wcxfCrVGdgMAxi6PrB6yaI6K/zSVf/53QxuYKac=;EntityPath=identity_validity";
+var bus = new IdentityValidityBus(busString);
+bus.SendAsync("Hello there");
+
+
 
 app.Run();

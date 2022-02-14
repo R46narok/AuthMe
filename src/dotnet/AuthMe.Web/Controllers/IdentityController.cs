@@ -1,11 +1,9 @@
 ﻿using AuthMe.Application.Common.Api;
-using AuthMe.Application.Common.Interfaces;
 using AuthMe.Application.Identities.Commands.CreateIdentity;
 using AuthMe.Application.Identities.Commands.DeleteIdentity;
 using AuthMe.Application.Identities.Commands.UpdateIdentity;
 using AuthMe.Application.Identities.Queries.GetIdentity;
 using AuthMe.Application.IdentityDocuments.Commands.CreateIdentityDocument;
-using AuthMe.Infrastructure.Data;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,14 +13,10 @@ namespace AuthMe.Web.Controllers;
 [Route("/api/[controller]")]
 public class IdentityController : ControllerBase
 {
-    private readonly ILogger<IdentityController> _logger;
-    private readonly IIdentityService _identityService;
     private readonly IMediator _mediator;
 
-    public IdentityController(ApplicationDbContext context, ILogger<IdentityController> logger, IMediator mediator, IIdentityService identityService)
+    public IdentityController(IMediator mediator)
     {
-        _logger = logger;
-        _identityService = identityService;
         _mediator = mediator;
     }
     
@@ -46,7 +40,7 @@ public class IdentityController : ControllerBase
         var createDocumentCmd = new CreateIdentityDocumentCommand { Image = bytes };
         var response = await _mediator.Send(createDocumentCmd);
 
-        var createIdentityCmd = new CreateIdentityCommand { ExternalId = externalId, DocumentId = response.Result};
+        var createIdentityCmd = new CreateIdentityCommand { ExternalId = externalId};
         response = await _mediator.Send(createIdentityCmd);
 
         if (response.IsValid)
@@ -62,7 +56,7 @@ public class IdentityController : ControllerBase
         return Ok(response);
     }
 
-    [HttpDelete("{externalId}")]
+    [HttpDelete(template: "{externalId}")]
     public async Task<ActionResult<ValidatableResponse>> DeleteIdentity(int externalId)
     {
         var command = new DeleteIdentityCommand {ExternalId = externalId};

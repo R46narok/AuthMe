@@ -21,7 +21,7 @@ public class IdentityDocumentController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("{name}", Name = "GetIdentityDocument")]
+    [HttpGet("{id:int}", Name = "GetIdentityDocument")]
     public ActionResult GetIdentityDocument(int id)
     {
         var entry = _dbContext.IdentityDocuments.FirstOrDefault(x => x.Id == id);

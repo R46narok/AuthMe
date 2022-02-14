@@ -6,6 +6,7 @@ using System.Reflection;
 using AuthMe.Application.Common.Interfaces;
 using AuthMe.Application.Identities.Queries.GetIdentity;
 using AuthMe.Application.IdentityDocuments.Commands.CreateIdentityDocument;
+using AuthMe.Infrastructure.IdentityService.Models;
 using GrapeCity.Documents.Imaging;
 using MediatR;
 using Microsoft.Extensions.Logging;

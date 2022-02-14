@@ -13,10 +13,7 @@ public class CreateIdentityCommand : IRequest<ValidatableResponse<int>>, IValida
     /// </summary>
     
     public int ExternalId { get; set; }
-    /// <summary>
-    /// A valid id of associated identity document record.
-    /// </summary>
-    public int DocumentId { get; set; }
+
 }
 
 public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityCommand, ValidatableResponse<int>>
@@ -50,14 +47,15 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityComman
             return new ValidatableResponse<int>(-1,
                 new[] {"An Identity with that ExternalId already exists."});
 
-        var document = _dbContext.IdentityDocuments.FirstOrDefault(x => x.Id == request.DocumentId);
-        if (document == null) return new ValidatableResponse<int>(-1,
-                new[] { "A valid document could not be found." });
-        
-        var identityDto = await _identityService.ReadIdentityDocument(document.Image);
-        var identity = _mapper.Map<Identity>(identityDto);
-        identity.ExternalId = request.ExternalId;
-        
+        var identity = new Identity()
+        {
+            ExternalId = request.ExternalId,
+            DateOfBirth = new IdentityProperty<DateTime>(),
+            Name = new IdentityProperty<string>(),
+            MiddleName = new IdentityProperty<string>(),
+            Surname = new IdentityProperty<string>()
+        };
+
         var entry = _dbContext.Identities.Add(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
 

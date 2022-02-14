@@ -1,9 +1,8 @@
-﻿using System.Diagnostics;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using AuthMe.Application.Common.Interfaces;
+using AuthMe.Infrastructure.OcrService.Models;
 using Microsoft.Extensions.Logging;
 
 namespace AuthMe.Infrastructure.OcrService;

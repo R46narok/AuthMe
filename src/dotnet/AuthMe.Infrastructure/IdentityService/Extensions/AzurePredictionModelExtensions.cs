@@ -1,4 +1,6 @@
-﻿namespace AuthMe.Infrastructure.IdentityService;
+﻿using AuthMe.Infrastructure.IdentityService.Models;
+
+namespace AuthMe.Infrastructure.IdentityService;
 
 public static class AzurePredictionBoundingBoxExtensions 
 {
