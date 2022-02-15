@@ -1,11 +1,10 @@
 package com.authme.authme.web;
 
+import com.authme.authme.data.binding.ValidateProfileBindingModel;
 import com.authme.authme.data.service.DataValidationRecordService;
 import com.authme.authme.data.service.GoldenTokenService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +19,11 @@ public class DataCheckController {
     public DataCheckController(DataValidationRecordService dataValidationService, GoldenTokenService goldenTokenService) {
         this.dataValidationService = dataValidationService;
         this.goldenTokenService = goldenTokenService;
+    }
+
+    @ModelAttribute("bindingModel")
+    public ValidateProfileBindingModel secondPartBindingModel() {
+        return new ValidateProfileBindingModel();
     }
 
     @GetMapping("/identity/check")
@@ -45,6 +49,16 @@ public class DataCheckController {
         String platinumToken = dataValidationService.triggerDataValidationProcess(goldenToken, issuerName, request.getRemoteAddr());
         redirectAttributes.addFlashAttribute("goldenToken", goldenToken);
         redirectAttributes.addFlashAttribute("platinumTokenLeft", platinumToken);
+        return "redirect:/identity/check/validate";
+    }
+
+    @Transactional
+    @PostMapping("/identity/check/validate")
+    public String finishProcess(@RequestParam String goldenToken,
+                                @RequestParam String platinumTokenLeft,
+                                @RequestParam String platinumTokenRight,
+                                ValidateProfileBindingModel bindingModel) {
+        String status = dataValidationService.finishDataValidationProcessAndValidateData(goldenToken, platinumTokenLeft + platinumTokenRight, bindingModel);
         return "redirect:/identity/check/validate";
     }
 }

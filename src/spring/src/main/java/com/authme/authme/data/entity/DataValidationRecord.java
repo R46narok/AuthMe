@@ -18,7 +18,6 @@ public class DataValidationRecord extends BaseEntity {
             joinColumns = @JoinColumn(name = "record_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-    private List<Permission> allowedPermissions;
 
 
     public AuthMeUserEntity getUser() {
@@ -63,15 +62,6 @@ public class DataValidationRecord extends BaseEntity {
 
     public DataValidationRecord setPlatinumToken(String platinumToken) {
         this.platinumToken = platinumToken;
-        return this;
-    }
-
-    public List<Permission> getAllowedPermissions() {
-        return allowedPermissions;
-    }
-
-    public DataValidationRecord setAllowedPermissions(List<Permission> allowedPermissions) {
-        this.allowedPermissions = allowedPermissions;
         return this;
     }
 }

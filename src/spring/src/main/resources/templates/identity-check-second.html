@@ -26,9 +26,19 @@
                             <div class="col">
                                 <div class="row">
                                     <div class="col-4">
+                                        <p style="margin-left: 25px;">Platinum token:</p>
+                                    </div>
+                                    <div class="col"><input name="platinumTokenRight" type="text"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-4">
                                         <p style="margin-left: 25px;">First name:</p>
                                     </div>
-                                    <div class="col"><input name="firstName" type="text"></div>
+                                    <div class="col"><input th:field="${bindingModel.firstName}" name="firstName" type="text"></div>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +48,7 @@
                                     <div class="col-4">
                                         <p style="margin-left: 25px;">Father's name:</p>
                                     </div>
-                                    <div class="col"><input name="middleName" type="text"></div>
+                                    <div class="col"><input th:field="${bindingModel.middleName}" name="middleName" type="text"></div>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +58,7 @@
                                     <div class="col-4">
                                         <p style="margin-left: 25px;">Surname:</p>
                                     </div>
-                                    <div class="col"><input name="lastName" type="text"></div>
+                                    <div class="col"><input th:field="${bindingModel.lastName}" name="lastName" type="text"></div>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +68,7 @@
                                     <div class="col-4">
                                         <p style="margin-left: 25px;">Date of birth:</p>
                                     </div>
-                                    <div class="col"><input name="dateOfBirth" type="date"></div>
+                                    <div class="col"><input th:field="${bindingModel.dateOfBirth}" name="dateOfBirth" type="date"></div>
                                 </div>
                             </div>
                         </div>

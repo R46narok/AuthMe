@@ -1,6 +1,7 @@
 package com.authme.authme.data.service.impl;
 
 import com.authme.authme.data.binding.ProfileBindingModel;
+import com.authme.authme.data.binding.ValidateProfileBindingModel;
 import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.service.CurrentUserService;
@@ -52,6 +53,12 @@ public class PersonalDataServiceImpl implements PersonalDataService {
 
     @Override
     public Boolean checkDataValid(AuthMeUserEntity user, Map<String, String> data) {
+
+        return true;
+    }
+
+    @Override
+    public Boolean checkDataValid(AuthMeUserEntity user, ValidateProfileBindingModel bindingModel) {
 
         return true;
     }

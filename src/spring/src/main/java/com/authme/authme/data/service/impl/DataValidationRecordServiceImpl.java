@@ -1,9 +1,9 @@
 package com.authme.authme.data.service.impl;
 
+import com.authme.authme.data.binding.ValidateProfileBindingModel;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.DataValidationRecord;
 import com.authme.authme.data.entity.GoldenToken;
-import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.DataValidationRecordRepository;
 import com.authme.authme.data.repository.GoldenTokenRepository;
@@ -11,9 +11,8 @@ import com.authme.authme.data.repository.PermissionRepository;
 import com.authme.authme.data.service.*;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 @Service
@@ -28,6 +27,7 @@ public class DataValidationRecordServiceImpl implements DataValidationRecordServ
     private final IpLocatorService ipLocatorService;
     private final GoldenTokenService goldenTokenService;
     private final GoldenTokenRepository goldenTokenRepository;
+    private final PersonalDataService personalDataService;
 
     public DataValidationRecordServiceImpl(DataValidationRecordRepository validationRepository,
                                            AuthMeUserRepository userRepository,
@@ -35,7 +35,7 @@ public class DataValidationRecordServiceImpl implements DataValidationRecordServ
                                            Random random,
                                            IpLocatorService ipLocatorService,
                                            GoldenTokenService goldenTokenService,
-                                           GoldenTokenRepository goldenTokenRepository) {
+                                           GoldenTokenRepository goldenTokenRepository, PersonalDataService personalDataService) {
         this.validationRepository = validationRepository;
         this.userRepository = userRepository;
         this.permissionRepository = permissionRepository;
@@ -43,6 +43,7 @@ public class DataValidationRecordServiceImpl implements DataValidationRecordServ
         this.ipLocatorService = ipLocatorService;
         this.goldenTokenService = goldenTokenService;
         this.goldenTokenRepository = goldenTokenRepository;
+        this.personalDataService = personalDataService;
     }
 
     @Override
@@ -53,18 +54,11 @@ public class DataValidationRecordServiceImpl implements DataValidationRecordServ
         if (token.getExpiry().isBefore(LocalDateTime.now()))
             return null;
 
-        List<Permission> permissions = new ArrayList<>();
-
-        for (Permission permission : token.getPermissions()) {
-            permissions.add(permissionRepository.findById(permission.getId()).get());
-        }
-
         String platinumToken = String.valueOf(random.nextLong(platinumTokenLowerBound, platinumTokenUpperBound));
         String ipLocation = ipLocatorService.getLocationDetailsString(issuerIP);
 
         DataValidationRecord record = new DataValidationRecord()
                 .setUser(user)
-                .setAllowedPermissions(permissions)
                 .setName(issuer)
                 .setIp(issuerIP)
                 .setPlatinumToken(platinumToken)
@@ -78,5 +72,37 @@ public class DataValidationRecordServiceImpl implements DataValidationRecordServ
         goldenTokenRepository.saveAndFlush(token);
 
         return record.getPlatinumToken().substring(0, record.getPlatinumToken().length() / 2);
+    }
+
+    @Override
+    public String finishDataValidationProcessAndValidateData(String goldenToken, String platinumToken, ValidateProfileBindingModel bindingModel) {
+        GoldenToken token = goldenTokenService.findByIdOrThrow(goldenToken);
+
+        if (!hasPermissions(token, bindingModel)) {
+            return "no-permissions";
+        }
+
+        boolean valid = personalDataService.checkDataValid(token.getUser(), bindingModel);
+
+
+
+        return "";
+    }
+
+    private boolean hasPermissions(GoldenToken token, ValidateProfileBindingModel bindingModel) {
+        Field[] fields = ValidateProfileBindingModel.class.getDeclaredFields();
+        for (Field field : fields) {
+            try {
+                field.setAccessible(true);
+                if (field.get(bindingModel) != null &&
+                        !field.get(bindingModel).equals("") &&
+                    token.getPermissions().stream().noneMatch(p -> p.getFieldName().equals(field.getName()))) {
+                    return false;
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
     }
 }

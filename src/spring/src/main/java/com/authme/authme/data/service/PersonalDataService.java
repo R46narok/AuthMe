@@ -1,6 +1,7 @@
 package com.authme.authme.data.service;
 
 import com.authme.authme.data.binding.ProfileBindingModel;
+import com.authme.authme.data.binding.ValidateProfileBindingModel;
 import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.utils.Picture;
@@ -21,4 +22,6 @@ public interface PersonalDataService {
     void uploadIdCardPictures(MultipartFile frontImage, MultipartFile backImage);
 
     Boolean checkDataValid(AuthMeUserEntity user, Map<String, String> data);
+
+    Boolean checkDataValid(AuthMeUserEntity user, ValidateProfileBindingModel bindingModel);
 }
