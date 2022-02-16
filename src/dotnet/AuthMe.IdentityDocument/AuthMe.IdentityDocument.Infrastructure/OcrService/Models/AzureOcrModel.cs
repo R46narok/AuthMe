@@ -1,4 +1,4 @@
-﻿namespace AuthMe.Infrastructure.OcrService.Models;
+﻿namespace AuthMe.IdentityDocumentMsrv.Infrastructure.OcrService.Models;
 
 /// <summary>
 /// The whole response from Azure Cognitive Services - OCR v3.0

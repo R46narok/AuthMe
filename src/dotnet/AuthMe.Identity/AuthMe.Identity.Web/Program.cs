@@ -1,10 +1,9 @@
 using System.Net.Http.Headers;
-using AuthMe.IdentityService.Application;
-using AuthMe.IdentityService.Application.Common.Interfaces;
-using AuthMe.IdentityService.Infrastructure.Data;
-using AuthMe.IdentityService.Infrastructure.IdentityService;
-using AuthMe.IdentityService.Infrastructure.IdentityValidityBus;
-using AuthMe.Infrastructure.IdentityService;
+using AuthMe.IdentityMsrv.Application;
+using AuthMe.IdentityMsrv.Application.Common.Interfaces;
+using AuthMe.IdentityMsrv.Infrastructure;
+using AuthMe.IdentityMsrv.Infrastructure.Data;
+using AuthMe.IdentityService.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,9 +18,8 @@ builder.Services.AddSwaggerGen();
 // TODO: Fix when adding dep inj
 builder.Services.AddApplication();
 
-builder.Services.AddTransient<IIdentityService, IdentityService>();
-builder.Services.AddSingleton<IIdentityValidityBus, IdentityValidityBus>(
-    bus => new IdentityValidityBus("Endpoint=sb://authme.servicebus.windows.net/;SharedAccessKeyName=ReadWrite;SharedAccessKey=wPQ2wcxfCrVGdgMAxi6PrB6yaI6K/zSVf/53QxuYKac=;EntityPath=identity_validity", "identity_validity"));
+builder.Services.AddTransient<IIdentityService, IdentityService>(_ => 
+    new IdentityService("https://localhost:7185"));
 
 builder.Services.AddHttpClient("AzureCognitivePrediction", client =>
 {

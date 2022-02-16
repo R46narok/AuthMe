@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace AuthMe.IdentityService.Application.Common.Behaviors;
+namespace AuthMe.IdentityMsrv.Application.Common.Behaviors;
 
 /// <summary>
 /// Behavior in the MediatR ecosystem. Tracks execution time of validation

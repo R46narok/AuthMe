@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+package authme;
+
+option csharp_namespace = "AuthMe.IdentityService.Infrastructure.Grpc";
+
+message CreateIdentityDocumentRequest {
+  int32 identityId = 1;
+  bytes documentFront = 2;
+  bytes documentBack = 3;
+}
+
+message CreateIdentityDocumentResponse {
+  int32 id = 1;
+}
+
+service IdentityDocumentSrv {
+  rpc CreateIdentityDocument (CreateIdentityDocumentRequest) returns (CreateIdentityDocumentResponse);
+}

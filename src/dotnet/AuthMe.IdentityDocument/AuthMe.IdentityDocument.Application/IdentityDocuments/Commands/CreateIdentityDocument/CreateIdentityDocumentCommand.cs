@@ -1,5 +1,6 @@
 ﻿using AuthMe.Domain.Common.Api;
 using AuthMe.Domain.Entities;
+using AuthMe.Domain.Events;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
@@ -8,22 +9,27 @@ namespace AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.
 
 public class CreateIdentityDocumentCommand : IRequest<ValidatableResponse<int>>
 {
+    public int IdentityId { get; set; }
     /// <summary>
     /// In-memory content of an identity document image.
     /// PNG or JPEG
     /// </summary>
-    public byte[] Image { get; set; }
+    public byte[] DocumentFront { get; set; }
+
+    public byte[] DocumentBack { get; set; }
 }
 
 public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityDocumentCommand, ValidatableResponse<int>>
 {
     private readonly IIdentityDocumentDbContext _dbContext;
     private readonly IMapper _mapper;
-    
-    public CreateIdentityCommandHandler(IIdentityDocumentDbContext dbContext, IMapper mapper)
+    private readonly IServiceBus _bus;
+
+    public CreateIdentityCommandHandler(IIdentityDocumentDbContext dbContext, IMapper mapper, IServiceBus bus)
     {
         _dbContext = dbContext;
         _mapper = mapper;
+        _bus = bus;
     }
     
     /// <summary>
@@ -38,8 +44,11 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityDocume
     {
         var document = _mapper.Map<IdentityDocument>(request);
         var entry = _dbContext.IdentityDocuments.Add(document);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        var saved = await _dbContext.SaveChangesAsync(cancellationToken);
 
+        await _bus.Send(new ValidateIdentityEvent(request.IdentityId), "identity_validity");
+        
         return new ValidatableResponse<int>(entry.Entity.Id);
     }
 }

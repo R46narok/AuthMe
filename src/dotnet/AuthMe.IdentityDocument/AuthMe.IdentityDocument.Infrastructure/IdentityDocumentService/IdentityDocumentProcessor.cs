@@ -1,16 +1,14 @@
-﻿using System.Net.NetworkInformation;
-using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Hosting;
 
-namespace AuthMe.Infrastructure.IdentityValidityService;
+namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService;
 
-public class IdentityValidityService : BackgroundService, IIdentityValidityService
+public class IdentityDocumentProcessor : BackgroundService
 {
     private readonly ServiceBusClient _client;
     private readonly ServiceBusProcessor _processor;
     
-    public IdentityValidityService(string connectionString, string queueName)
+    public IdentityDocumentProcessor(string connectionString, string queueName)
     {
         _client = new ServiceBusClient(connectionString);
         _processor = _client.CreateProcessor(queueName);
@@ -19,18 +17,6 @@ public class IdentityValidityService : BackgroundService, IIdentityValidityServi
         _processor.ProcessErrorAsync += ErrorHandler;
 
         _processor.StartProcessingAsync().Wait();
-    }
-    
-    /// <summary>
-    /// Begin the validation process 
-    /// </summary>
-    /// <param name="documentNumber"></param>
-    /// <param name="dateOfBirth"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public bool IsValid(string documentNumber, DateTime dateOfBirth)
-    {
-        throw new NotImplementedException();
     }
 
     private async Task MessageHandler(ProcessMessageEventArgs args)

@@ -2,7 +2,7 @@
 using FluentValidation;
 using MediatR;
 
-namespace AuthMe.Application.Common.Behaviors;
+namespace AuthMe.IdentityMsrv.Application.Common.Behaviors;
 
 /// <summary>
 /// Behavior in the MediatR ecosystem. Performs FluentValidation logic before

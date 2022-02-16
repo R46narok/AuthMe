@@ -3,13 +3,13 @@ using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-namespace AuthMe.IdentityDocumentService.Infrastructure.Data;
+namespace AuthMe.IdentityDocumentMsrv.Infrastructure.Data;
 
 public class IdentityDocumentDbContext : DbContext, IIdentityDocumentDbContext
 {
         
-    public DbSet<Domain.Entities.Identity> Identities { get; set; }
-    public DbSet<IdentityDocument> IdentityDocuments { get; set; }
+    public DbSet<Identity>? Identities { get; set; }
+    public DbSet<IdentityDocument>? IdentityDocuments { get; set; }
     
     public IdentityDocumentDbContext(DbContextOptions<IdentityDocumentDbContext> options)
         : base(options)

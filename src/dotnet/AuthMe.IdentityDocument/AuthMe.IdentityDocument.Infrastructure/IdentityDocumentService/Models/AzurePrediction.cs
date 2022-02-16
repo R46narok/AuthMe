@@ -1,4 +1,4 @@
-﻿namespace AuthMe.Infrastructure.IdentityService.Models;
+﻿namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Models;
 
 /// <summary>
 /// A prediction result from Azure Cognitive Services - Custom Vision.

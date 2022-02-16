@@ -1,10 +1,10 @@
 ﻿using AuthMe.Domain.Common.Api;
 using AuthMe.Domain.Entities;
-using AuthMe.IdentityService.Application.Common.Interfaces;
+using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
 
-namespace AuthMe.Application.Identities.Commands.CreateIdentity;
+namespace AuthMe.IdentityMsrv.Application.Identities.Commands.CreateIdentity;
 
 public class CreateIdentityCommand : IRequest<ValidatableResponse<int>>, IValidatable
 {

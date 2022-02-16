@@ -1,9 +1,9 @@
 ﻿using AuthMe.Domain.Entities;
-using AuthMe.IdentityService.Application.Common.Interfaces;
+using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-namespace AuthMe.IdentityService.Infrastructure.Data;
+namespace AuthMe.IdentityMsrv.Infrastructure.Data;
 
 /// <summary>
 /// Illustrates database schema and connection.
@@ -16,8 +16,7 @@ public class IdentityDbContext : DbContext, IIdentityDbContext
     
     public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
         : base(options)
-    {
-        
+    { 
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

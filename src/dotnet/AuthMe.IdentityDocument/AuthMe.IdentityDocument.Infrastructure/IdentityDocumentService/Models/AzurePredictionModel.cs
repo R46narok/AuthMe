@@ -1,7 +1,8 @@
 ﻿// ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+
 #pragma warning disable CS8618
-namespace AuthMe.Infrastructure.IdentityService.Models;
+namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Models;
 
 /// <summary>
 /// The whole response from Azure Cognitive Services - Custom Vision v3.0.

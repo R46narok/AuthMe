@@ -1,4 +1,4 @@
-﻿namespace AuthMe.Infrastructure.IdentityService.Models;
+﻿namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Models;
 
 /// <summary>
 /// Bounding box of a prediction.

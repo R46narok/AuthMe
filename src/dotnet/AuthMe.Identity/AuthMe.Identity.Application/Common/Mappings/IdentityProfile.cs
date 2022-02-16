@@ -1,9 +1,9 @@
-﻿using AuthMe.Application.Identities.Commands.CreateIdentity;
-using AuthMe.Application.Identities.Queries.GetIdentity;
-using AuthMe.Domain.Entities;
+﻿using AuthMe.Domain.Entities;
+using AuthMe.IdentityMsrv.Application.Identities.Commands.CreateIdentity;
+using AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 using AutoMapper;
 
-namespace AuthMe.IdentityService.Application.Common.Mappings;
+namespace AuthMe.IdentityMsrv.Application.Common.Mappings;
 
 public class IdentityProfile : Profile
 {

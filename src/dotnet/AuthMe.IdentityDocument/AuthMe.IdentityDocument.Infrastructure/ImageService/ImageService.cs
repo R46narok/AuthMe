@@ -4,7 +4,7 @@ using AuthMe.IdentityDocumentService.Application.Common.Models;
 using GrapeCity.Documents.Imaging;
 using Microsoft.Extensions.Logging;
 
-namespace AuthMe.Infrastructure.ImageService;
+namespace AuthMe.IdentityDocumentMsrv.Infrastructure.ImageService;
 
 /// <summary>
 /// A cross-platform implementation of <see cref="IImageService"/>
@@ -32,7 +32,7 @@ public class ImageService : IImageService
 
         await stream.ReadAsync(result, 0, (int)length);
         stream.Close();
-
+        cropped.SaveAsJpeg($"{left}-{top}-{width}-{height}.jpg");
         return result;
     }
     
@@ -55,7 +55,7 @@ public class ImageService : IImageService
 
         left = (secondLeft + secondWidth) - (firstLeft + firstWidth);
         top = secondTop;
-        width = secondWidth - firstWidth +20 ;
+        width = secondWidth - firstWidth + 50;
         height = secondHeight;
 
         return await CropAsync(bytes, left, top, width, height);

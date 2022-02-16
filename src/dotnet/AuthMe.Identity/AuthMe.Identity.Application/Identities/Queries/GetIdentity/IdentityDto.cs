@@ -1,6 +1,6 @@
 ﻿using AuthMe.Domain.Entities;
 
-namespace AuthMe.Application.Identities.Queries.GetIdentity;
+namespace AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 
 public class IdentityDto
 {

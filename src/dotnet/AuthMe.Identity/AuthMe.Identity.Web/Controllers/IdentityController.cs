@@ -1,8 +1,8 @@
-﻿using AuthMe.Application.Identities.Commands.CreateIdentity;
-using AuthMe.Application.Identities.Commands.DeleteIdentity;
-using AuthMe.Application.Identities.Commands.UpdateIdentity;
-using AuthMe.Application.Identities.Queries.GetIdentity;
-using AuthMe.Domain.Common.Api;
+﻿using AuthMe.Domain.Common.Api;
+using AuthMe.IdentityMsrv.Application.Identities.Commands.CreateIdentity;
+using AuthMe.IdentityMsrv.Application.Identities.Commands.DeleteIdentity;
+using AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
+using AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,16 +59,5 @@ public class IdentityController : ControllerBase
         if (response.IsValid)
             return Ok(response);
         return NotFound(response);
-    }
-
-    private async Task<byte[]> ReadFileAsBytesAsync(IFormFile file)
-    {
-        var stream = file.OpenReadStream();
-        var bytes = new byte[stream.Length];
-        var length = (int) stream.Length;
-        
-        await stream.ReadAsync(bytes, 0, length);
-
-        return bytes;
     }
 }

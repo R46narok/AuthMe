@@ -1,11 +1,10 @@
 ﻿using System.Reflection;
-using AuthMe.Application.Common.Behaviors;
-using AuthMe.IdentityService.Application.Common.Behaviors;
+using AuthMe.IdentityMsrv.Application.Common.Behaviors;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AuthMe.IdentityService.Application;
+namespace AuthMe.IdentityMsrv.Application;
 
 public static class DependencyInjection
 {
