@@ -43,9 +43,9 @@ public class DataCheckController {
                                  HttpServletRequest request,
                                  RedirectAttributes redirectAttributes) {
         if(goldenTokenService.findByIdOrNull(goldenToken) == null)
-            return "redirect:/404";
+            return "redirect:/no-such-golden-token";
         if(goldenTokenService.findById(goldenToken).getExpiry().isBefore(LocalDateTime.now()))
-            return "redirect:/404";
+            return "redirect:/token-expired";
         String platinumToken = dataValidationService.triggerDataValidationProcess(goldenToken, issuerName, request.getRemoteAddr());
         redirectAttributes.addFlashAttribute("goldenToken", goldenToken);
         redirectAttributes.addFlashAttribute("platinumTokenLeft", platinumToken);
@@ -59,6 +59,9 @@ public class DataCheckController {
                                 @RequestParam String platinumTokenRight,
                                 ValidateProfileBindingModel bindingModel) {
         String status = dataValidationService.finishDataValidationProcessAndValidateData(goldenToken, platinumTokenLeft + platinumTokenRight, bindingModel);
+        if(status.equals("no-permissions")) {
+            return "redirect:/no-permission";
+        }
         return "redirect:/identity/check/validate";
     }
 }

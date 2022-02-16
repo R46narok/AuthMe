@@ -18,13 +18,11 @@ import java.util.List;
 
 @Controller
 public class GoldenTokenController {
-    private final AuthMeUserService userService;
     private final GoldenTokenService goldenTokenService;
     private final PermissionService permissionService;
     private final ClassMapper classMapper;
 
-    public GoldenTokenController(AuthMeUserService userService, GoldenTokenService goldenTokenService, PermissionService permissionService, ClassMapper classMapper) {
-        this.userService = userService;
+    public GoldenTokenController(GoldenTokenService goldenTokenService, PermissionService permissionService, ClassMapper classMapper) {
         this.goldenTokenService = goldenTokenService;
         this.permissionService = permissionService;
         this.classMapper = classMapper;
@@ -33,7 +31,7 @@ public class GoldenTokenController {
     @Transactional
     @ModelAttribute("tokens")
     public List<GoldenTokenView> goldenTokens() {
-        return userService.getCurrentUserGoldenTokens();
+        return goldenTokenService.getCurrentUserGoldenTokens();
     }
 
     @ModelAttribute("permissions")
@@ -49,7 +47,7 @@ public class GoldenTokenController {
     @Transactional
     @GetMapping("/token/golden/generate")
     public String generateGoldenToken() {
-        userService.generateGoldenToken();
+        goldenTokenService.generateGoldenToken();
         return "redirect:/token";
     }
 
@@ -59,7 +57,7 @@ public class GoldenTokenController {
                                                 @RequestParam(value = "permission", required = false) List<String> permissionsStrings) {
         if (permissionsStrings == null)
             permissionsStrings = new ArrayList<>();
-        if(userService.tokenBelongsToCurrentUser(goldenToken)) {
+        if(goldenTokenService.tokenBelongsToCurrentUser(goldenToken)) {
             goldenTokenService.setTokenPermissions(goldenToken, permissionsStrings);
         }
         return "redirect:/token";

@@ -1,13 +1,16 @@
 package com.authme.authme.data.service;
 
-import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.GoldenToken;
+import com.authme.authme.data.view.GoldenTokenView;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GoldenTokenService {
-    String generateFor(AuthMeUserEntity user);
+    String generateGoldenToken();
+
+    boolean tokenBelongsToCurrentUser(String goldenToken);
+
+    List<GoldenTokenView> getCurrentUserGoldenTokens();
 
     GoldenToken findById(String goldenToken);
 
