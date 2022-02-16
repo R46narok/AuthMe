@@ -60,6 +60,6 @@ public class PersonalDataServiceImpl implements PersonalDataService {
     @Override
     public Boolean checkDataValid(AuthMeUserEntity user, ValidateProfileBindingModel bindingModel) {
 
-        return true;
+        return false;
     }
 }

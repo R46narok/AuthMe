@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <span th:replace="fragments/fragments::imports"></span>
+</head>
+
+<body class="legion-background">
+<div th:replace="fragments/fragments::nav"></div>
+<div class="container">
+    <div class="container text-center">
+        <div class="row pt-4">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8 text-center pt-3 rounded-back bg-white">
+                <h1>Data invalid!</h1>
+                <img src="/images/data-invalid.png" class="fill"/>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

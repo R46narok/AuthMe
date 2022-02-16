@@ -61,3 +61,7 @@ body {
 .btn {
     border-radius: 10px;
 }
+
+img.fill {
+    max-width: 100%;
+}

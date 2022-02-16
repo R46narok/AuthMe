@@ -36,6 +36,16 @@ public class DataCheckController {
         return "identity-check-second";
     }
 
+    @GetMapping("/identity/check/result/data-valid")
+    public String getDataValidPage() {
+        return "data-valid";
+    }
+
+    @GetMapping("/identity/check/result/data-invalid")
+    public String getDataInvalidPage() {
+        return "data-invalid";
+    }
+
     @Transactional
     @PostMapping("/identity/check")
     public String triggerProcess(@RequestParam String goldenToken,
@@ -62,6 +72,7 @@ public class DataCheckController {
         if(status.equals("no-permissions")) {
             return "redirect:/no-permission";
         }
-        return "redirect:/identity/check/validate";
+
+        return "redirect:/identity/check/result/" + status;
     }
 }
