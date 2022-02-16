@@ -1,6 +1,6 @@
-﻿using AuthMe.Infrastructure.IdentityService.Models;
+﻿using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Models;
 
-namespace AuthMe.Infrastructure.IdentityService;
+namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Extensions;
 
 public static class AzurePredictionBoundingBoxExtensions 
 {

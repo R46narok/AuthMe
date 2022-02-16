@@ -7,8 +7,9 @@ public class IdentityDocument
 {
     public int Id { get; set; }
     
-    /// <summary>
-    /// Image of the identity document in PNG or JPEG.
-    /// </summary>
-    public byte[] Image { get; set; }
+    public int IdentityId { get; set; }
+
+    public byte[] DocumentFront { get; set; }
+
+    public byte[] DocumentBack { get; set; }
 }

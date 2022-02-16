@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace AuthMe.IdentityService.Application.Common.Interfaces;
+namespace AuthMe.IdentityMsrv.Application.Common.Interfaces;
 
 public interface IIdentityDbContext
 {

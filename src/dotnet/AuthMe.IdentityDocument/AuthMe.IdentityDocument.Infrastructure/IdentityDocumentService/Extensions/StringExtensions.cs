@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace AuthMe.Infrastructure.IdentityService;
+namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Extensions;
 
 public static class StringExtensions
 {

@@ -1,13 +1,10 @@
-﻿using System.Reflection;
-using AuthMe.Domain.Common;
-using AuthMe.Domain.Common.Api;
+﻿using AuthMe.Domain.Common.Api;
 using AuthMe.Domain.Entities;
-using AuthMe.Domain.ValueObjects;
-using AuthMe.IdentityService.Application.Common.Interfaces;
+using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
 
-namespace AuthMe.Application.Identities.Commands.UpdateIdentity;
+namespace AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
 
 public class UpdateIdentityCommand : IRequest<ValidatableResponse>, IValidatable
 {

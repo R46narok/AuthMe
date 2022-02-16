@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using MediatR;
 
-namespace AuthMe.Application.Identities.Commands.CreateIdentity;
+namespace AuthMe.IdentityMsrv.Application.Identities.Commands.CreateIdentity;
 
 public class CreateIdentityCommandValidator : AbstractValidator<CreateIdentityCommand>
 {

@@ -1,4 +1,4 @@
-﻿namespace AuthMe.Infrastructure.OcrService.Models;
+﻿namespace AuthMe.IdentityDocumentMsrv.Infrastructure.OcrService.Models;
 
 public class AzureOcrReadResult
 {

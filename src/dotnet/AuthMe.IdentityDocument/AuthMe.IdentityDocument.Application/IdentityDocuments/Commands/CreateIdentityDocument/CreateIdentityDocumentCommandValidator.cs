@@ -6,6 +6,7 @@ public class CreateIdentityDocumentCommandValidator : AbstractValidator<CreateId
 {
     public CreateIdentityDocumentCommandValidator()
     {
-        RuleFor(x => x.Image).NotNull();
+        RuleFor(x => x.DocumentFront).NotNull();
+        RuleFor(x => x.DocumentBack).NotNull();
     }
 }

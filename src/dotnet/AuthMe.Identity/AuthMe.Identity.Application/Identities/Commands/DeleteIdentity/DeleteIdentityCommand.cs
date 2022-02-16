@@ -1,10 +1,8 @@
 ﻿using AuthMe.Domain.Common.Api;
-using AuthMe.Domain.Entities;
-using AuthMe.IdentityService.Application.Common.Interfaces;
-using AutoMapper;
+using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using MediatR;
 
-namespace AuthMe.Application.Identities.Commands.DeleteIdentity;
+namespace AuthMe.IdentityMsrv.Application.Identities.Commands.DeleteIdentity;
 
 public class DeleteIdentityCommand : IRequest<ValidatableResponse>, IValidatable
 {

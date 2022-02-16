@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using AuthMe.IdentityDocumentMsrv.Infrastructure.OcrService.Models;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
-using AuthMe.Infrastructure.OcrService.Models;
 using Microsoft.Extensions.Logging;
 
-namespace AuthMe.Infrastructure.OcrService;
+namespace AuthMe.IdentityDocumentMsrv.Infrastructure.OcrService;
 
 public class OcrService : IOcrService
 {

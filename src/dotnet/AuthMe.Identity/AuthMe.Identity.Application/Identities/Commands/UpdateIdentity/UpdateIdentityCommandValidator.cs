@@ -1,4 +1,4 @@
-﻿namespace AuthMe.Application.Identities.Commands.UpdateIdentity;
+﻿namespace AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
 
 public class UpdateIdentityCommandValidator
 {

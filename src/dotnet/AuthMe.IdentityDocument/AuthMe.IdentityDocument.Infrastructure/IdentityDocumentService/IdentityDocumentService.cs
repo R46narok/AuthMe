@@ -1,21 +1,23 @@
-﻿using System.Net.Http.Json;
+﻿using System.Globalization;
+using System.Net.Http.Json;
 using System.Reflection;
-using AuthMe.Application.Identities.Queries.GetIdentity;
-using AuthMe.IdentityService.Application.Common.Interfaces;
-using AuthMe.Infrastructure.IdentityService.Models;
+using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Extensions;
+using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Models;
+using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
+using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.ReadIdentityDocument;
 using Microsoft.Extensions.Logging;
 
-namespace AuthMe.IdentityService.Infrastructure.IdentityService;
+namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService;
 
 /// <summary>
 /// Implements the IIdentityService interface with Azure Cognitive Services.
 /// </summary>
 /// <seealso cref="IIdentityService"/>
-public class IdentityService : IIdentityService
+public class IdentityDocumentService : IIdentityDocumentService
 {
-    private readonly ILogger<IdentityService> _logger;
-    /*private readonly IImageService _imageService;
-    private readonly IOcrService _ocrService;*/
+    private readonly ILogger<IdentityDocumentService> _logger;
+    private readonly IImageService _imageService;
+    private readonly IOcrService _ocrService;
     private readonly IHttpClientFactory _httpFactory;
 
     private readonly Dictionary<string, AzurePredictionBoundingBox<int>> _matches;
@@ -30,7 +32,7 @@ public class IdentityService : IIdentityService
     /// A minimum probability value to be achieved to ensure
     /// better confidence in results.
     /// </summary>
-    private const double Threshold = 0.95;
+    private const double Threshold = 0.90;
     
     /// <summary>
     /// Azure Cognitive Services require images that have dimensions
@@ -39,17 +41,18 @@ public class IdentityService : IIdentityService
     /// <see cref="https://centraluseuap.dev.cognitive.microsoft.com/docs/services/computer-vision-v3-2/operations/5d986960601faab4bf452005"/>
     private const int MinImageDimension = 50;
     
-    public IdentityService(ILogger<IdentityService> logger, IHttpClientFactory httpFactory)//, IImageService imageService, IOcrService ocrService)
+    public IdentityDocumentService(ILogger<IdentityDocumentService> logger, 
+        IImageService imageService, IOcrService ocrService, IHttpClientFactory httpFactory)
     {
         _logger = logger;
-        /*_imageService = imageService;
+        _imageService = imageService;
         _ocrService = ocrService;
-        _httpFactory = httpFactory;*/
+        _httpFactory = httpFactory;
         _matches = new Dictionary<string, AzurePredictionBoundingBox<int>>();
 
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         if (_identityDtoProps == null)
-            _identityDtoProps = typeof(IdentityDto).GetProperties();
+            _identityDtoProps = typeof(IdentityDocumentDto).GetProperties();
     }
 
     /// <summary>
@@ -60,9 +63,9 @@ public class IdentityService : IIdentityService
     /// </summary>
     /// <param name="document">An identity document to extract information from.</param>
     /// <returns>Empty Dto, if errors occur.</returns>
-    public async Task<IdentityDto> ReadIdentityDocument(byte[] document)
+    public async Task<IdentityDocumentDto> ReadIdentityDocument(byte[] document)
     {
-        var identity = new IdentityDto();
+        var identity = new IdentityDocumentDto();
         
         var client = _httpFactory.CreateClient("AzureCognitivePrediction");
         var request = new HttpRequestMessage(HttpMethod.Post, "");
@@ -72,7 +75,7 @@ public class IdentityService : IIdentityService
         if (response.IsSuccessStatusCode)
         {
             var model = await response.Content.ReadFromJsonAsync<AzurePredictionModel>();
-            var successful = model.Predictions.Where(x => x.Probability > Threshold).ToArray();
+            var successful = model!.Predictions.Where(x => x.Probability > Threshold).ToArray();
 
             foreach (var azurePrediction in successful)
                 ProcessPrediction(document, azurePrediction);
@@ -91,9 +94,9 @@ public class IdentityService : IIdentityService
     /// <param name="prediction">Prediction to be processed.</param>
     private void ProcessPrediction(byte[] document, AzurePrediction prediction)
     {
-        /*var metadata = _imageService.ReadImageMetadata(document);
+        var metadata = _imageService.ReadImageMetadata(document);
         var box = prediction.BoundingBox.ToPixelBased((int)metadata.Width, (int)metadata.Height);
-        _matches.Add(prediction.TagName, box);*/
+        _matches.Add(prediction.TagName, box);
     }
 
     /// <summary>
@@ -102,11 +105,11 @@ public class IdentityService : IIdentityService
     /// </summary>
     /// <param name="document">An image to extract from.</param>
     /// <returns>Populated dto.</returns>
-    private async Task<IdentityDto> PopulateIdentityDtoAsync(byte[] document)
+    private async Task<IdentityDocumentDto> PopulateIdentityDtoAsync(byte[] document)
     {
-        var dto = new IdentityDto();
+        var dto = new IdentityDocumentDto();
         
-        /*foreach (var prop in _identityDtoProps)
+        foreach (var prop in _identityDtoProps)
         {
             var name = prop.Name;
 
@@ -142,7 +145,7 @@ public class IdentityService : IIdentityService
             }
             
             prop.SetValue(dto, instance);
-        }*/
+        }
 
         return dto;
     }
@@ -159,7 +162,7 @@ public class IdentityService : IIdentityService
     private async Task<byte[]> ProcessImage(byte[] document, AzurePredictionBoundingBox<int> box, AzurePredictionBoundingBox<int> keyBox)
     {
         // Extracts the value from key-value pair
-        /*var value = await _imageService.CropAsync(document,
+        var value = await _imageService.CropAsync(document,
             box.Left, box.Top, box.Width, box.Height,
             keyBox.Left, keyBox.Top, keyBox.Width, keyBox.Height);
         var metadata = _imageService.ReadImageMetadata(value);
@@ -175,8 +178,8 @@ public class IdentityService : IIdentityService
 
         // resize if necessary
         if (scaleFactor > 1)
-            value = await _imageService.ResizeAsync(value, scaleFactor);*/
+            value = await _imageService.ResizeAsync(value, scaleFactor);
 
-        return null; //value;
+        return value;
     }
 }

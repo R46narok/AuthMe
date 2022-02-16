@@ -1,10 +1,9 @@
 ﻿using AuthMe.Domain.Common.Api;
-using AuthMe.Domain.Entities;
-using AuthMe.IdentityService.Application.Common.Interfaces;
+using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
 
-namespace AuthMe.Application.Identities.Queries.GetIdentity;
+namespace AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 
 public class GetIdentityQuery : IRequest<ValidatableResponse<IdentityDto>>, IValidatable
 {
