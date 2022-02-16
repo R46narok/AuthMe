@@ -8,55 +8,54 @@
 
 <body class="legion-background">
 <div th:replace="fragments/fragments::nav"></div>
-<main style="padding-bottom: 25px;margin: 25px;/*width: 96%;*/background-color: white;border-radius: 10px;">
-    <div class="container rounded-back">
-        <div class="container">
-            <h1 style="padding-left: 25px;padding-top: 25px;">Profile check</h1>
-            <p style="padding-left: 25px;max-width: 450px;">You are able to invoke profile check on other people if you
-                have the sufficient permissions.</p>
-        </div>
-        <div class="container" style="padding-top: 50px;">
-            <div class="row">
-                <form th:action="@{/identity/check}" th:method="post">
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p style="margin-left: 25px;">Golden token:</p>
-                                    </div>
-                                    <div class="col"><input name="goldenToken" type="text"></div>
+<div class="container mt-4 rounded-back bg-white">
+    <div class="container">
+        <h1 style="padding-left: 25px;padding-top: 25px;">Profile check</h1>
+        <p style="padding-left: 25px;max-width: 450px;">You are able to invoke profile check on other people if you
+            have the sufficient permissions.</p>
+    </div>
+    <div class="container" style="padding-top: 50px;">
+        <div class="row">
+            <form th:action="@{/identity/check}" th:method="post">
+                <div class="col-md-6 text-center<!--
+                -->">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p style="margin-left: 25px;">Golden token:</p>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p style="margin-left: 25px;">Your name:</p>
-                                    </div>
-                                    <div class="col"><input name="issuerName" type="text"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <input type="submit"
-                                       class="btn btn-primary btn-dark"
-                                       style="margin-top: 10px;margin-left: 25px;border-radius: 10px;"
-                                       value="Trigger process">
+                                <div class="col"><input name="goldenToken" type="text"></div>
                             </div>
                         </div>
                     </div>
-                </form>
-                <div class="col-md-6">
-                    <p style="max-width: 500px;">Enter the golden token you've received from the person you are
-                        checking.</p>
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p style="margin-left: 25px;">Your name:</p>
+                                </div>
+                                <div class="col"><input name="issuerName" type="text"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input type="submit"
+                                   class="btn btn-primary btn-dark"
+                                   style="margin-top: 10px;margin-left: 25px;border-radius: 10px;"
+                                   value="Trigger process">
+                        </div>
+                    </div>
                 </div>
+            </form>
+            <div class="col-md-6">
+                <p style="max-width: 500px;">Enter the golden token you've received from the person you are
+                    checking.</p>
             </div>
         </div>
     </div>
-</main>
+</div>
 </body>
 
 </html>
