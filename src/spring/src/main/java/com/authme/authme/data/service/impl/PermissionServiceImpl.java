@@ -4,6 +4,7 @@ import com.authme.authme.data.dto.ProfileDTO;
 import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.repository.PermissionRepository;
 import com.authme.authme.data.service.PermissionService;
+import com.authme.authme.exceptions.CommonErrorMessages;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -29,5 +30,10 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<Permission> getAll() {
         return permissionRepository.findAll();
+    }
+
+    @Override
+    public Permission findById(Long id) {
+        return permissionRepository.findById(id).orElseThrow(() -> CommonErrorMessages.permission(id));
     }
 }

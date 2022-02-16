@@ -33,10 +33,6 @@
     color: inherit
 }
 
-.navigation-clean-button .navbar-brand:hover {
-    color: #1485ee
-}
-
 .navigation-clean-button .navbar-collapse, .navigation-clean-button .navbar-form {
     border-top-color: #ddd
 }
@@ -90,13 +86,6 @@
     border-radius: 0;
     font-family: Roboto;
     font-weight: 400
-}
-
-.btn.focus, .btn:focus, .btn:hover {
-    color: #fff;
-    text-decoration: none;
-    background-color: #1485ee;
-    border: none
 }
 
 #ipi-table > thead > tr, #ipi-table > thead > tr > td {

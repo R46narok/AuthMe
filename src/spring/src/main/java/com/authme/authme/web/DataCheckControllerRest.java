@@ -1,10 +1,9 @@
 package com.authme.authme.web;
 
-import com.authme.authme.data.service.AuthMeUserService;
+import com.authme.authme.data.service.DataValidationRecordService;
 import com.authme.authme.data.service.GoldenTokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,13 +12,13 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @RestController
-public class DataVerificationController {
-    private final AuthMeUserService userService;
+public class DataCheckControllerRest {
     private final GoldenTokenService goldenTokenService;
+    private final DataValidationRecordService dataValidationService;
 
-    public DataVerificationController(AuthMeUserService userService, GoldenTokenService goldenTokenService) {
-        this.userService = userService;
+    public DataCheckControllerRest(GoldenTokenService goldenTokenService, DataValidationRecordService dataValidationService) {
         this.goldenTokenService = goldenTokenService;
+        this.dataValidationService = dataValidationService;
     }
 
     @Transactional
@@ -27,11 +26,11 @@ public class DataVerificationController {
     public ResponseEntity<String> firstVerificationRequest(@RequestHeader String goldenToken,
                                                            @RequestHeader String issuer,
                                                            HttpServletRequest request) {
-        if(goldenTokenService.findById(goldenToken).isEmpty())
+        if(goldenTokenService.findByIdOrNull(goldenToken) == null)
             return ResponseEntity.notFound().build();
-        if(goldenTokenService.findById(goldenToken).get().getExpiry().isBefore(LocalDateTime.now()))
+        if(goldenTokenService.findById(goldenToken).getExpiry().isBefore(LocalDateTime.now()))
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(goldenTokenService.triggerDataValidationProcess(goldenToken, issuer, request.getRemoteAddr()));
+        return ResponseEntity.ok(dataValidationService.triggerDataValidationProcess(goldenToken, issuer, request.getRemoteAddr()));
     }
 
 //    @Transactional

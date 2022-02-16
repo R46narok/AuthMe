@@ -1,58 +1,41 @@
 package com.authme.authme.data.service.impl;
 
 import com.authme.authme.data.entity.AuthMeUserEntity;
-import com.authme.authme.data.entity.DataValidationRecord;
-import com.authme.authme.data.entity.GoldenToken;
 import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.RoleRepository;
 import com.authme.authme.data.service.*;
 import com.authme.authme.data.service.models.RegisterServiceModel;
-import com.authme.authme.data.view.DataMonitorViewModel;
-import com.authme.authme.utils.ClassMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class AuthMeUserServiceImpl implements AuthMeUserService {
     private final AuthMeUserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    private final UserDetailsServiceImpl userDetailsService;
+
+    private final UserDetailsService userDetailsService;
     private final PersonalDataService personalDataService;
-    private final CurrentUserService currentUserService;
-    private final GoldenTokenService goldenTokenService;
-    private final DataValidationRecordService validationService;
-    private final ClassMapper classMapper;
+
+    private final PasswordEncoder passwordEncoder;
 
     public AuthMeUserServiceImpl(AuthMeUserRepository userRepository,
-                                 PasswordEncoder passwordEncoder,
                                  RoleRepository roleRepository,
-                                 UserDetailsServiceImpl userDetailsService,
-                                 PersonalDataService personalDataService, CurrentUserService currentUserService, GoldenTokenService goldenTokenService, DataValidationRecordService validationService, ClassMapper classMapper) {
+                                 UserDetailsService userDetailsService,
+                                 PersonalDataService personalDataService,
+                                 PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userDetailsService = userDetailsService;
         this.personalDataService = personalDataService;
-        this.currentUserService = currentUserService;
-        this.goldenTokenService = goldenTokenService;
-        this.validationService = validationService;
-        this.classMapper = classMapper;
-    }
-
-    @Override
-    public Optional<AuthMeUserEntity> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -64,84 +47,14 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
                 .setDataId(personalDataService.newEntry());
         user = userRepository.saveAndFlush(user);
 
-        if (user != null) {
-            UserDetails principal = this.userDetailsService.loadUserByUsername(user.getUsername());
-            Authentication authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            principal,
-                            user.getPassword(),
-                            principal.getAuthorities()
-                    );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-
-    }
-
-    @Override
-    public DataMonitorViewModel getDataMonitorViewModel() {
-        List<DataValidationRecord> records = currentUserService.getCurrentLoggedUser().getValidationRecords();
-        return classMapper.toDataMonitorViewModel(records);
-    }
-
-    @Override
-    public String generateGoldenToken() {
-        AuthMeUserEntity user = currentUserService.getCurrentLoggedUser();
-        if (user.getGoldenToken() != null) {
-            goldenTokenService.deleteToken(user.getGoldenToken().getId());
-        }
-        return goldenTokenService.generateFor(user);
-    }
-
-    @Override
-    public Boolean goldenTokenActive() {
-        AuthMeUserEntity user = currentUserService.getCurrentLoggedUserOrNull();
-        if(user == null)
-            return false;
-        return (user.getGoldenToken() != null && user.getGoldenToken().getExpiry().isAfter(LocalDateTime.now()));
-    }
-
-    @Override
-    public String getCurrentUserGoldenToken() {
-        AuthMeUserEntity user = currentUserService.getCurrentLoggedUserOrNull();
-        if(user == null)
-            return "";
-        if(user.getGoldenToken() != null && user.getGoldenToken().getExpiry().isAfter(LocalDateTime.now())){
-            return user.getGoldenToken().getId();
-        }
-        return "";
-    }
-
-    @Override
-    public LocalDateTime getCurrentUserGoldenTokenExpiry() {
-        if (currentUserService.getCurrentLoggedUserOrNull() == null)
-            return null;
-        if (currentUserService.getCurrentLoggedUser().getGoldenToken() == null)
-            return null;
-        return currentUserService.getCurrentLoggedUser().getGoldenToken().getExpiry();
-    }
-
-    @Override
-    public AuthMeUserEntity getAssociatedUserByGoldenTokenOrNull(String goldenToken) {
-        GoldenToken token = goldenTokenService.findById(goldenToken).orElse(null);
-        if(token == null)
-            return null;
-        return token.getUser();
-    }
-
-    @Override
-    public String checkDataValidForUser(AuthMeUserEntity user, String requesterName, String remoteAddress, Map<String, String> data) {
-        if(!personalDataService.checkDataValid(user, data))
-            return null;
-        DataValidationRecord record = validationService.generateRecord(user, requesterName, remoteAddress);
-        return record.getPlatinumToken();
-    }
-
-    @Override
-    public void setTokenPermissions(List<String> permissionsStrings) {
-        if(permissionsStrings == null)
-            return;
-        AuthMeUserEntity user = currentUserService.getCurrentLoggedUser();
-        goldenTokenService.setPermissionsForToken(user.getGoldenToken(), permissionsStrings);
+        UserDetails principal = this.userDetailsService.loadUserByUsername(user.getUsername());
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(
+                        principal,
+                        user.getPassword(),
+                        principal.getAuthorities()
+                );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Override

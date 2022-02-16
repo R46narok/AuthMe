@@ -1,6 +1,6 @@
 package com.authme.authme.web;
 
-import com.authme.authme.data.service.AuthMeUserService;
+import com.authme.authme.data.service.DataValidationRecordService;
 import com.authme.authme.data.view.DataMonitorViewModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,16 +10,16 @@ import javax.transaction.Transactional;
 
 @Controller
 public class DataMonitorController {
-    private final AuthMeUserService userService;
+    private final DataValidationRecordService validationService;
 
-    public DataMonitorController(AuthMeUserService userService) {
-        this.userService = userService;
+    public DataMonitorController(DataValidationRecordService validationService) {
+        this.validationService = validationService;
     }
 
     @Transactional
     @ModelAttribute("dataMonitorViewModel")
     public DataMonitorViewModel getViewModel() {
-        return userService.getDataMonitorViewModel();
+        return validationService.getDataMonitorViewModel();
     }
 
     @GetMapping("/data")

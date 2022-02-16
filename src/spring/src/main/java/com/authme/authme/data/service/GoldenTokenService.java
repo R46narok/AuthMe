@@ -1,26 +1,22 @@
 package com.authme.authme.data.service;
 
-import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.GoldenToken;
-import com.authme.authme.data.view.PermissionViewModel;
-import org.springframework.http.ResponseEntity;
+import com.authme.authme.data.view.GoldenTokenView;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public interface GoldenTokenService {
-    void deleteToken(String goldenToken);
+    String generateGoldenToken();
 
-    String generateFor(AuthMeUserEntity user);
+    boolean tokenBelongsToCurrentUser(String goldenToken);
 
-    Optional<GoldenToken> findById(String goldenToken);
+    List<GoldenTokenView> getCurrentUserGoldenTokens();
 
-    boolean hasPermission(Map<String, String> data, String token);
+    GoldenToken findById(String goldenToken);
 
-    void setPermissionsForToken(GoldenToken goldenToken, List<String> permissionsStrings);
+    GoldenToken findByIdOrNull(String goldenToken);
 
-    String triggerDataValidationProcess(String goldenToken, String issuer, String issuerIP);
+    GoldenToken findByIdOrThrow(String goldenToken);
 
-    List<PermissionViewModel> getAllPermissionsTagged();
+    void setTokenPermissions(String goldenToken, List<String> permissionsStrings);
 }
