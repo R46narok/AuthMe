@@ -9,4 +9,6 @@ public class IdentityDocumentDto
     public IdentityProperty<string> Surname { get; set; }
     
     public IdentityProperty<DateTime> DateOfBirth { get; set; }
+
+    public IdentityProperty<string> DocumentNumber { get; set; }
 }

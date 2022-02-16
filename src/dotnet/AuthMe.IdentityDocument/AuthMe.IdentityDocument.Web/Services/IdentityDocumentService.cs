@@ -33,9 +33,7 @@ public class IdentityDocumentService : IdentityDocumentSrv.IdentityDocumentSrvBa
         };
 
         var response = await _mediator.Send(command);
-
-        //var result = await _documentService.ReadIdentityDocument(command.DocumentFront);
-        await _validityService.IsValidAsync("", DateTime.Now);
+        
         return new CreateIdentityDocumentResponse() {Id = response.Result};
     }
 }

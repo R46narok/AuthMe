@@ -21,7 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="IdentityDocuments\Commands\ReadIdentityDocument" />
       <Folder Include="IdentityDocuments\Queries\GetIdentityDocument" />
     </ItemGroup>
 

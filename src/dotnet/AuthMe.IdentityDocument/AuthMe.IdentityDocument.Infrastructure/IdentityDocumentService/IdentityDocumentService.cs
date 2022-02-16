@@ -32,7 +32,7 @@ public class IdentityDocumentService : IIdentityDocumentService
     /// A minimum probability value to be achieved to ensure
     /// better confidence in results.
     /// </summary>
-    private const double Threshold = 0.95;
+    private const double Threshold = 0.90;
     
     /// <summary>
     /// Azure Cognitive Services require images that have dimensions
@@ -75,7 +75,7 @@ public class IdentityDocumentService : IIdentityDocumentService
         if (response.IsSuccessStatusCode)
         {
             var model = await response.Content.ReadFromJsonAsync<AzurePredictionModel>();
-            var successful = model.Predictions.Where(x => x.Probability > Threshold).ToArray();
+            var successful = model!.Predictions.Where(x => x.Probability > Threshold).ToArray();
 
             foreach (var azurePrediction in successful)
                 ProcessPrediction(document, azurePrediction);

@@ -29,8 +29,7 @@ builder.Services.AddTransient<IOcrService, OcrService>();
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IIdentityDocumentValidityService,IdentityDocumentValidityService>();
 
-builder.Services.AddHostedService(_ =>
-    new IdentityDocumentProcessor("Endpoint=sb://authme.servicebus.windows.net/;SharedAccessKeyName=ReadWrite;SharedAccessKey=wPQ2wcxfCrVGdgMAxi6PrB6yaI6K/zSVf/53QxuYKac=;EntityPath=identity_validity", "identity_validity"));
+builder.Services.AddHostedService<IdentityDocumentProcessor>();
 builder.Services.AddSingleton<IServiceBus, AzureServiceBus>(_ => new AzureServiceBus("Endpoint=sb://authme.servicebus.windows.net/;SharedAccessKeyName=ReadWrite;SharedAccessKey=wPQ2wcxfCrVGdgMAxi6PrB6yaI6K/zSVf/53QxuYKac=;EntityPath=identity_validity"));
 var connString = builder.Configuration.GetConnectionString("MsSQLDb");
 builder.Services.AddDbContext<IIdentityDocumentDbContext, IdentityDocumentDbContext>(options => options.UseSqlServer(connString));
