@@ -3,6 +3,7 @@ package authme;
 
 option csharp_namespace = "AuthMe.IdentityDocumentService.Grpc";
 
+
 message CreateIdentityDocumentRequest {
   int32 identityId = 1;
   bytes documentFront = 2;

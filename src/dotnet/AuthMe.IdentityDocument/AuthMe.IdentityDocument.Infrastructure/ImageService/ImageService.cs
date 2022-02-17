@@ -32,7 +32,7 @@ public class ImageService : IImageService
 
         await stream.ReadAsync(result, 0, (int)length);
         stream.Close();
-
+        cropped.SaveAsJpeg($"{left}-{top}-{width}-{height}.jpg");
         return result;
     }
     

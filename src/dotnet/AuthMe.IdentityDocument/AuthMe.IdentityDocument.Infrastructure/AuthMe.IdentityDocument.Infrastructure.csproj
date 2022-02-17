@@ -14,6 +14,7 @@
     <ItemGroup>
       <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.6.0" />
       <PackageReference Include="GrapeCity.Documents.Imaging" Version="5.0.0.770" />
+      <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
       <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.2-mauipre.1.22054.8" />

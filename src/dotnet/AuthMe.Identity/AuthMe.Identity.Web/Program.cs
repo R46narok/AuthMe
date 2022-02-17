@@ -3,7 +3,6 @@ using AuthMe.IdentityMsrv.Application;
 using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using AuthMe.IdentityMsrv.Infrastructure;
 using AuthMe.IdentityMsrv.Infrastructure.Data;
-using AuthMe.IdentityService.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,13 +13,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddGrpc();
 
 // TODO: Fix when adding dep inj
 builder.Services.AddApplication();
 
 builder.Services.AddTransient<IIdentityService, IdentityService>(_ => 
     new IdentityService("https://localhost:7185"));
-
+builder.Services.AddHostedService<IdentityServiceProcessor>();
 builder.Services.AddHttpClient("AzureCognitivePrediction", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["AzureCognitivePredictionEndpoint"]);
@@ -58,7 +58,6 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

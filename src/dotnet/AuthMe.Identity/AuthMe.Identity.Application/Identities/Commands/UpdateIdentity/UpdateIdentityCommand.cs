@@ -8,7 +8,7 @@ namespace AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
 
 public class UpdateIdentityCommand : IRequest<ValidatableResponse>, IValidatable
 {
-    public int ExternalId { get; set; }
+    public int Id { get; set; }
     
     public string Name { get; set; }
     public string MiddleName { get; set; }
@@ -29,9 +29,9 @@ public class UpdateIdentityCommandHandler : IRequestHandler<UpdateIdentityComman
     
     public async Task<ValidatableResponse> Handle(UpdateIdentityCommand request, CancellationToken cancellationToken)
     {
-        var entry = _dbContext.Identities.FirstOrDefault(x => x.ExternalId == request.ExternalId);
+        var entry = _dbContext.Identities.FirstOrDefault(x => x.Id == request.Id);
         if (entry == null)
-            return new ValidatableResponse(new[] { $"Identity with external id {request.ExternalId} could not be found." });
+            return new ValidatableResponse(new[] { $"Identity with id {request.Id} could not be found." });
 
         if (!string.IsNullOrWhiteSpace(request.Name))
             entry.Name = new IdentityProperty<string>

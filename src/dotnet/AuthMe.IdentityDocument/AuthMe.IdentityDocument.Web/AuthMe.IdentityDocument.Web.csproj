@@ -22,9 +22,8 @@
 
     <ItemGroup>
         <Protobuf Include="./Protos/*.proto" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Protos" />
+        <Protobuf Update="Protos\identitydocument.proto">
+          <Generator>MSBuild:Compile</Generator>
+        </Protobuf>
     </ItemGroup>
 </Project>

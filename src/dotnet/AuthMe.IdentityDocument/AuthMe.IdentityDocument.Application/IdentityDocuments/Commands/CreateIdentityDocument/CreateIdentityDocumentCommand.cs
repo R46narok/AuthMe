@@ -4,6 +4,7 @@ using AuthMe.Domain.Events;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.CreateIdentityDocument;
 
@@ -14,9 +15,9 @@ public class CreateIdentityDocumentCommand : IRequest<ValidatableResponse<int>>
     /// In-memory content of an identity document image.
     /// PNG or JPEG
     /// </summary>
-    public byte[] DocumentFront { get; set; }
+    public byte[]? DocumentFront { get; set; }
 
-    public byte[] DocumentBack { get; set; }
+    public byte[]? DocumentBack { get; set; }
 }
 
 public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityDocumentCommand, ValidatableResponse<int>>
@@ -42,10 +43,14 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityDocume
     /// </returns>
     public async Task<ValidatableResponse<int>> Handle(CreateIdentityDocumentCommand request, CancellationToken cancellationToken)
     {
-        var document = _mapper.Map<IdentityDocument>(request);
-        var entry = _dbContext.IdentityDocuments.Add(document);
+        if (await _dbContext.IdentityDocuments!.FirstOrDefaultAsync(
+                x => x.IdentityId == request.IdentityId, cancellationToken) != null)
+            return new ValidatableResponse<int>(-1, new[] {$"A document is already attached to id {request.IdentityId}"});
         
-        var saved = await _dbContext.SaveChangesAsync(cancellationToken);
+        var document = _mapper.Map<IdentityDocument>(request);
+        var entry = _dbContext.IdentityDocuments!.Add(document);
+        
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         await _bus.Send(new ValidateIdentityEvent(request.IdentityId), "identity_validity");
         

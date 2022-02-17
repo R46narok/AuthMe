@@ -19,8 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc(options =>
 {
     options.EnableDetailedErrors = true;
-    options.MaxReceiveMessageSize = 10 * 1024 * 1024; // 2 MB
-    options.MaxSendMessageSize = 10 * 1024 * 1024; // 5 MB
+    options.MaxReceiveMessageSize = 10 * 1024 * 1024; // 10 MB
+    options.MaxSendMessageSize = 10 * 1024 * 1024; // 10 MB
 });
 builder.Services.AddApplication();
 
@@ -30,7 +30,7 @@ builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IIdentityDocumentValidityService,IdentityDocumentValidityService>();
 
 builder.Services.AddHostedService<IdentityDocumentProcessor>();
-builder.Services.AddSingleton<IServiceBus, AzureServiceBus>(_ => new AzureServiceBus("Endpoint=sb://authme.servicebus.windows.net/;SharedAccessKeyName=ReadWrite;SharedAccessKey=wPQ2wcxfCrVGdgMAxi6PrB6yaI6K/zSVf/53QxuYKac=;EntityPath=identity_validity"));
+builder.Services.AddSingleton<IServiceBus, AzureServiceBus>();
 var connString = builder.Configuration.GetConnectionString("MsSQLDb");
 builder.Services.AddDbContext<IIdentityDocumentDbContext, IdentityDocumentDbContext>(options => options.UseSqlServer(connString));
 

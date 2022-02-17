@@ -1,7 +1,6 @@
 using AuthMe.Domain.Common;
 using AuthMe.Domain.Events;
-using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
-using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.ReadIdentityDocument;
+using AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
 using Azure.Messaging.ServiceBus;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -9,15 +8,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EventHandler = AuthMe.Domain.Common.EventHandler;
 
-namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService;
+namespace AuthMe.IdentityMsrv.Infrastructure;
 
-public class IdentityDocumentProcessor : BackgroundService
+public class IdentityServiceProcessor : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ServiceBusClient _client;
     private readonly ServiceBusProcessor _processor;
     
-    public IdentityDocumentProcessor(IConfiguration configuration, IServiceProvider serviceProvider)
+    public IdentityServiceProcessor(IConfiguration configuration, IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
         _client = new ServiceBusClient(configuration["AzureServiceBusEndpoint"]);
@@ -33,23 +32,22 @@ public class IdentityDocumentProcessor : BackgroundService
     {
         var handler = new EventHandler(args.Message.Body.ToString());
         
-        await handler.On<ValidateIdentityEvent>(async @event =>
+        await handler.On<ValidateIdentityCompletedEvent>(async @event =>
         {
             using var scope = _serviceProvider.CreateScope();
             var mediatr = scope.ServiceProvider.GetService<IMediator>();
-            var bus = scope.ServiceProvider.GetService<IServiceBus>();
-            
-            var query = new ReadIdentityDocumentQuery {IdentityId = @event.Model};
-            var response = await mediatr!.Send(query);
 
-            await bus.Send(new ValidateIdentityCompletedEvent(new ValidateIdentityCompletedModel
+            var model = @event.Model;
+            var command = new UpdateIdentityCommand
             {
-                Id = @event.Model,
-                Name = response.Result.Name.Value,
-                MiddleName = response.Result.MiddleName.Value,
-                Surname = response.Result.Surname.Value,
-                DateOfBirth = response.Result.DateOfBirth.Value.ToString()
-            }),"identity_validity");
+                Id = model.Id,
+                Name = model.Name,
+                MiddleName = model.MiddleName,
+                Surname = model.Surname,
+                DateOfBirth = model.DateOfBirth
+            };
+
+            var response = await mediatr!.Send(command);
             
             return true;
         });

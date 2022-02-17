@@ -129,14 +129,21 @@ public class IdentityDocumentService : IIdentityDocumentService
 
                 if (!string.IsNullOrWhiteSpace(text))
                 {
-                    // TODO: Value setter
-                    if (prop.Name == "DateOfBirth")
-                        valueProp!.SetValue( instance, DateTime.ParseExact(text, "dd.MM.yyyy", CultureInfo.CurrentCulture));
-                    else
-                        valueProp!.SetValue(instance, text.ToTitleCase());
+                    try
+                    {
+// TODO: Value setter
+                        if (prop.Name == "DateOfBirth")
+                            valueProp!.SetValue( instance, DateTime.ParseExact(text, "dd.MM.yyyy", CultureInfo.CurrentCulture));
+                        else
+                            valueProp!.SetValue(instance, text.ToTitleCase());
                 
-                    lastUpdatedProp!.SetValue(instance, DateTime.Now);
-                    isValidProp!.SetValue(instance, true);
+                        lastUpdatedProp!.SetValue(instance, DateTime.Now);
+                        isValidProp!.SetValue(instance, true);
+                    }
+                    catch (Exception e)
+                    {
+                    }
+                    
                 }
             }
             else
