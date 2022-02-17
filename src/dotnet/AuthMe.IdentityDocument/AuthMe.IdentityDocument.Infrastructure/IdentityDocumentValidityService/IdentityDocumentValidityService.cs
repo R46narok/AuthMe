@@ -17,7 +17,7 @@ public class IdentityDocumentValidityService : IIdentityDocumentValidityService
         _httpClientFactory = httpClientFactory;
     }
     
-    public async Task<bool> IsValidAsync(string documentNumber, DateTime dateOfBirth)
+    public async Task<bool> IsValidAsync(string documentNumber, string dateOfBirth)
     {
         var client = _httpClientFactory.CreateClient("MinistryOfInterior");
 
@@ -56,8 +56,8 @@ public class IdentityDocumentValidityService : IIdentityDocumentValidityService
         contentList.Add($"ctl00$ctl05={Uri.EscapeDataString("")}");
         contentList.Add($"__RequestVerificationToken={Uri.EscapeDataString($"{validation.Value}")}");
         contentList.Add($"DocumentKindCode={Uri.EscapeDataString("6729")}");
-        contentList.Add($"DocumentNumber={Uri.EscapeDataString("123456789")}");
-        contentList.Add($"BirthsDayTXT={Uri.EscapeDataString("05.08.2005")}");
+        contentList.Add($"DocumentNumber={Uri.EscapeDataString(documentNumber)}");
+        contentList.Add($"BirthsDayTXT={Uri.EscapeDataString(dateOfBirth)}");
         request.Content = new StringContent(string.Join("&", contentList));
         request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
 
@@ -67,8 +67,7 @@ public class IdentityDocumentValidityService : IIdentityDocumentValidityService
         var bytes = new byte[stream.Length];
         await stream.ReadAsync(bytes, 0, (int) stream.Length);
         var str = Encoding.UTF8.GetString(bytes);
-        await File.WriteAllTextAsync("index.html", str);
-        
-        return false;
+
+        return str.Contains("<p class=\"positive-result\">");
     }
 }

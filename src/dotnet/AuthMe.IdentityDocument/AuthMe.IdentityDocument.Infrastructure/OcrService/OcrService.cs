@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using AuthMe.IdentityDocumentMsrv.Infrastructure.OcrService.Models;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -27,34 +28,14 @@ public class OcrService : IOcrService
     /// <returns></returns>
     public async Task<string> ReadTextFromImage(byte[] image)
     {
-        var client = _httpFactory.CreateClient("AzureCognitiveAnalyzer");
+        var client = _httpFactory.CreateClient("AzureCognitiveOcr");
         
         using var content = new ByteArrayContent(image);
         content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
         var response = await client.PostAsync("", content);
 
-        if (response.StatusCode == HttpStatusCode.Accepted)
-        {
-            response.Headers.TryGetValues("Operation-Location", out var values);
-            var operationLocation = values.FirstOrDefault();
-
-            client = _httpFactory.CreateClient("AzureCognitiveAnalyzeResults");
-            
-            var model = new AzureOcrModel();
-            
-            while (model.Status != "succeeded")
-            {
-                if (response.StatusCode == HttpStatusCode.TooManyRequests) return string.Empty;
-                
-                response = await client.SendAsync(CreateAnalyzeResultsRequest(operationLocation));
-                var str = await response.Content.ReadAsStringAsync();
-                model = await response.Content.ReadFromJsonAsync<AzureOcrModel>();
-            }
-
-            return model.AnalyzeResult.ReadResults.First().Lines.First().Text;
-        }
-
-        return string.Empty;
+        var result = await response.Content.ReadFromJsonAsync<AzureOcrResult>();
+        return result?.Regions[0].Lines[0].Words[0].Text ?? string.Empty;
     }
 
     private HttpRequestMessage CreateAnalyzeResultsRequest(string operationLocation)

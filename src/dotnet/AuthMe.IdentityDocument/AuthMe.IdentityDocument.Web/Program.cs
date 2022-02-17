@@ -45,6 +45,11 @@ builder.Services.AddHttpClient("AzureCognitiveAnalyzer", client =>
     client.BaseAddress = new Uri(builder.Configuration["AzureCognitiveAnalyzerEndpoint"]);
     client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", builder.Configuration["AzureCognitiveAnalyzerKey"]);
 });
+builder.Services.AddHttpClient("AzureCognitiveOcr", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["AzureCognitiveOcrEndpoint"]);
+    client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", builder.Configuration["AzureCognitiveOcrKey"]);
+});
 builder.Services.AddHttpClient("AzureCognitiveAnalyzeResults", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["AzureCognitiveAnalyzeResultsEndpoint"]);

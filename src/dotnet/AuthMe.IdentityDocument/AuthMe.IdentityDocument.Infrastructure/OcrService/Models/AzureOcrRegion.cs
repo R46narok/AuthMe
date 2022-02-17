@@ -1,7 +1,7 @@
 namespace AuthMe.IdentityDocumentMsrv.Infrastructure.OcrService.Models;
 
-public class AzureOcrWord
+public class AzureOcrRegion
 {
     public string BoundingBox { get; set; }
-    public string Text { get; set; }
+    public List<AzureOcrLine> Lines { get; set; }
 }

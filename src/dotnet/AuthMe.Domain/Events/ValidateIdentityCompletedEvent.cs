@@ -1,14 +1,15 @@
 using AuthMe.Domain.Common;
+using AuthMe.Domain.Entities;
 
 namespace AuthMe.Domain.Events;
 
 public class ValidateIdentityCompletedModel
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public string MiddleName { get; set; }
-    public string Surname { get; set; }
-    public string DateOfBirth { get; set; }
+    public IdentityProperty<string> Name { get; set; }
+    public IdentityProperty<string> MiddleName { get; set; }
+    public IdentityProperty<string> Surname { get; set; }
+    public IdentityProperty<DateTime> DateOfBirth { get; set; }
 }
 
 public class ValidateIdentityCompletedEvent : Event<ValidateIdentityCompletedModel>

@@ -16,12 +16,7 @@ public class IdentityService : IIdentityService
         _client = new IdentityDocumentSrv.IdentityDocumentSrvClient(channel);
     }
 
-    public Task<IdentityDto> ReadIdentityDocument(byte[] document)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<int> AttachIdentityDocument(int identityId, byte[] documentFront, byte[] documentBack)
+    public async Task<int> AttachIdentityDocument(int identityId, byte[]? documentFront, byte[]? documentBack)
     {
         var request = new CreateIdentityDocumentRequest
         {

@@ -10,10 +10,10 @@ public class UpdateIdentityCommand : IRequest<ValidatableResponse>, IValidatable
 {
     public int Id { get; set; }
     
-    public string Name { get; set; }
-    public string MiddleName { get; set; }
-    public string Surname { get; set; }
-    public string DateOfBirth { get; set; }
+    public IdentityProperty<string> Name { get; set; }
+    public IdentityProperty<string> MiddleName { get; set; }
+    public IdentityProperty<string> Surname { get; set; }
+    public IdentityProperty<DateTime> DateOfBirth { get; set; }
 }
 
 public class UpdateIdentityCommandHandler : IRequestHandler<UpdateIdentityCommand, ValidatableResponse>
@@ -33,18 +33,11 @@ public class UpdateIdentityCommandHandler : IRequestHandler<UpdateIdentityComman
         if (entry == null)
             return new ValidatableResponse(new[] { $"Identity with id {request.Id} could not be found." });
 
-        if (!string.IsNullOrWhiteSpace(request.Name))
-            entry.Name = new IdentityProperty<string>
-                {Value = request.Name, IsValidated = false, LastUpdated = DateTime.Now};
-    
-        if (!string.IsNullOrWhiteSpace(request.MiddleName))
-            entry.MiddleName = new IdentityProperty<string>
-                {Value = request.MiddleName, IsValidated = false, LastUpdated = DateTime.Now};
+        entry.Name = request.Name;
+        entry.MiddleName = request.MiddleName;
+        entry.Surname = request.Surname;
+        entry.DateOfBirth = request.DateOfBirth;
         
-        if (!string.IsNullOrWhiteSpace(request.Surname))
-            entry.Surname = new IdentityProperty<string>
-                {Value = request.Surname, IsValidated = false, LastUpdated = DateTime.Now};
-
         _dbContext.Identities.Update(entry);
         await _dbContext.SaveChangesAsync(cancellationToken);
         

@@ -2,5 +2,5 @@
 
 public interface IIdentityDocumentValidityService
 {
-    public Task<bool> IsValidAsync(string documentNumber, DateTime dateOfBirth);
+    public Task<bool> IsValidAsync(string documentNumber, string dateOfBirth);
 }

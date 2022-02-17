@@ -45,10 +45,10 @@ public class IdentityDocumentProcessor : BackgroundService
             await bus.Send(new ValidateIdentityCompletedEvent(new ValidateIdentityCompletedModel
             {
                 Id = @event.Model,
-                Name = response.Result.Name.Value,
-                MiddleName = response.Result.MiddleName.Value,
-                Surname = response.Result.Surname.Value,
-                DateOfBirth = response.Result.DateOfBirth.Value.ToString()
+                Name = response.Result.Name,
+                MiddleName = response.Result.MiddleName,
+                Surname = response.Result.Surname,
+                DateOfBirth = response.Result.DateOfBirth
             }),"identity_validity");
             
             return true;

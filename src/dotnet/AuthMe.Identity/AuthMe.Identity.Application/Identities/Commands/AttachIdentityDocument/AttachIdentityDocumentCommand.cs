@@ -6,11 +6,12 @@ namespace AuthMe.IdentityMsrv.Application.Identities.Commands.AttachIdentityDocu
 
 public class AttachIdentityDocumentCommand : IRequest<ValidatableResponse>, IValidatable
 {
-    public int IdentityId { get; set; }
-    public byte[] DocumentFront { get; set; }
-    public byte[] DocumentBack { get; set; }
+    public int IdentityId { get; init; }
+    public byte[]? DocumentFront { get; init; }
+    public byte[]? DocumentBack { get; init; }
 }
 
+// ReSharper disable once UnusedType.Global
 public class AttachIdentityDocumentCommandHandler : IRequestHandler<AttachIdentityDocumentCommand, ValidatableResponse>
 {
     private readonly IIdentityService _identityService;
@@ -22,7 +23,7 @@ public class AttachIdentityDocumentCommandHandler : IRequestHandler<AttachIdenti
     
     public async Task<ValidatableResponse> Handle(AttachIdentityDocumentCommand request, CancellationToken cancellationToken)
     {
-        var response = await _identityService.AttachIdentityDocument(request.IdentityId, request.DocumentFront, request.DocumentFront);
+        await _identityService.AttachIdentityDocument(request.IdentityId, request.DocumentFront, request.DocumentBack);
         return new ValidatableResponse();
     }
 }
