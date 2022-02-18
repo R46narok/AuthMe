@@ -30,7 +30,7 @@ public class IdentityValidityController : ControllerBase
         
         var response = await _mediator.Send(command);
 
-        if (response.IsValid)
+        if (response.Valid)
             return Ok();
         
         return BadRequest(response.Errors);

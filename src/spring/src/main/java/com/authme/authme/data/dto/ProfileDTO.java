@@ -6,24 +6,17 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 public class ProfileDTO {
-    private ProfileEntryObject<String> firstName;
+    private ProfileEntryObject<String> name;
     private ProfileEntryObject<String> middleName;
-    private ProfileEntryObject<String> lastName;
+    private ProfileEntryObject<String> surname;
     private ProfileEntryObject<LocalDate> dateOfBirth;
 
-    public ProfileDTO() {
-        this.firstName = new ProfileEntryObject<>();
-        this.middleName = new ProfileEntryObject<>();
-        this.lastName = new ProfileEntryObject<>();
-        this.dateOfBirth = new ProfileEntryObject<>();
+    public ProfileEntryObject<String> getName() {
+        return name;
     }
 
-    public ProfileEntryObject<String> getFirstName() {
-        return firstName;
-    }
-
-    public ProfileDTO setFirstName(ProfileEntryObject<String> firstName) {
-        this.firstName = firstName;
+    public ProfileDTO setName(ProfileEntryObject<String> name) {
+        this.name = name;
         return this;
     }
 
@@ -36,12 +29,12 @@ public class ProfileDTO {
         return this;
     }
 
-    public ProfileEntryObject<String> getLastName() {
-        return lastName;
+    public ProfileEntryObject<String> getSurname() {
+        return surname;
     }
 
-    public ProfileDTO setLastName(ProfileEntryObject<String> lastName) {
-        this.lastName = lastName;
+    public ProfileDTO setSurname(ProfileEntryObject<String> surname) {
+        this.surname = surname;
         return this;
     }
 

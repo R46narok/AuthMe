@@ -6,6 +6,5 @@ public class CreateIdentityCommandValidator : AbstractValidator<CreateIdentityCo
 {
     public CreateIdentityCommandValidator()
     {
-        RuleFor(x => x.ExternalId).Must(x => x > -1);
     }
 }

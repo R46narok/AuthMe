@@ -12,7 +12,7 @@ public class ValidatableResponse
         Errors = errors?.ToList();
     }
 
-    public bool IsValid => Errors == null || !Errors.Any();
+    public bool Valid => Errors == null || !Errors.Any();
 }
 
 /// <see cref="ValidatableResponse"/>

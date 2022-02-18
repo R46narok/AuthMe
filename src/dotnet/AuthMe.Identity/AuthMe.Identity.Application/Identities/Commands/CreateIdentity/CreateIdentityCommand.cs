@@ -8,12 +8,6 @@ namespace AuthMe.IdentityMsrv.Application.Identities.Commands.CreateIdentity;
 
 public class CreateIdentityCommand : IRequest<ValidatableResponse<int>>, IValidatable
 {
-    /// <summary>
-    /// A valid id of the associated record in the Spring service.
-    /// </summary>
-    
-    public int ExternalId { get; set; }
-
 }
 
 public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityCommand, ValidatableResponse<int>>
@@ -43,13 +37,8 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityComman
     /// </returns>
     public async Task<ValidatableResponse<int>> Handle(CreateIdentityCommand request, CancellationToken cancellationToken)
     {
-        if (_dbContext.Identities.FirstOrDefault(x => x.ExternalId == request.ExternalId) != null)
-            return new ValidatableResponse<int>(-1,
-                new[] {"An Identity with that ExternalId already exists."});
-
         var identity = new Identity()
         {
-            ExternalId = request.ExternalId,
             DateOfBirth = new IdentityProperty<DateTime>(),
             Name = new IdentityProperty<string>(),
             MiddleName = new IdentityProperty<string>(),

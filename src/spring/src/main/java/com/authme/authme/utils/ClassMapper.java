@@ -38,21 +38,21 @@ public class ClassMapper extends ModelMapper {
 
     public ProfileBindingModel toProfileBindingModel(ProfileDTO profileDTO) {
         return new ProfileBindingModel()
-                .setFirstName(profileDTO.getFirstName().getValue())
-                .setFirstNameValidated(profileDTO.getFirstName().getValidated())
+                .setFirstName(profileDTO.getName().getValue())
+                .setFirstNameValidated(profileDTO.getName().getValidated())
                 .setMiddleName(profileDTO.getMiddleName().getValue())
                 .setMiddleNameValidated(profileDTO.getMiddleName().getValidated())
-                .setLastName(profileDTO.getLastName().getValue())
-                .setLastNameValidated(profileDTO.getLastName().getValidated())
+                .setLastName(profileDTO.getSurname().getValue())
+                .setLastNameValidated(profileDTO.getSurname().getValidated())
                 .setDateOfBirth(profileDTO.getDateOfBirth().getValue())
                 .setDateOfBirthValidated(profileDTO.getDateOfBirth().getValidated());
     }
 
     public ProfileDTO toProfileDTO(ProfileBindingModel profileBindingModel) {
         return new ProfileDTO()
-                .setFirstName(new ProfileEntryObject<String>().setValue(profileBindingModel.getFirstName()).setValidated(profileBindingModel.getFirstNameValidated()))
+                .setName(new ProfileEntryObject<String>().setValue(profileBindingModel.getFirstName()).setValidated(profileBindingModel.getFirstNameValidated()))
                 .setMiddleName(new ProfileEntryObject<String>().setValue(profileBindingModel.getMiddleName()).setValidated(profileBindingModel.getMiddleNameValidated()))
-                .setLastName(new ProfileEntryObject<String>().setValue(profileBindingModel.getLastName()).setValidated(profileBindingModel.getLastNameValidated()))
+                .setSurname(new ProfileEntryObject<String>().setValue(profileBindingModel.getLastName()).setValidated(profileBindingModel.getLastNameValidated()))
                 .setDateOfBirth(new ProfileEntryObject<LocalDate>().setValue(profileBindingModel.getDateOfBirth()).setValidated(profileBindingModel.getDateOfBirthValidated()));
     }
 

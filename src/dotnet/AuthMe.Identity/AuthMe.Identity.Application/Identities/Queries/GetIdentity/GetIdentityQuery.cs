@@ -36,7 +36,7 @@ public class GetIdentityQueryHandler : IRequestHandler<GetIdentityQuery, Validat
     /// </returns>
     public async Task<ValidatableResponse<IdentityDto>> Handle(GetIdentityQuery request, CancellationToken cancellationToken)
     {
-        var entry = _dbContext.Identities.FirstOrDefault(x => x.ExternalId == request.ExternalId);
+        var entry = _dbContext.Identities.FirstOrDefault(x => x.Id == request.ExternalId);
 
         if (entry == null)
         {
