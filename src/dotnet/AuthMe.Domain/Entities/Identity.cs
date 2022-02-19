@@ -19,10 +19,6 @@ public class Identity
 {
     public int Id { get; set; }
     
-    /// <summary>
-    /// Id of the associated record in the Spring service.
-    /// </summary>
-    public int ExternalId { get; set; }
     
     public IdentityProperty<string> Name { get; set; }
     public IdentityProperty<string> MiddleName { get; set; }

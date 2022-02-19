@@ -1,5 +1,6 @@
 ﻿using AuthMe.Domain.Entities;
 using AuthMe.IdentityMsrv.Application.Identities.Commands.CreateIdentity;
+using AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
 using AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 using AutoMapper;
 
@@ -12,5 +13,6 @@ public class IdentityProfile : Profile
         CreateMap<CreateIdentityCommand, Identity>();
         CreateMap<Identity, IdentityDto>();
         CreateMap<IdentityDto, Identity>();
+        CreateMap<UpdateIdentityCommand, Identity>();
     }
 }

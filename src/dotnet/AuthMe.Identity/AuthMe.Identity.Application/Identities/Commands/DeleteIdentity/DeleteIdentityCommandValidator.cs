@@ -1,14 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using AuthMe.IdentityMsrv.Application.Common.Interfaces;
-using AuthMe.IdentityMsrv.Application.Identities.Commands.DeleteIdentity;
 using FluentValidation;
 
-namespace AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
+namespace AuthMe.IdentityMsrv.Application.Identities.Commands.DeleteIdentity;
 
 [SuppressMessage("ReSharper", "UnusedType.Global")]
-public class UpdateIdentityCommandValidator : AbstractValidator<DeleteIdentityCommand>
+public class DeleteIdentityCommandValidator : AbstractValidator<DeleteIdentityCommand>
 {
-    public UpdateIdentityCommandValidator(IIdentityDbContext dbContext)
+    public DeleteIdentityCommandValidator(IIdentityDbContext dbContext)
     {
         RuleFor(identity => identity.Id)
             .Must(id => dbContext.Identities.Find(id) != null)

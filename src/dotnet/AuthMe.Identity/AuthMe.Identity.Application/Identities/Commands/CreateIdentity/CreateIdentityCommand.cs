@@ -22,19 +22,7 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityComman
         _mapper = mapper;
         _identityService = identityService;
     }
-
-    /// <summary>
-    /// Performs OCR operations on the associated identity document.
-    /// Creates an Identity entry based on the latter. 
-    /// </summary>
-    /// <param name="request">Fluent-Validated request</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>
-    /// Id of the created entity.
-    /// Errors:
-    /// - An Identity with that ExternalId already exists.
-    /// - A valid document could not be found.
-    /// </returns>
+    
     public async Task<ValidatableResponse<int>> Handle(CreateIdentityCommand request, CancellationToken cancellationToken)
     {
         var identity = new Identity()

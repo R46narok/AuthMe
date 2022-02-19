@@ -7,10 +7,7 @@ namespace AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 
 public class GetIdentityQuery : IRequest<ValidatableResponse<IdentityDto>>, IValidatable
 {
-    /// <summary>
-    /// A valid id of the associated record in the Spring service.
-    /// </summary>
-    public int ExternalId { get; set; }
+    public int Id { get; set; }
 }
 
 public class GetIdentityQueryHandler : IRequestHandler<GetIdentityQuery, ValidatableResponse<IdentityDto>>
@@ -36,7 +33,7 @@ public class GetIdentityQueryHandler : IRequestHandler<GetIdentityQuery, Validat
     /// </returns>
     public async Task<ValidatableResponse<IdentityDto>> Handle(GetIdentityQuery request, CancellationToken cancellationToken)
     {
-        var entry = _dbContext.Identities.FirstOrDefault(x => x.Id == request.ExternalId);
+        var entry = _dbContext.Identities.FirstOrDefault(x => x.Id == request.Id);
 
         if (entry == null)
         {

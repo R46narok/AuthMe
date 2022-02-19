@@ -1,4 +1,5 @@
 ﻿using AuthMe.Domain.Common.Api;
+using AuthMe.Domain.Entities;
 using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using MediatR;
 
@@ -6,7 +7,7 @@ namespace AuthMe.IdentityMsrv.Application.Identities.Commands.DeleteIdentity;
 
 public class DeleteIdentityCommand : IRequest<ValidatableResponse>, IValidatable
 {
-    public int ExternalId { get; set; }
+    public int Id { get; set; }
 }
 
 public class DeleteIdentityCommandHandler : IRequestHandler<DeleteIdentityCommand, ValidatableResponse>
@@ -20,11 +21,8 @@ public class DeleteIdentityCommandHandler : IRequestHandler<DeleteIdentityComman
     
     public async Task<ValidatableResponse> Handle(DeleteIdentityCommand request, CancellationToken cancellationToken)
     {
-        var identity = _dbContext.Identities.FirstOrDefault(x => x.ExternalId == request.ExternalId);
+        var identity = new Identity {Id = request.Id};
         
-        if (identity == null)
-            return new ValidatableResponse(new [] { $"Identity with external id {request.ExternalId} could not be found." });
-
         _dbContext.Identities.Remove(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
         

@@ -19,10 +19,10 @@ public class IdentityController : ControllerBase
         _mediator = mediator;
     }
     
-    [HttpGet(template: "{externalId}")]
-    public async Task<ActionResult<ValidatableResponse<IdentityDto>>> GetIdentity(int externalId)
+    [HttpGet(template: "{id}")]
+    public async Task<ActionResult<ValidatableResponse<IdentityDto>>> GetIdentity(int id)
     {
-        var query = new GetIdentityQuery {ExternalId = externalId};
+        var query = new GetIdentityQuery { Id = id };
         var result = await _mediator.Send(query);
 
         if (result.Valid)
@@ -50,10 +50,10 @@ public class IdentityController : ControllerBase
         return Ok(response);
     }
 
-    [HttpDelete(template: "{externalId}")]
-    public async Task<ActionResult<ValidatableResponse>> DeleteIdentity(int externalId)
+    [HttpDelete(template: "{id}")]
+    public async Task<ActionResult<ValidatableResponse>> DeleteIdentity(int id)
     {
-        var command = new DeleteIdentityCommand {ExternalId = externalId};
+        var command = new DeleteIdentityCommand {Id = id};
         var response = await _mediator.Send(command);
 
         if (response.Valid)
