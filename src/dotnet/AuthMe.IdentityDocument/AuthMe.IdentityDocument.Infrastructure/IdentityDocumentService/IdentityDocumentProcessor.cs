@@ -1,12 +1,15 @@
 using AuthMe.Domain.Common;
 using AuthMe.Domain.Events;
+using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Settings;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
+using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.DeleteIdentityDocument;
 using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.ReadIdentityDocument;
 using Azure.Messaging.ServiceBus;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using EventHandler = AuthMe.Domain.Common.EventHandler;
 
 namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService;
@@ -17,11 +20,11 @@ public class IdentityDocumentProcessor : BackgroundService
     private readonly ServiceBusClient _client;
     private readonly ServiceBusProcessor _processor;
     
-    public IdentityDocumentProcessor(IConfiguration configuration, IServiceProvider serviceProvider)
+    public IdentityDocumentProcessor(IOptions<AzureServiceBusSettings> options, IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        _client = new ServiceBusClient(configuration["AzureServiceBusEndpoint"]);
-        _processor = _client.CreateProcessor("identity_validity");
+        _client = new ServiceBusClient(options.Value.Endpoint);
+        _processor = _client.CreateProcessor(options.Value.Queue);
 
         _processor.ProcessMessageAsync += MessageHandler;
         _processor.ProcessErrorAsync += ErrorHandler;
@@ -42,6 +45,9 @@ public class IdentityDocumentProcessor : BackgroundService
             var query = new ReadIdentityDocumentQuery {IdentityId = @event.Model};
             var response = await mediatr!.Send(query);
 
+            var command = new DeleteIdentityDocumentCommand { IdentityId = @event.Model};
+            await mediatr.Send(command);
+            
             await bus.Send(new ValidateIdentityCompletedEvent(new ValidateIdentityCompletedModel
             {
                 Id = @event.Model,

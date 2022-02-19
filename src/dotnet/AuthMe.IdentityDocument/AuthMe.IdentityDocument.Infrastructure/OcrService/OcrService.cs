@@ -28,7 +28,7 @@ public class OcrService : IOcrService
     /// <returns></returns>
     public async Task<string> ReadTextFromImage(byte[] image)
     {
-        var client = _httpFactory.CreateClient("AzureCognitiveOcr");
+        var client = _httpFactory.CreateClient("AzureOcr");
         
         using var content = new ByteArrayContent(image);
         content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");

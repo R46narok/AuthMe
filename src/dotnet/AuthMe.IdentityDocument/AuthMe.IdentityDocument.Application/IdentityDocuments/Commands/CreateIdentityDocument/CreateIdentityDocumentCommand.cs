@@ -22,13 +22,13 @@ public class CreateIdentityDocumentCommand : IRequest<ValidatableResponse<int>>
 
 public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityDocumentCommand, ValidatableResponse<int>>
 {
-    private readonly IIdentityDocumentDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly IServiceBus _bus;
+    private readonly IIdentityDocumentRepository _repository;
 
-    public CreateIdentityCommandHandler(IIdentityDocumentDbContext dbContext, IMapper mapper, IServiceBus bus)
+    public CreateIdentityCommandHandler(IIdentityDocumentRepository repository, IMapper mapper, IServiceBus bus)
     {
-        _dbContext = dbContext;
+        _repository = repository;
         _mapper = mapper;
         _bus = bus;
     }
@@ -43,17 +43,11 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityDocume
     /// </returns>
     public async Task<ValidatableResponse<int>> Handle(CreateIdentityDocumentCommand request, CancellationToken cancellationToken)
     {
-        if (await _dbContext.IdentityDocuments!.FirstOrDefaultAsync(
-                x => x.IdentityId == request.IdentityId, cancellationToken) != null)
-            return new ValidatableResponse<int>(-1, new[] {$"A document is already attached to id {request.IdentityId}"});
-        
         var document = _mapper.Map<IdentityDocument>(request);
-        var entry = _dbContext.IdentityDocuments!.Add(document);
-        
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        var id = await _repository.CreateDocumentAsync(document);
 
         await _bus.Send(new ValidateIdentityEvent(request.IdentityId), "identity_validity");
         
-        return new ValidatableResponse<int>(entry.Entity.Id);
+        return new ValidatableResponse<int>(id);
     }
 }

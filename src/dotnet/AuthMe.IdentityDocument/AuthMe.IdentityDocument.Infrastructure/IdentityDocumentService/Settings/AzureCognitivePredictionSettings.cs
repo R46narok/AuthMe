@@ -1,4 +1,4 @@
-namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService;
+namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Settings;
 
 public class AzureCognitivePredictionSettings
 {

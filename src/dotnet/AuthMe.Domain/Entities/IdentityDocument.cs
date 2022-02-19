@@ -12,4 +12,16 @@ public class IdentityDocument
     public byte[] DocumentFront { get; set; }
 
     public byte[] DocumentBack { get; set; }
+
+    public IdentityDocument()
+    {
+        
+    }
+
+    public IdentityDocument(int identityId, byte[] documentFront, byte[] documentBack)
+    {
+        IdentityId = identityId;
+        DocumentFront = documentFront;
+        DocumentBack = documentBack;
+    }
 }

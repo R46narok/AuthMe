@@ -12,24 +12,21 @@ public class ReadIdentityDocumentQuery : IRequest<ValidatableResponse<IdentityDo
 
 public class ReadIdentityDocumentQueryHandler : IRequestHandler<ReadIdentityDocumentQuery, ValidatableResponse<IdentityDocumentDto>>
 {
-    private readonly IIdentityDocumentDbContext _dbContext;
+    private readonly IIdentityDocumentRepository _repository;
     private readonly IIdentityDocumentService _identityDocumentService;
     private readonly IIdentityDocumentValidityService _documentValidityService;
 
-    public ReadIdentityDocumentQueryHandler(IIdentityDocumentDbContext dbContext
+    public ReadIdentityDocumentQueryHandler(IIdentityDocumentRepository repository
         , IIdentityDocumentService identityDocumentService, IIdentityDocumentValidityService documentValidityService)
     {
-        _dbContext = dbContext;
+        _repository = repository;
         _identityDocumentService = identityDocumentService;
         _documentValidityService = documentValidityService;
     }
     
     public async Task<ValidatableResponse<IdentityDocumentDto>> Handle(ReadIdentityDocumentQuery request, CancellationToken cancellationToken)
     {
-        var document = await _dbContext.IdentityDocuments.FirstOrDefaultAsync(x => x.IdentityId == request.IdentityId
-            , cancellationToken: cancellationToken);
-        if (document == null)
-            return new ValidatableResponse<IdentityDocumentDto>(null, new[] {$"Could not find an identity document with the given id {request.IdentityId}"});
+        var document = await _repository.GetDocument(request.IdentityId);
 
         var documentDto = await _identityDocumentService.ReadIdentityDocument(document.DocumentFront);
 

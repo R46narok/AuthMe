@@ -12,8 +12,7 @@ namespace AuthMe.IdentityMsrv.Infrastructure.Data;
 public class IdentityDbContext : DbContext, IIdentityDbContext
 {
     public DbSet<Identity> Identities { get; set; }
-    public DbSet<IdentityDocument> IdentityDocuments { get; set; }
-    
+
     public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
         : base(options)
     { 

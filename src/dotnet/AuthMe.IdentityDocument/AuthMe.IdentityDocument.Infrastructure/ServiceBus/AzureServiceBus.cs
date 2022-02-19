@@ -1,8 +1,10 @@
 using System.Text.Json;
 using AuthMe.Domain.Common;
+using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Settings;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace AuthMe.IdentityDocumentMsrv.Infrastructure.ServiceBus;
 
@@ -11,9 +13,9 @@ public class AzureServiceBus : IServiceBus
     private readonly ServiceBusClient _client;
     private readonly Dictionary<string, ServiceBusSender> _senders;
 
-    public AzureServiceBus(IConfiguration configuration)
+    public AzureServiceBus(IOptions<AzureServiceBusSettings> options)
     {
-        _client = new ServiceBusClient(configuration["AzureServiceBusEndpoint"]);
+        _client = new ServiceBusClient(options.Value.Endpoint);
         _senders = new Dictionary<string, ServiceBusSender>();
     }
 

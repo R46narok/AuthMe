@@ -6,27 +6,22 @@ namespace AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.
 
 public class DeleteIdentityDocumentCommand : IRequest<ValidatableResponse>
 {
-    public int Id { get; set; }
+    public int IdentityId { get; set; }
 }
 
 public class DeleteIdentityDocumentCommandHandler : IRequestHandler<DeleteIdentityDocumentCommand, ValidatableResponse>
 {
-    private readonly IIdentityDocumentDbContext _dbContext;
-    
-    public DeleteIdentityDocumentCommandHandler(IIdentityDocumentDbContext dbContext)
+    private readonly IIdentityDocumentRepository _repository;
+
+    public DeleteIdentityDocumentCommandHandler(IIdentityDocumentRepository repository)
     {
-        _dbContext = dbContext;
+        _repository = repository;
     }
     
     public async Task<ValidatableResponse> Handle(DeleteIdentityDocumentCommand request, CancellationToken cancellationToken)
     {
-        var entry = _dbContext.IdentityDocuments.FirstOrDefault(x => x.Id == request.Id);
-        if (entry != null)
-        {
-            _dbContext.IdentityDocuments.Remove(entry);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-        }
+        await _repository.DeleteDocumentAsync(request.IdentityId);
 
-        return new ValidatableResponse(new[] {"Cannot delete a non existing IdentityDocument"});
+        return new ValidatableResponse();
     }
 }
