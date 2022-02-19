@@ -6,6 +6,7 @@ using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Models;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.ReadIdentityDocument;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService;
 

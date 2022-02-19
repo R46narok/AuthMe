@@ -8,10 +8,10 @@ namespace AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
 [SuppressMessage("ReSharper", "UnusedType.Global")]
 public class UpdateIdentityCommandValidator : AbstractValidator<DeleteIdentityCommand>
 {
-    public UpdateIdentityCommandValidator(IIdentityDbContext dbContext)
+    public UpdateIdentityCommandValidator(IIdentityRepository repository)
     {
         RuleFor(identity => identity.Id)
-            .Must(id => dbContext.Identities.Find(id) != null)
+            .MustAsync(async (id,_) => await repository.IdentityExistsAsync(id))
             .WithErrorCode("NotFound")
             .WithMessage("Identity with the given id does not exist in the database.");
     }

@@ -1,8 +1,8 @@
 ﻿using AuthMe.Domain.Common.Api;
 using AuthMe.Domain.Entities;
 using AuthMe.IdentityMsrv.Application.Common.Interfaces;
-using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace AuthMe.IdentityMsrv.Application.Identities.Commands.CreateIdentity;
 
@@ -12,30 +12,22 @@ public class CreateIdentityCommand : IRequest<ValidatableResponse<int>>, IValida
 
 public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityCommand, ValidatableResponse<int>>
 {
-    private readonly IIdentityDbContext _dbContext;
-    private readonly IMapper _mapper;
-    private readonly IIdentityService _identityService;
+    private readonly IIdentityRepository _repository;
+    private readonly ILogger<CreateIdentityCommandHandler> _logger;
 
-    public CreateIdentityCommandHandler(IIdentityDbContext dbContext, IMapper mapper, IIdentityService identityService)
+    public CreateIdentityCommandHandler(IIdentityRepository repository, ILogger<CreateIdentityCommandHandler> logger)
     {
-        _dbContext = dbContext;
-        _mapper = mapper;
-        _identityService = identityService;
+        _repository = repository;
+        _logger = logger;
     }
     
     public async Task<ValidatableResponse<int>> Handle(CreateIdentityCommand request, CancellationToken cancellationToken)
     {
-        var identity = new Identity()
-        {
-            DateOfBirth = new IdentityProperty<DateTime>(),
-            Name = new IdentityProperty<string>(),
-            MiddleName = new IdentityProperty<string>(),
-            Surname = new IdentityProperty<string>()
-        };
+        var identity = new Identity();
+        var id = await _repository.CreateIdentityAsync(identity);
 
-        var entry = _dbContext.Identities.Add(identity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return new ValidatableResponse<int>(entry.Entity.Id);
+        _logger.LogInformation("Created identity with the new id of {Id}", id);
+        
+        return new ValidatableResponse<int>(id);
     }
 }

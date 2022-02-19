@@ -8,6 +8,8 @@ using AuthMe.IdentityDocumentMsrv.Infrastructure.ServiceBus;
 using AuthMe.IdentityDocumentService.Application;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
+using Microsoft.Extensions.Options;
 using IdentityDocumentService = AuthMe.IdentityDocumentService.Web.Services.IdentityDocumentService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,12 +36,18 @@ builder.Services.AddSingleton<IServiceBus, AzureServiceBus>();
 var connString = builder.Configuration.GetConnectionString("MsSQLDb");
 builder.Services.AddDbContext<IIdentityDocumentDbContext, IdentityDocumentDbContext>(options => options.UseSqlServer(connString));
 
-builder.Services.AddHttpClient("AzureCognitivePrediction", client =>
+builder.Services.Configure<AzureCognitivePredictionSettings>(builder.Configuration.GetSection("AzureCognitivePrediction"));
+
+builder.Services.AddHttpClient("AzureCognitivePrediction", (serviceProvider, client) =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["AzureCognitivePredictionEndpoint"]);
+    var options = serviceProvider.GetService<IOptions<AzureCognitivePredictionSettings>>()!.Value;
+    
+    client.BaseAddress = new Uri(options.Endpoint);
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
-    client.DefaultRequestHeaders.Add("Prediction-Key", builder.Configuration["AzureCognitivePredictionKey"]);
+    client.DefaultRequestHeaders.Add("Prediction-Key", options.Key);
 });
+
+
 builder.Services.AddHttpClient("AzureCognitiveAnalyzer", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["AzureCognitiveAnalyzerEndpoint"]);

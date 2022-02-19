@@ -4,6 +4,7 @@ using AuthMe.Domain.Entities;
 using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
 
@@ -20,21 +21,23 @@ public class UpdateIdentityCommand : IRequest<ValidatableResponse>, IValidatable
 [SuppressMessage("ReSharper", "UnusedType.Global")]
 public class UpdateIdentityCommandHandler : IRequestHandler<UpdateIdentityCommand, ValidatableResponse>
 {
-    private readonly IIdentityDbContext _dbContext;
+    private readonly IIdentityRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ILogger<UpdateIdentityCommandHandler> _logger;
 
-    public UpdateIdentityCommandHandler(IIdentityDbContext dbContext, IMapper mapper)
+    public UpdateIdentityCommandHandler(IIdentityRepository repository, IMapper mapper, ILogger<UpdateIdentityCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _repository = repository;
         _mapper = mapper;
+        _logger = logger;
     }
     
     public async Task<ValidatableResponse> Handle(UpdateIdentityCommand request, CancellationToken cancellationToken)
     {
         var identity = _mapper.Map<Identity>(request);
-        
-        _dbContext.Identities.Update(identity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        await _repository.UpdateIdentityAsync(identity);
+        _logger.LogInformation("Updated identity with id {Id}", request.Id);
         
         return new ValidatableResponse();
     }

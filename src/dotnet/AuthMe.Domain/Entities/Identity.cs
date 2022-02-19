@@ -25,4 +25,13 @@ public class Identity
     public IdentityProperty<string> Surname { get; set; }
     
     public IdentityProperty<DateTime> DateOfBirth { get; set; }
+
+    public Identity()
+    {
+        Name = new IdentityProperty<string>();
+        MiddleName = new IdentityProperty<string>();
+        Surname = new IdentityProperty<string>();
+        DateOfBirth = new IdentityProperty<DateTime>();
+        DateOfBirth.Value = new DateTime();
+    }
 }

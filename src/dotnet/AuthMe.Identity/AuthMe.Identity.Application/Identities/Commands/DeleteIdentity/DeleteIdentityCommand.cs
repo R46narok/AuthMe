@@ -2,6 +2,7 @@
 using AuthMe.Domain.Entities;
 using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace AuthMe.IdentityMsrv.Application.Identities.Commands.DeleteIdentity;
 
@@ -12,19 +13,20 @@ public class DeleteIdentityCommand : IRequest<ValidatableResponse>, IValidatable
 
 public class DeleteIdentityCommandHandler : IRequestHandler<DeleteIdentityCommand, ValidatableResponse>
 {
-    private readonly IIdentityDbContext _dbContext;
+    private readonly IIdentityRepository _repository;
+    private readonly ILogger<DeleteIdentityCommandHandler> _logger;
 
-    public DeleteIdentityCommandHandler(IIdentityDbContext dbContext)
+    public DeleteIdentityCommandHandler(IIdentityRepository repository, ILogger<DeleteIdentityCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _repository = repository;
+        _logger = logger;
     }
     
     public async Task<ValidatableResponse> Handle(DeleteIdentityCommand request, CancellationToken cancellationToken)
     {
-        var identity = new Identity {Id = request.Id};
+        await _repository.DeleteIdentityAsync(request.Id);
         
-        _dbContext.Identities.Remove(identity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        _logger.LogInformation("Deleted identity with id {Id}", request.Id);
         
         return new ValidatableResponse();
     }

@@ -2,6 +2,7 @@
 using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 
@@ -13,12 +14,14 @@ public class GetIdentityQuery : IRequest<ValidatableResponse<IdentityDto>>, IVal
 public class GetIdentityQueryHandler : IRequestHandler<GetIdentityQuery, ValidatableResponse<IdentityDto>>
 {
     private readonly IMapper _mapper;
-    private readonly IIdentityDbContext _dbContext;
+    private readonly IIdentityRepository _repository;
+    private readonly ILogger<GetIdentityQueryHandler> _logger;
 
-    public GetIdentityQueryHandler(IMapper mapper, IIdentityDbContext dbContext)
+    public GetIdentityQueryHandler(IMapper mapper, IIdentityRepository repository, ILogger<GetIdentityQueryHandler> logger)
     {
         _mapper = mapper;
-        _dbContext = dbContext;
+        _repository = repository;
+        _logger = logger;
     }
 
     /// <summary>
@@ -33,14 +36,9 @@ public class GetIdentityQueryHandler : IRequestHandler<GetIdentityQuery, Validat
     /// </returns>
     public async Task<ValidatableResponse<IdentityDto>> Handle(GetIdentityQuery request, CancellationToken cancellationToken)
     {
-        var entry = _dbContext.Identities.FirstOrDefault(x => x.Id == request.Id);
-
-        if (entry == null)
-        {
-            return new ValidatableResponse<IdentityDto>(null,
-                new[] {"Requested Identity does not exist in the database."});
-        }
+        var identity = await _repository.GetIdentityAsync(request.Id);
+        _logger.LogInformation("Retrieved identity with id {Id}", request.Id);
         
-        return new ValidatableResponse<IdentityDto>(_mapper.Map<IdentityDto>(entry));
+        return new ValidatableResponse<IdentityDto>(_mapper.Map<IdentityDto>(identity));
     }
 }

@@ -1,8 +1,10 @@
 using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
+using AuthMe.IdentityMsrv.Infrastructure.Settings;
 using AuthMe.IdentityService.Infrastructure.Grpc;
 using Google.Protobuf;
 using Grpc.Net.Client;
+using Microsoft.Extensions.Options;
 
 namespace AuthMe.IdentityMsrv.Infrastructure;
 
@@ -10,9 +12,9 @@ public class IdentityService : IIdentityService
 {
     private readonly IdentityDocumentSrv.IdentityDocumentSrvClient _client;
 
-    public IdentityService(string connection)
+    public IdentityService(IOptions<IdentityServiceSettings> options)
     {
-        var channel = GrpcChannel.ForAddress(connection);
+        var channel = GrpcChannel.ForAddress(options.Value.Endpoint);
         _client = new IdentityDocumentSrv.IdentityDocumentSrvClient(channel);
     }
 

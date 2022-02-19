@@ -19,7 +19,7 @@ public class IdentityController : ControllerBase
         _mediator = mediator;
     }
     
-    [HttpGet(template: "{id}")]
+    [HttpGet("{id}", Name = "GetIdentity")]
     public async Task<ActionResult<ValidatableResponse<IdentityDto>>> GetIdentity(int id)
     {
         var query = new GetIdentityQuery { Id = id };
@@ -31,7 +31,7 @@ public class IdentityController : ControllerBase
         return NotFound(result);
     }
     
-    [HttpGet]
+    [HttpGet(Name = "CreateIdentity")]
     public async Task<ActionResult<ValidatableResponse<int>>> CreateIdentity()
     {
         var createIdentityCmd = new CreateIdentityCommand();
@@ -43,14 +43,14 @@ public class IdentityController : ControllerBase
         return BadRequest(response);
     }
 
-    [HttpPost]
+    [HttpPost(Name = "UpdateIdentity")]
     public async Task<ActionResult<ValidatableResponse>> UpdateIdentity([FromBody] UpdateIdentityCommand command)
     {
         var response = await _mediator.Send(command);
         return Ok(response);
     }
 
-    [HttpDelete(template: "{id}")]
+    [HttpDelete("{id}", Name = "DeleteIdentity")]
     public async Task<ActionResult<ValidatableResponse>> DeleteIdentity(int id)
     {
         var command = new DeleteIdentityCommand {Id = id};
