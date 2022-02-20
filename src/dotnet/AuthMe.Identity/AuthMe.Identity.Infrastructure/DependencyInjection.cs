@@ -16,19 +16,19 @@ namespace AuthMe.IdentityMsrv.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this WebApplicationBuilder builder)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        builder.Services.Configure<IdentityServiceSettings>(builder.Configuration.GetSection("IdentityService"));
-        builder.Services.Configure<IdentityServiceProcessorSettings>(builder.Configuration.GetSection("AzureServiceBus"));
+        services.Configure<IdentityServiceSettings>(configuration.GetSection("IdentityService"));
+        services.Configure<IdentityServiceProcessorSettings>(configuration.GetSection("AzureServiceBus"));
         
-        builder.Services.AddTransient<IIdentityRepository, IdentityRepository>();
-        builder.Services.AddTransient<IIdentityService, IdentityService>();
+        services.AddTransient<IIdentityRepository, IdentityRepository>();
+        services.AddTransient<IIdentityService, IdentityService>();
         
-        builder.Services.AddHostedService<IdentityServiceProcessor>();
+        services.AddHostedService<IdentityServiceProcessor>();
         
-        var connString = builder.Configuration.GetConnectionString("MsSQLDb");
-        builder.Services.AddDbContext<IIdentityDbContext, IdentityDbContext>(options => options.UseSqlServer(connString));
+        var connString = configuration.GetConnectionString("MsSQLDb");
+        services.AddDbContext<IIdentityDbContext, IdentityDbContext>(options => options.UseSqlServer(connString));
         
-        return builder.Services;
+        return services;
     }
 }

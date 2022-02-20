@@ -7,7 +7,6 @@ using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentValidityService
 using AuthMe.IdentityDocumentMsrv.Infrastructure.OcrService.Settings;
 using AuthMe.IdentityDocumentMsrv.Infrastructure.ServiceBus;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,35 +16,35 @@ namespace AuthMe.IdentityDocumentMsrv.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this WebApplicationBuilder builder)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         var asm = Assembly.GetExecutingAssembly();
         
-        builder.Services.Configure<AzureServiceBusSettings>(builder.Configuration.GetSection("AzureServiceBus"));
+        services.Configure<AzureServiceBusSettings>(configuration.GetSection("AzureServiceBus"));
         
-        builder.Services.AddTransient<IIdentityDocumentService, AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.IdentityDocumentService>();
-        builder.Services.AddTransient<IOcrService, OcrService.OcrService>();
-        builder.Services.AddTransient<IImageService, ImageService.ImageService>();
-        builder.Services.AddTransient<IIdentityDocumentValidityService,IdentityDocumentValidityService.IdentityDocumentValidityService>();
-
-        builder.Services.AddHostedService<IdentityDocumentProcessor>();
-        builder.Services.AddSingleton<IServiceBus, AzureServiceBus>();
-        builder.Services.AddDbContext<IIdentityDocumentDbContext, IdentityDocumentDbContext>(
-            options => options.UseSqlServer(builder.Configuration.GetConnectionString("MsSQLDb")));
-        builder.Services.AddTransient<IIdentityDocumentRepository, IdentityDocumentRepository>();
+        services.AddTransient<IIdentityDocumentService, AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.IdentityDocumentService>();
+        services.AddTransient<IOcrService, OcrService.OcrService>();
+        services.AddTransient<IImageService, ImageService.ImageService>();
+        services.AddTransient<IIdentityDocumentValidityService,IdentityDocumentValidityService.IdentityDocumentValidityService>();
+    
+        services.AddHostedService<IdentityDocumentProcessor>();
+        services.AddSingleton<IServiceBus, AzureServiceBus>();
+        services.AddDbContext<IIdentityDocumentDbContext, IdentityDocumentDbContext>(
+            options => options.UseSqlServer(configuration.GetConnectionString("MsSQLDb")));
+        services.AddTransient<IIdentityDocumentRepository, IdentityDocumentRepository>();
         
-        builder.AddHttpClients();
+        services.AddHttpClients(configuration);
         
-        return builder.Services;
+        return services;
     }
 
-    private static void AddHttpClients(this WebApplicationBuilder builder)
+    private static void AddHttpClients(this IServiceCollection services, IConfiguration configuration)
     {
-        builder.Services.Configure<AzureCognitivePredictionSettings>(builder.Configuration.GetSection("AzureCognitivePrediction"));
-        builder.Services.Configure<AzureOcrSettings>(builder.Configuration.GetSection("AzureOcr"));
-        builder.Services.Configure<MinistryOfInteriorSettings>(builder.Configuration.GetSection("MinistryOfInterior"));
+        services.Configure<AzureCognitivePredictionSettings>(configuration.GetSection("AzureCognitivePrediction"));
+        services.Configure<AzureOcrSettings>(configuration.GetSection("AzureOcr"));
+        services.Configure<MinistryOfInteriorSettings>(configuration.GetSection("MinistryOfInterior"));
         
-        builder.Services.AddHttpClient("AzureCognitivePrediction", (serviceProvider, client) =>
+        services.AddHttpClient("AzureCognitivePrediction", (serviceProvider, client) =>
         {
             var options = serviceProvider.GetService<IOptions<AzureCognitivePredictionSettings>>()!.Value;
     
@@ -54,7 +53,7 @@ public static class DependencyInjection
             client.DefaultRequestHeaders.Add("Prediction-Key", options.Key);
         });
         
-        builder.Services.AddHttpClient("AzureOcr", (serviceProvider, client) =>
+        services.AddHttpClient("AzureOcr", (serviceProvider, client) =>
         {
             var options = serviceProvider.GetService<IOptions<AzureOcrSettings>>()!.Value;
             
@@ -62,7 +61,7 @@ public static class DependencyInjection
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", options.Key);
         });
         
-        builder.Services.AddHttpClient("MinistryOfInterior", (serviceProvider, client) =>
+        services.AddHttpClient("MinistryOfInterior", (serviceProvider, client) =>
         {
             var options = serviceProvider.GetService<IOptions<MinistryOfInteriorSettings>>()!.Value;
             client.BaseAddress = new Uri(options.Endpoint);

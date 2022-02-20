@@ -16,8 +16,8 @@ builder.Services.AddGrpc(options =>
     options.MaxSendMessageSize = 20 * 1024 * 1024; // 10 MB
 });
 
-builder.AddApplication();
-builder.AddInfrastructure();
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
