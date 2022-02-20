@@ -19,6 +19,8 @@ public interface PersonalDataService {
 
     void patchProfile(ProfileBindingModel profileBindingModel);
 
+    void deleteProfile(Long id);
+
     void uploadIdCardPictures(MultipartFile frontImage, MultipartFile backImage);
 
     Boolean checkDataValid(AuthMeUserEntity user, Map<String, String> data);

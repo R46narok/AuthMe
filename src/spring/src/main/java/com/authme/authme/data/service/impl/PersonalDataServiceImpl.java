@@ -12,10 +12,10 @@ import com.authme.authme.utils.ClassMapper;
 import com.authme.authme.utils.RemoteEndpoints;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,31 +35,65 @@ public class PersonalDataServiceImpl implements PersonalDataService {
 
     @Override
     public Long newEntry() {
-        ValidatableResponse<Integer> response = restTemplate.getForObject(RemoteEndpoints.entry(), ValidatableResponse.class);
-        return Long.valueOf(response.getResult());
+        ValidatableResponse<Long> response =
+                restTemplate.exchange(RemoteEndpoints.entry(), HttpMethod.GET, null,
+                                new ParameterizedTypeReference<ValidatableResponse<Long>>() {
+                                })
+                        .getBody();
+        if (response == null || !response.isValid()) {
+            throw CommonErrorMessages.errorCreatingEntityInSecondService();
+        }
+        return response.getResult();
     }
 
     @Override
     public ProfileBindingModel getBindingModel() {
         AuthMeUserEntity user = currentUser.getCurrentLoggedUser();
-        ValidatableResponse<ProfileDTO> profileDTO =
-                restTemplate.exchange(RemoteEndpoints.profile(user.getDataId()), HttpMethod.GET, null, new ParameterizedTypeReference<ValidatableResponse<ProfileDTO>>() {})
+        ValidatableResponse<ProfileDTO> response =
+                restTemplate.exchange(RemoteEndpoints.profile(user.getDataId()), HttpMethod.GET, null,
+                                new ParameterizedTypeReference<ValidatableResponse<ProfileDTO>>() {
+                                })
                         .getBody();
-        return classMapper.toProfileBindingModel(profileDTO.getResult());
+        if (response == null || !response.isValid()) {
+            throw CommonErrorMessages.errorExtractingEntityFromSecondService();
+        }
+        return classMapper.toProfileBindingModel(response.getResult());
     }
 
     @Override
     public void patchProfile(ProfileBindingModel profileBindingModel) {
         AuthMeUserEntity user = currentUser.getCurrentLoggedUser();
-        ProfileDTO profileDTO = classMapper.toProfileDTO(profileBindingModel);
 
+        ProfileDTO profileDTO = classMapper.toProfileDTO(profileBindingModel);
+        profileDTO.setId(user.getId());
         HttpEntity<ProfileDTO> entity = new HttpEntity<>(profileDTO);
+
         restTemplate.exchange(RemoteEndpoints.profile(user.getDataId()), HttpMethod.POST, entity, Void.class);
     }
 
     @Override
-    public void uploadIdCardPictures(MultipartFile frontImage, MultipartFile backImage) {
+    public void deleteProfile(Long id) {
+        restTemplate.delete(RemoteEndpoints.profile(id));
+    }
 
+
+    @Override
+    public void uploadIdCardPictures(MultipartFile frontImage, MultipartFile backImage) {
+        AuthMeUserEntity user = currentUser.getCurrentLoggedUser();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        MultiValueMap<String, Object> body =
+                new LinkedMultiValueMap<>();
+        body.add("id", user.getDataId());
+        body.add("documentFront", frontImage.getResource());
+        body.add("documentBack", backImage.getResource());
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity =
+                new HttpEntity<>(body, headers);
+
+        restTemplate.exchange(RemoteEndpoints.picture(), HttpMethod.POST, requestEntity, Void.class);
     }
 
     @Override

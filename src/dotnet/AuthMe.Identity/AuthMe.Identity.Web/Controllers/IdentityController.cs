@@ -43,9 +43,10 @@ public class IdentityController : ControllerBase
         return BadRequest(response);
     }
 
-    [HttpPost(Name = "UpdateIdentity")]
-    public async Task<ActionResult<ValidatableResponse>> UpdateIdentity([FromBody] UpdateIdentityCommand command)
+    [HttpPost("{id}", Name = "UpdateIdentity")]
+    public async Task<ActionResult<ValidatableResponse>> UpdateIdentity(int id, [FromBody] UpdateIdentityCommand command)
     {
+        command.Id = id;
         var response = await _mediator.Send(command);
         return Ok(response);
     }

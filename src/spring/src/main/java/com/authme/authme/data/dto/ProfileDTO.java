@@ -1,11 +1,15 @@
 package com.authme.authme.data.dto;
 
 import com.authme.authme.data.dto.objects.ProfileEntryObject;
+import com.authme.authme.data.dto.serializers.LocalDateCustomSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 public class ProfileDTO {
+    private Long id;
     private ProfileEntryObject<String> name;
     private ProfileEntryObject<String> middleName;
     private ProfileEntryObject<String> surname;
@@ -38,6 +42,7 @@ public class ProfileDTO {
         return this;
     }
 
+    @JsonSerialize(using = LocalDateCustomSerializer.class)
     public ProfileEntryObject<LocalDate> getDateOfBirth() {
         return dateOfBirth;
     }
@@ -66,5 +71,14 @@ public class ProfileDTO {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public ProfileDTO setId(Long id) {
+        this.id = id;
+        return this;
     }
 }
