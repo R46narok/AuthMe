@@ -8,6 +8,7 @@ namespace AuthMe.Domain.Entities;
 public class IdentityProperty<T>
 {
     public T? Value { get; set; }
+
     public bool Validated { get; set; }
     public DateTime? LastUpdated { get; set; }
 }
@@ -18,12 +19,12 @@ public class IdentityProperty<T>
 public class Identity
 {
     public int Id { get; set; }
-    
-    
+
+
     public IdentityProperty<string> Name { get; set; }
     public IdentityProperty<string> MiddleName { get; set; }
     public IdentityProperty<string> Surname { get; set; }
-    
+
     public IdentityProperty<DateTime> DateOfBirth { get; set; }
 
     public Identity()

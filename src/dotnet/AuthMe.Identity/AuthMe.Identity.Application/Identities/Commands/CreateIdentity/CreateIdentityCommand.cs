@@ -24,6 +24,10 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityComman
     public async Task<ValidatableResponse<int>> Handle(CreateIdentityCommand request, CancellationToken cancellationToken)
     {
         var identity = new Identity();
+        identity.Name.Validated = true;
+        identity.MiddleName.Validated = true;
+        identity.Surname.Validated = true;
+        identity.DateOfBirth.Validated = true;
         var id = await _repository.CreateIdentityAsync(identity);
 
         _logger.LogInformation("Created identity with the new id of {Id}", id);
