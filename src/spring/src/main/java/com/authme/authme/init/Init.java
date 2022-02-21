@@ -20,8 +20,8 @@ public class Init implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        permissionService.init();
-//        roleService.init();
-//        userService.init();
+        permissionService.init();
+        roleService.init();
+        userService.init();
     }
 }

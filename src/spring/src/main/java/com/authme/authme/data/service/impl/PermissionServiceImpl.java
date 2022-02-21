@@ -20,10 +20,12 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public void init() {
-        Field[] fieldsInDTO = ProfileDTO.class.getDeclaredFields();
-        for (Field field : fieldsInDTO) {
-            Permission permission = new Permission().setFieldName(field.getName());
-            permissionRepository.saveAndFlush(permission);
+        if (permissionRepository.count() == 0) {
+            Field[] fieldsInDTO = ProfileDTO.class.getDeclaredFields();
+            for (Field field : fieldsInDTO) {
+                Permission permission = new Permission().setFieldName(field.getName());
+                permissionRepository.saveAndFlush(permission);
+            }
         }
     }
 

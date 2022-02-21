@@ -59,18 +59,20 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
 
     @Override
     public void init() {
-        AuthMeUserEntity user = new AuthMeUserEntity()
-                .setUsername("test")
-                .setPassword("8abb9bfc12232d7e0ca435b875173f577729923491d7e12a144fd26970b30060d7c8b04484e130e7")
-                .setRoles(List.of(roleRepository.findByName(AuthMeUserRole.USER).get()))
-                .setDataId(personalDataService.newEntry());
-        AuthMeUserEntity mitko = new AuthMeUserEntity()
-                .setUsername("mitko")
-                .setPassword("addc1ad2644907e0422ccdb79538de69cd4daf72ab5e0a26e85ed8ceb5208b47101fb93f7520dcc4")
-                .setRoles(List.of(roleRepository.findByName(AuthMeUserRole.USER).get()))
-                .setDataId(personalDataService.newEntry());
+        if(userRepository.count() == 0) {
+            AuthMeUserEntity user = new AuthMeUserEntity()
+                    .setUsername("test")
+                    .setPassword("8abb9bfc12232d7e0ca435b875173f577729923491d7e12a144fd26970b30060d7c8b04484e130e7")
+                    .setRoles(List.of(roleRepository.findByName(AuthMeUserRole.USER).get()))
+                    .setDataId(personalDataService.newEntry());
+            AuthMeUserEntity mitko = new AuthMeUserEntity()
+                    .setUsername("mitko")
+                    .setPassword("addc1ad2644907e0422ccdb79538de69cd4daf72ab5e0a26e85ed8ceb5208b47101fb93f7520dcc4")
+                    .setRoles(List.of(roleRepository.findByName(AuthMeUserRole.USER).get()))
+                    .setDataId(personalDataService.newEntry());
 
-        userRepository.saveAndFlush(user);
-        userRepository.saveAndFlush(mitko);
+            userRepository.saveAndFlush(user);
+            userRepository.saveAndFlush(mitko);
+        }
     }
 }

@@ -18,10 +18,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void init() {
-        Arrays.stream(AuthMeUserRole.values()).forEach(r -> {
-            Role role = new Role()
-                    .setName(r);
-            roleRepository.saveAndFlush(role);
-        });
+        if (roleRepository.count() == 0) {
+            Arrays.stream(AuthMeUserRole.values()).forEach(r -> {
+                Role role = new Role()
+                        .setName(r);
+                roleRepository.saveAndFlush(role);
+            });
+        }
     }
 }
