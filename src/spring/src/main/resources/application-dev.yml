@@ -1,0 +1,3 @@
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/auth_me?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
