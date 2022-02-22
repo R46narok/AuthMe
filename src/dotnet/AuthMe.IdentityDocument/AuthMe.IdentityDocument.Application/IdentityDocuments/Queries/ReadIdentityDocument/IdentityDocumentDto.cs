@@ -4,11 +4,12 @@ namespace AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.R
 
 public class IdentityDocumentDto
 {
-    public IdentityProperty<string> Name { get; set; }
-    public IdentityProperty<string> MiddleName { get; set; }
-    public IdentityProperty<string> Surname { get; set; }
+    public string Name { get; set; }
+    public string MiddleName { get; set; }
+    public string Surname { get; set; }
     
-    public IdentityProperty<DateTime> DateOfBirth { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
-    public IdentityProperty<string> DocumentNumber { get; set; }
+    public string DocumentNumber { get; set; }
+    
 }

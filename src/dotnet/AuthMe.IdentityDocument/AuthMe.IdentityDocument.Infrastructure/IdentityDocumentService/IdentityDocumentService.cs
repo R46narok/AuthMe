@@ -115,10 +115,7 @@ public class IdentityDocumentService : IIdentityDocumentService
             var name = prop.Name;
 
             var type = prop.PropertyType;
-            var valueProp = type.GetProperty("Value");
-            var isValidProp = type.GetProperty("IsValidated");
-            var lastUpdatedProp = type.GetProperty("LastUpdated");
-            var instance = Activator.CreateInstance(type);
+            object? instance = null;
             
             if (_matches.ContainsKey($"{name}-Key") && _matches.ContainsKey(name))
             {
@@ -127,29 +124,22 @@ public class IdentityDocumentService : IIdentityDocumentService
 
                 var value = await ProcessImage(document, box, keyBox); // value image
                 var text =  await _ocrService.ReadTextFromImage(value); // OCR
-
+                
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     try
                     {
-// TODO: Value setter
                         if (prop.Name == "DateOfBirth")
-                            valueProp!.SetValue( instance, DateTime.ParseExact(text, "dd.MM.yyyy", CultureInfo.CurrentCulture));
+                            instance = Activator.CreateInstance(type,
+                                DateTime.ParseExact(text, "dd.MM.yyyy", CultureInfo.CurrentCulture));
                         else
-                            valueProp!.SetValue(instance, text.ToTitleCase());
-                
-                        lastUpdatedProp!.SetValue(instance, DateTime.Now);
-                        isValidProp!.SetValue(instance, true);
+                            instance = new string(text.ToTitleCase());
                     }
                     catch (Exception e)
                     {
+                        _logger.LogError("Parsing data went wrong.");
                     }
-                    
                 }
-            }
-            else
-            {
-                isValidProp!.SetValue(instance, false);
             }
             
             prop.SetValue(dto, instance);

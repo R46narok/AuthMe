@@ -1,4 +1,5 @@
 ﻿using AuthMe.Domain.Common.Api;
+using AuthMe.Identity.Web.Filters;
 using AuthMe.IdentityMsrv.Application.Identities.Commands.CreateIdentity;
 using AuthMe.IdentityMsrv.Application.Identities.Commands.DeleteIdentity;
 using AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
@@ -22,6 +23,7 @@ public class IdentityController : ControllerBase
     
     [Authorize]
     [HttpGet("{id}", Name = "GetIdentity")]
+    [Log("Invoked GetIdentity endpoint")]
     public async Task<ActionResult<ValidatableResponse<IdentityDto>>> GetIdentity(int id)
     {
         var query = new GetIdentityQuery { Id = id };
@@ -35,6 +37,7 @@ public class IdentityController : ControllerBase
     
     [Authorize]
     [HttpGet(Name = "CreateIdentity")]
+    [Log("Invoked CreateIdentity endpoint")]
     public async Task<ActionResult<ValidatableResponse<int>>> CreateIdentity()
     {
         var createIdentityCmd = new CreateIdentityCommand();

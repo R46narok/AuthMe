@@ -24,6 +24,7 @@ public interface IIdentityRepository
     /// <param name="id"></param>
     /// <returns></returns>
     public Task<bool> IdentityExistsAsync(int id);
+    public bool IdentityExists(int id);
 
     /// <summary>
     /// 
