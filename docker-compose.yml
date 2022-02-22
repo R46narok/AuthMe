@@ -10,6 +10,15 @@ services:
     ports:
       - 1433:1433
 
+  mssql2:
+    image: mcr.microsoft.com/mssql/server
+    restart: always
+    environment:
+      SA_PASSWORD: AuthMeSuperSecurePassword123
+      ACCEPT_EULA: "Y" # Add Persistence
+    ports:
+      - 1434:1433
+
   # dotnet-worker:
   #   image: ${DOCKER_REGISTRY-}dotnet-worker
   #   build:
@@ -21,15 +30,15 @@ services:
   #   depends_on:
   #     - mssql
 
-  # mysql:
-  #   image: mysql:latest
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: example
-  #   ports:
-  #     - 3306:3306
-  #   cap_add:
-  #     - SYS_NICE
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+    cap_add:
+      - SYS_NICE
 
   # spring-worker:
   #   depends_on:
