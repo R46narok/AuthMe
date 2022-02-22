@@ -4,7 +4,6 @@
 </p>
 
 > A solution for digital identity
-> web hook test
 
 ## Authors
 
