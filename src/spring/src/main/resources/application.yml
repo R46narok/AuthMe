@@ -31,7 +31,7 @@ spring:
     #defer-datasource-initialization: true
   #Cloudinary Properties
   profiles:
-    active: prod
+    active: dev
 #cloudinary:
 #  api-key: 339616528418163
 #  api-secret: ${CLOUDINARY_API_SECRET}

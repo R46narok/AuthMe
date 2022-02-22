@@ -33,6 +33,7 @@ public class IdentityController : ControllerBase
         return NotFound(result);
     }
     
+    [Authorize]
     [HttpGet(Name = "CreateIdentity")]
     public async Task<ActionResult<ValidatableResponse<int>>> CreateIdentity()
     {
@@ -45,6 +46,7 @@ public class IdentityController : ControllerBase
         return BadRequest(response);
     }
 
+    [Authorize]
     [HttpPost("{id}", Name = "UpdateIdentity")]
     public async Task<ActionResult<ValidatableResponse>> UpdateIdentity(int id, [FromBody] UpdateIdentityCommand command)
     {
@@ -53,6 +55,7 @@ public class IdentityController : ControllerBase
         return Ok(response);
     }
 
+    [Authorize]
     [HttpDelete("{id}", Name = "DeleteIdentity")]
     public async Task<ActionResult<ValidatableResponse>> DeleteIdentity(int id)
     {

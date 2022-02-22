@@ -1,6 +1,7 @@
 ﻿using AuthMe.Identity.Web.Extensions;
 using AuthMe.IdentityMsrv.Application.Identities.Commands.AttachIdentityDocument;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthMe.Identity.Web.Controllers;
@@ -17,6 +18,7 @@ public class IdentityValidityController : ControllerBase
 
     }
 
+    [Authorize]
     [HttpPost(Name = "TriggerIdentityValidation")]
     public async Task<ActionResult> TriggerIdentityValidation(
         [FromForm] int id, [FromForm] IFormFile documentFront, [FromForm] IFormFile documentBack)
