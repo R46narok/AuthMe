@@ -12,13 +12,6 @@ public class DataValidationRecord extends BaseEntity {
     private String ip;
     private String location;
     private String platinumToken;
-    @ManyToMany
-    @JoinTable(
-            name = "validation_record_permissions",
-            joinColumns = @JoinColumn(name = "record_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-
 
     public AuthMeUserEntity getUser() {
         return user;

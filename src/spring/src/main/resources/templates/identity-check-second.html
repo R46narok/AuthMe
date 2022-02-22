@@ -20,15 +20,17 @@
 
                 <div class="col-md-6">
                     <form th:action="@{/identity/check/validate}" th:method="post">
+                        <p th:if="${noPermissions}" class="text-danger">You don't have permissions to validate these fields!</p>
                         <input name="goldenToken" th:value="${goldenToken}" hidden>
                         <input name="platinumTokenLeft" th:value="${platinumTokenLeft}" hidden>
                         <div class="row">
                             <div class="col">
                                 <div class="row">
+                                    <p class="text-danger" th:if="${invalidPlatinumToken}">Invalid platinum token!</p>
                                     <div class="col-4">
                                         <p style="margin-left: 25px;">Platinum token:</p>
                                     </div>
-                                    <div class="col"><input name="platinumTokenRight" type="text"></div>
+                                    <div class="col"><input name="platinumTokenRight" th:value="${platinumTokenRight}" type="text"></div>
                                 </div>
                             </div>
                         </div>

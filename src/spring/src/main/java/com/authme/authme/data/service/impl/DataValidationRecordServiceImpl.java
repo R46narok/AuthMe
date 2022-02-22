@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -51,7 +52,7 @@ public class DataValidationRecordServiceImpl implements DataValidationRecordServ
 
     @Override
     public DataMonitorViewModel getDataMonitorViewModel() {
-        List<DataValidationRecord> records = currentUserService.getCurrentLoggedUser().getValidationRecords();
+        List<DataValidationRecord> records = validationRepository.findByUserIdOrderByIdDesc(currentUserService.getCurrentLoggedUser().getId());
         return classMapper.toDataMonitorViewModel(records);
     }
 
@@ -85,8 +86,10 @@ public class DataValidationRecordServiceImpl implements DataValidationRecordServ
 
     @Override
     public String finishDataValidationProcessAndValidateData(String goldenToken, String platinumToken, ValidateProfileBindingModel bindingModel) {
+        Optional<DataValidationRecord> record = validationRepository.findByPlatinumToken(platinumToken);
+        if(record.isEmpty())
+            return "invalid-platinum-token";
         GoldenToken token = goldenTokenService.findByIdOrThrow(goldenToken);
-
         if (!hasPermissions(token, bindingModel)) {
             return "no-permissions";
         }
