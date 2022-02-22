@@ -5,18 +5,18 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 public class ValidateProfileBindingModel {
-    private String firstName;
+    private String name;
     private String middleName;
-    private String lastName;
+    private String surname;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public ValidateProfileBindingModel setFirstName(String firstName) {
-        this.firstName = firstName;
+    public ValidateProfileBindingModel setName(String name) {
+        this.name = name;
         return this;
     }
 
@@ -29,12 +29,12 @@ public class ValidateProfileBindingModel {
         return this;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getSurname() {
+        return surname;
     }
 
-    public ValidateProfileBindingModel setLastName(String lastName) {
-        this.lastName = lastName;
+    public ValidateProfileBindingModel setSurname(String surname) {
+        this.surname = surname;
         return this;
     }
 

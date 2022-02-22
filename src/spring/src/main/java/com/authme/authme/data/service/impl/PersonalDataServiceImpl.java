@@ -24,6 +24,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 @Service
@@ -50,22 +51,24 @@ public class PersonalDataServiceImpl implements PersonalDataService {
         return response.getResult();
     }
 
-    @Override
-    public ProfileBindingModel getBindingModel() {
-        AuthMeUserEntity user = currentUser.getCurrentLoggedUser();
-
+    public ProfileDTOGet getProfile(Long dataId) {
         ValidatableResponse<ProfileDTOGet> response =
-                request(RemoteEndpoints.profile(user.getDataId()),
+                request(RemoteEndpoints.profile(dataId),
                         HttpMethod.GET,
                         null,
                         null,
                         new ParameterizedTypeReference<>() {
                         });
-
         if (response == null || !response.isValid()) {
             throw CommonErrorMessages.errorExtractingEntityFromSecondService();
         }
-        return classMapper.toProfileBindingModel(response.getResult());
+        return response.getResult();
+    }
+
+    @Override
+    public ProfileBindingModel getBindingModel() {
+        AuthMeUserEntity user = currentUser.getCurrentLoggedUser();
+        return classMapper.toProfileBindingModel(getProfile(user.getDataId()));
     }
 
     @Override
@@ -106,15 +109,27 @@ public class PersonalDataServiceImpl implements PersonalDataService {
     }
 
     @Override
-    public Boolean checkDataValid(AuthMeUserEntity user, Map<String, String> data) {
-
-        return true;
-    }
-
-    @Override
     public Boolean checkDataValid(AuthMeUserEntity user, ValidateProfileBindingModel bindingModel) {
+        ProfileDTOGet profile = getProfile(user.getDataId());
+        if (!bindingModel.getName().equals("") &&
+                (!profile.getName().getValidated() ||
+                !profile.getName().getValue().equals(bindingModel.getName())))
+            return false;
 
-        return false;
+        if (!bindingModel.getMiddleName().equals("") &&
+                (!profile.getMiddleName().getValidated() ||
+                !profile.getMiddleName().getValue().equals(bindingModel.getMiddleName())))
+            return false;
+        if (!bindingModel.getSurname().equals("") &&
+                (!profile.getSurname().getValidated() ||
+                !profile.getSurname().getValue().equals(bindingModel.getSurname())))
+            return false;
+        if (bindingModel.getDateOfBirth() != null &&
+                !bindingModel.getDateOfBirth().equals(LocalDate.MIN) &&
+                (!profile.getDateOfBirth().getValidated() ||
+                !profile.getDateOfBirth().getValue().equals(bindingModel.getDateOfBirth())))
+            return false;
+        return true;
     }
 
     private <T, B> T request(String endpoint, HttpMethod method, HttpHeaders headers, B body, ParameterizedTypeReference<T> typeReference) {

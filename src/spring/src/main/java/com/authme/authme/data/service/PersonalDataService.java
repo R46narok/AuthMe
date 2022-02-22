@@ -18,7 +18,5 @@ public interface PersonalDataService {
 
     void uploadIdCardPictures(MultipartFile frontImage, MultipartFile backImage);
 
-    Boolean checkDataValid(AuthMeUserEntity user, Map<String, String> data);
-
     Boolean checkDataValid(AuthMeUserEntity user, ValidateProfileBindingModel bindingModel);
 }
