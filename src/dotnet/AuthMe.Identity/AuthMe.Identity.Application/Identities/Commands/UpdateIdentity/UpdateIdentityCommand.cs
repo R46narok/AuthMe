@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using System.Reflection;
 using AuthMe.Domain.Common.Api;
 using AuthMe.Domain.Entities;
@@ -13,10 +14,10 @@ public class UpdateIdentityCommand : IRequest<ValidatableResponse>, IValidatable
 {
     public int Id { get; set; }
 
-    public IdentityProperty<string> Name { get; set; }
-    public IdentityProperty<string> MiddleName { get; set; }
-    public IdentityProperty<string> Surname { get; set; }
-    public IdentityProperty<DateTime> DateOfBirth { get; set; }
+    public string Name { get; set; }
+    public string MiddleName { get; set; }
+    public string Surname { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 }
 
 [SuppressMessage("ReSharper", "UnusedType.Global")]
@@ -36,53 +37,36 @@ public class UpdateIdentityCommandHandler : IRequestHandler<UpdateIdentityComman
 
     public async Task<ValidatableResponse> Handle(UpdateIdentityCommand request, CancellationToken cancellationToken)
     {
-        var identity = _mapper.Map<Identity>(request);
+        var oldIdentity = await _repository.GetIdentityAsync(request.Id);
+        
+        InvalidateUpdatedFields(request.Name, oldIdentity!.Name);
+        InvalidateUpdatedFields(request.MiddleName, oldIdentity.MiddleName);
+        InvalidateUpdatedFields(request.Surname, oldIdentity.Surname);
+        InvalidateUpdatedFields(request.DateOfBirth, oldIdentity.DateOfBirth);
 
-        //var oldIdentity = await _repository.GetIdentityAsync(request.Id);
-        // invalidateUpdatedFields(identity, oldIdentity);
-
-        await _repository.UpdateIdentityAsync(identity);
+        await _repository.UpdateIdentityAsync(oldIdentity);
         _logger.LogInformation("Updated identity with id {Id}", request.Id);
 
         return new ValidatableResponse();
     }
 
-    private void invalidateUpdatedFields(Identity identity, Identity oldIdentity)
+    private void InvalidateUpdatedFields(string updated, IdentityProperty<string> old)
     {
-        if (identity.Name != null && !identity.Name.Equals(oldIdentity.Name))
-        {
-            identity.Name.Validated = false;
-        }
-        else if (identity.Name == null)
-        {
-            identity.Name.Validated = true;
-        }
-        
-        if (identity.MiddleName != null && !identity.MiddleName.Equals(oldIdentity.MiddleName))
-        {
-            identity.MiddleName.Validated = false;
-        }
-        else if (identity.MiddleName == null)
-        {
-            identity.MiddleName.Validated = true;
-        }
-        
-        if (identity.Surname != null && !identity.Surname.Equals(oldIdentity.Surname))
-        {
-            identity.Surname.Validated = false;
-        }
-        else if (identity.Surname == null)
-        {
-            identity.Surname.Validated = true;
-        }
-        
-        if (identity.DateOfBirth != null && !identity.DateOfBirth.Equals(oldIdentity.DateOfBirth))
-        {
-            identity.DateOfBirth.Validated = false;
-        }
-        else if (identity.DateOfBirth == null)
-        {
-            identity.DateOfBirth.Validated = true;
-        }
+        if (updated != null && updated != old.Value)
+            old.Validated = false;
+        else
+            old.Validated = true;
+
+        old.Value = updated;
+    }
+
+    private void InvalidateUpdatedFields(DateTime? updated, IdentityProperty<DateTime> old)
+    {
+        if (updated != null && DateTime.Compare(updated.Value, old.Value) != 0)
+            old.Validated = false;
+        else
+            old.Validated = true;
+
+        old.Value = updated.Value;
     }
 }

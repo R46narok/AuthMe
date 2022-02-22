@@ -27,7 +27,7 @@ public class CreateIdentityCommandHandler : IRequestHandler<CreateIdentityComman
         identity.Name.Validated = true;
         identity.MiddleName.Validated = true;
         identity.Surname.Validated = true;
-        identity.DateOfBirth.Validated = true;
+        //identity.DateOfBirth.Validated = true;
         var id = await _repository.CreateIdentityAsync(identity);
 
         _logger.LogInformation("Created identity with the new id of {Id}", id);

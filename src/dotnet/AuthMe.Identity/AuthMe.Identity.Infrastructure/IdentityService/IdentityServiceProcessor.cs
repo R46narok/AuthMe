@@ -43,10 +43,10 @@ public class IdentityServiceProcessor : BackgroundService
             var command = new UpdateIdentityCommand
             {
                 Id = model.Id,
-                Name = model.Name,
-                MiddleName = model.MiddleName,
-                Surname = model.Surname,
-                DateOfBirth = model.DateOfBirth
+                Name = model.Name.Value,
+                MiddleName = model.MiddleName.Value,
+                Surname = model.Surname.Value,
+                DateOfBirth = model.DateOfBirth.Value
             };
 
             var response = await mediatr!.Send(command);

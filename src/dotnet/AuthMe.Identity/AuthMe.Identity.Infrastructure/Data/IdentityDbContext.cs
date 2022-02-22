@@ -20,24 +20,24 @@ public class IdentityDbContext : DbContext, IIdentityDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Identity>().Property(p => p.Name)
-            .HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<IdentityProperty<string>>(v));
-        
-        modelBuilder.Entity<Identity>().Property(p => p.MiddleName)
-            .HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<IdentityProperty<string>>(v));
-        
-        modelBuilder.Entity<Identity>().Property(p => p.Surname)
-            .HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<IdentityProperty<string>>(v));
-        
-        modelBuilder.Entity<Identity>().Property(p => p.DateOfBirth)
-            .HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<IdentityProperty<DateTime>>(v));
+         modelBuilder.Entity<Identity>().Property(p => p.Name)
+             .HasConversion(
+                 v => JsonConvert.SerializeObject(v),
+                 v => JsonConvert.DeserializeObject<IdentityProperty<string>>(v));
+         
+         modelBuilder.Entity<Identity>().Property(p => p.MiddleName)
+             .HasConversion(
+                 v => JsonConvert.SerializeObject(v),
+                 v => JsonConvert.DeserializeObject<IdentityProperty<string>>(v));
+         
+         modelBuilder.Entity<Identity>().Property(p => p.Surname)
+             .HasConversion(
+                 v => JsonConvert.SerializeObject(v),
+                 v => JsonConvert.DeserializeObject<IdentityProperty<string>>(v));
+         
+         modelBuilder.Entity<Identity>().Property(p => p.DateOfBirth)
+             .HasConversion(
+                 v => JsonConvert.SerializeObject(v),
+                 v => JsonConvert.DeserializeObject<IdentityProperty<DateTime>>(v));
     }
 }

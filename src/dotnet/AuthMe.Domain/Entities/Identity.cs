@@ -11,6 +11,11 @@ public class IdentityProperty<T>
 
     public bool Validated { get; set; }
     public DateTime? LastUpdated { get; set; }
+
+    public override bool Equals(object? obj)
+    {
+        return Value.Equals(((IdentityProperty<T>) obj).Value);
+    }
 }
 
 /// <summary>
