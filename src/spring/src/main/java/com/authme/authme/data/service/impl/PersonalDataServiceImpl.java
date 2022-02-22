@@ -125,7 +125,6 @@ public class PersonalDataServiceImpl implements PersonalDataService {
                 !profile.getSurname().getValue().equals(bindingModel.getSurname())))
             return false;
         if (bindingModel.getDateOfBirth() != null &&
-                !bindingModel.getDateOfBirth().equals(LocalDate.MIN) &&
                 (!profile.getDateOfBirth().getValidated() ||
                 !profile.getDateOfBirth().getValue().equals(bindingModel.getDateOfBirth())))
             return false;

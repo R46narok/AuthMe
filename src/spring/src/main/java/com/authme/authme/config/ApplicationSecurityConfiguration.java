@@ -39,9 +39,13 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                         "/login",
                         "/register",
                         "/error/**",
-                        "/identity/check/**")
+                        "/identity/check/**",
+                        "/api/identity/check/**")
                 .permitAll()
                 .antMatchers("/**").authenticated()
+                .and()
+                .csrf()
+                .ignoringAntMatchers("/api/identity/check/**")
 
                 .and()
                 .formLogin()

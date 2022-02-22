@@ -11,6 +11,13 @@ public class ValidateProfileBindingModel {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
+    public ValidateProfileBindingModel() {
+        name = "";
+        middleName = "";
+        surname = "";
+        dateOfBirth = null;
+    }
+
     public String getName() {
         return name;
     }

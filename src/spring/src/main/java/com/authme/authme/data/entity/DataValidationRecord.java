@@ -12,6 +12,16 @@ public class DataValidationRecord extends BaseEntity {
     private String ip;
     private String location;
     private String platinumToken;
+    private Boolean expired;
+
+    public DataValidationRecord() {
+        name = "";
+        ip = "";
+        location = "";
+        platinumToken = "";
+        expired = false;
+
+    }
 
     public AuthMeUserEntity getUser() {
         return user;
@@ -55,6 +65,15 @@ public class DataValidationRecord extends BaseEntity {
 
     public DataValidationRecord setPlatinumToken(String platinumToken) {
         this.platinumToken = platinumToken;
+        return this;
+    }
+
+    public Boolean getExpired() {
+        return expired;
+    }
+
+    public DataValidationRecord setExpired(Boolean expired) {
+        this.expired = expired;
         return this;
     }
 }

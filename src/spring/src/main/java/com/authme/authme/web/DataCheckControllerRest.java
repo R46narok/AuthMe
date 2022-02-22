@@ -1,15 +1,19 @@
 package com.authme.authme.web;
 
+import com.authme.authme.data.binding.ValidateProfileBindingModel;
+import com.authme.authme.data.dto.ValidatableResponse;
 import com.authme.authme.data.service.DataValidationRecordService;
 import com.authme.authme.data.service.GoldenTokenService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @RestController
 public class DataCheckControllerRest {
@@ -22,20 +26,43 @@ public class DataCheckControllerRest {
     }
 
     @Transactional
-    @GetMapping("/identity/check/trigger")
-    public ResponseEntity<String> firstVerificationRequest(@RequestHeader String goldenToken,
-                                                           @RequestHeader String issuer,
-                                                           HttpServletRequest request) {
-        if(goldenTokenService.findByIdOrNull(goldenToken) == null)
-            return ResponseEntity.notFound().build();
-        if(goldenTokenService.findById(goldenToken).getExpiry().isBefore(LocalDateTime.now()))
-            return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(dataValidationService.triggerDataValidationProcess(goldenToken, issuer, request.getRemoteAddr()));
+    @PostMapping("/api/identity/check")
+    public ResponseEntity<Map<String, String>> triggerProcess(@RequestHeader String goldenToken,
+                                                              @RequestHeader String issuerName,
+                                                              HttpServletRequest request) {
+
+        if (goldenTokenService.findByIdOrNull(goldenToken) == null)
+            return ResponseEntity
+                    .status(401)
+                    .body(Map.of("error", "Invalid golden token!"));
+
+
+        if (goldenTokenService.findById(goldenToken).getExpiry().isBefore(LocalDateTime.now()))
+            return ResponseEntity
+                    .status(401)
+                    .body(Map.of("error", "Expired golden token!"));
+
+        String platinumToken = dataValidationService.triggerDataValidationProcess(goldenToken, issuerName, request.getRemoteAddr());
+        return ResponseEntity.ok(Map.of("status", "triggered", "platinumToken", platinumToken));
     }
 
-//    @Transactional
-//    @GetMapping
-//    public ResponseEntity<Boolean> secondVerificationRequest(@RequestHeader String goldenToken,
-//                                                             @RequestHeader String platinumToken,
-//                                                             @RequestBody )
+    @Transactional
+    @PostMapping("/api/identity/check/validate")
+    public ResponseEntity<Map<String, String>> finishProcess(@RequestHeader String goldenToken,
+                                                             @RequestHeader String platinumTokenLeft,
+                                                             @RequestHeader String platinumTokenRight,
+                                                             ValidateProfileBindingModel bindingModel) {
+        String status =
+                dataValidationService.finishDataValidationProcessAndValidateData(
+                        goldenToken,
+                        platinumTokenLeft + platinumTokenRight,
+                        bindingModel);
+        if (status.equals("no-permissions"))
+            return ResponseEntity.status(401).body(Map.of("error", "No permissions for the requested fields!"));
+
+        if (status.equals("invalid-platinum-token"))
+            return ResponseEntity.status(401).body(Map.of("error", "Invalid platinum token!"));
+
+        return ResponseEntity.ok().body(Map.of("status", "finished", "result", status));
+    }
 }
