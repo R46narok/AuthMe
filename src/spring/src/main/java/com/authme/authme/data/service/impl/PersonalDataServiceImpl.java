@@ -1,5 +1,6 @@
 package com.authme.authme.data.service.impl;
 
+import com.authme.authme.config.CustomConfig;
 import com.authme.authme.data.binding.ProfileBindingModel;
 import com.authme.authme.data.binding.ValidateProfileBindingModel;
 import com.authme.authme.data.dto.ProfileDTO;
@@ -13,12 +14,12 @@ import com.authme.authme.utils.RemoteEndpoints;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,33 +27,24 @@ import java.util.Map;
 
 @Service
 public class PersonalDataServiceImpl implements PersonalDataService {
-    private static final String clientSecret = "WD57Q~88~v2Vta21TM.EqsJygrPWcPG6nbZwX";
-    private static final String clientId = "c4a2ab21-acdb-4a07-83be-b07b28fffe54";
-    private static final String resource = "api://bc005232-4de2-4e23-a624-17f0921944de";
-    private static final String tenant = "505fc22a-c476-49ef-97df-da53b5b7dfe9";
-    private static final String instanceId = "https://login.microsoftonline.com/";
     private static String accessToken = "";
 
     private final RestTemplate restTemplate;
     private final ClassMapper classMapper;
     private final CurrentUserService currentUser;
+    private final CustomConfig customConfig;
 
-    public PersonalDataServiceImpl(RestTemplate restTemplate, ClassMapper classMapper, CurrentUserService currentUser) {
+    public PersonalDataServiceImpl(RestTemplate restTemplate, ClassMapper classMapper, CurrentUserService currentUser, CustomConfig customConfig) {
         this.restTemplate = restTemplate;
         this.classMapper = classMapper;
         this.currentUser = currentUser;
+        this.customConfig = customConfig;
     }
 
     @Override
     public Long newEntry() {
-        ValidatableResponse<Long> response =
-                restTemplate.exchange(RemoteEndpoints.entry(), HttpMethod.GET, null,
-                                new ParameterizedTypeReference<ValidatableResponse<Long>>() {
-                                })
-                        .getBody();
-        if (response == null || !response.isValid()) {
-            throw CommonErrorMessages.errorCreatingEntityInSecondService();
-        }
+        ValidatableResponse<Long> response = request(RemoteEndpoints.entry(), HttpMethod.GET, null, null,
+                new ParameterizedTypeReference<ValidatableResponse<Long>>());
         return response.getResult();
     }
 
@@ -118,20 +110,59 @@ public class PersonalDataServiceImpl implements PersonalDataService {
         return false;
     }
 
-    private void retrieveToken() throws JsonProcessingException {
+    private <T, B> T request(String endpoint, HttpMethod method, HttpHeaders headers, B body, ResponseEntity<T> responseEntity) {
+        try {
+            if (headers == null)
+                headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + accessToken);
+
+            HttpEntity<B> requestEntity = new HttpEntity<B>(body, headers);
+
+            ResponseEntity<T> response =
+                    restTemplate.exchange(endpoint, method, requestEntity,
+                            new ParameterizedTypeReference<>() {
+                            });
+
+            T entity = (T) response.getBody();
+            if (entity == null) {
+                throw CommonErrorMessages.errorCreatingEntityInSecondService();
+            }
+            return entity;
+        } catch (HttpClientErrorException e) {
+            if(e.getStatusCode().value() == 401){
+                retrieveToken();
+                return request(endpoint, method, headers, body);
+            }
+            throw e;
+        }
+    }
+
+    private void retrieveToken() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("grant_type", "client_credentials");
-        headers.set("client_id", clientId);
-        headers.set("client_secret", clientSecret);
-        headers.set("resource", resource);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", "client_credentials");
+        body.add("client_id", customConfig.getAzureClientId());
+        body.add("client_secret", customConfig.getAzureClientSecret());
+        body.add("resource", customConfig.getAzureResource());
+
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
+
         String json =
-                restTemplate.exchange(instanceId + tenant + "/oauth2/token",
-                                HttpMethod.GET,
-                                null,
+                restTemplate.exchange(customConfig.getAzureInstance() +
+                                        customConfig.getAzureTenant() +
+                                        "/oauth2/token",
+                                HttpMethod.POST,
+                                requestEntity,
                                 String.class)
                         .getBody();
-        JsonNode node = new ObjectMapper().readTree(json);
+        JsonNode node = null;
+        try {
+            node = new ObjectMapper().readTree(json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         accessToken = node.get("access_token").asText();
     }
 }
