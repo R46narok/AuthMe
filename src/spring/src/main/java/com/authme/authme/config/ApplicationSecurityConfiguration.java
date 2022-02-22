@@ -35,17 +35,13 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .permitAll()
                 .antMatchers("/fonts/**").permitAll()
                 .antMatchers(
-                        // TODO: Remove in production
-                        "/dev/**",
                         "/",
-                        "/identity/check/**",
                         "/login",
-                        "/register")
+                        "/register",
+                        "/error/**",
+                        "/identity/check/**")
                 .permitAll()
                 .antMatchers("/**").authenticated()
-                .and()
-                .csrf()
-                .ignoringAntMatchers("/dev/**")
 
                 .and()
                 .formLogin()
