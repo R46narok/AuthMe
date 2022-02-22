@@ -27,7 +27,15 @@ public class IdentityRepository : IIdentityRepository
 
     public async Task<bool> IdentityExistsAsync(int id)
     {
-        return await GetIdentityAsync(id) != null;
+        var identity = await GetIdentityAsync(id);
+        return  identity != null;
+    }
+
+    public bool IdentityExists(int id)
+    {
+        var task = IdentityExistsAsync(id);
+        task.Wait();
+        return task.Result;
     }
 
     public async Task DeleteIdentityAsync(int id)

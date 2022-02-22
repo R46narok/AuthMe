@@ -1,6 +1,7 @@
 using AuthMe.Domain.Common;
 using AuthMe.Domain.Events;
 using AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
+using AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentityTrusted;
 using AuthMe.IdentityMsrv.Infrastructure.Settings;
 using Azure.Messaging.ServiceBus;
 using MediatR;
@@ -40,12 +41,12 @@ public class IdentityServiceProcessor : BackgroundService
             var mediatr = scope.ServiceProvider.GetService<IMediator>();
 
             var model = @event.Model;
-            var command = new UpdateIdentityCommand
+            var command = new UpdateIdentityTrustedCommand
             {
                 Id = model.Id,
-                Name = model.Name.Value,
-                MiddleName = model.MiddleName.Value,
-                Surname = model.Surname.Value,
+                Name = model.Name,
+                MiddleName = model.MiddleName,
+                Surname = model.Surname,
                 DateOfBirth = model.DateOfBirth.Value
             };
 

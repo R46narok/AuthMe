@@ -30,9 +30,9 @@ public class ReadIdentityDocumentQueryHandler : IRequestHandler<ReadIdentityDocu
 
         var documentDto = await _identityDocumentService.ReadIdentityDocument(document.DocumentFront);
 
-        if (documentDto.DocumentNumber.Validated && documentDto.DateOfBirth.Validated)
+        if (!string.IsNullOrEmpty(documentDto.DocumentNumber) && documentDto.DateOfBirth.HasValue)
         {
-            var valid = await _documentValidityService.IsValidAsync(documentDto.DocumentNumber.Value, documentDto.DateOfBirth.Value.ToString("dd.MM.yyyy"));
+            var valid = await _documentValidityService.IsValidAsync(documentDto.DocumentNumber, documentDto.DateOfBirth.Value.ToString("dd.MM.yyyy"));
 
             if (!valid)
                 return new ValidatableResponse<IdentityDocumentDto>(documentDto, new[] {"Document is not valid."});
