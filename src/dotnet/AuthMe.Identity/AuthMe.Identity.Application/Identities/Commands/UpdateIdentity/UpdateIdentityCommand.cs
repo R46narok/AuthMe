@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
+using System.Reflection;
 using AuthMe.Domain.Common.Api;
 using AuthMe.Domain.Entities;
 using AuthMe.IdentityMsrv.Application.Common.Interfaces;
@@ -50,13 +52,21 @@ public class UpdateIdentityCommandHandler : IRequestHandler<UpdateIdentityComman
 
     private void InvalidateUpdatedFields(string updated, IdentityProperty<string> old)
     {
-        old.Validated = string.IsNullOrEmpty(updated);
+        if (updated != null && updated != old.Value)
+            old.Validated = false;
+        else
+            old.Validated = true;
+
         old.Value = updated;
     }
 
     private void InvalidateUpdatedFields(DateTime? updated, IdentityProperty<DateTime> old)
     {
-        old.Validated = updated.Value.CompareTo(DateTime.Parse("0001-01-01T00:00:00")) == 0;
-        old.Value = updated!.Value;
+        if (updated != null && DateTime.Compare(updated.Value, old.Value) != 0)
+            old.Validated = false;
+        else
+            old.Validated = true;
+
+        old.Value = updated.Value;
     }
 }
