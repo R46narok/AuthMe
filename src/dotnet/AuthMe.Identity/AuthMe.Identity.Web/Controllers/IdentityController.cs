@@ -4,6 +4,7 @@ using AuthMe.IdentityMsrv.Application.Identities.Commands.DeleteIdentity;
 using AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
 using AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthMe.Identity.Web.Controllers;
@@ -19,6 +20,7 @@ public class IdentityController : ControllerBase
         _mediator = mediator;
     }
     
+    [Authorize]
     [HttpGet("{id}", Name = "GetIdentity")]
     public async Task<ActionResult<ValidatableResponse<IdentityDto>>> GetIdentity(int id)
     {
