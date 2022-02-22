@@ -1,26 +1,26 @@
-resource "kubernetes_deployment_v1" "spring-worker" {
+resource "kubernetes_deployment_v1" "front-portal" {
   metadata {
-    name = "spring-worker-depl"
+    name = "front-portal-depl"
   }
   spec {
     replicas = 1
     selector {
       match_labels = {
-        "service" = "spring-worker"
+        "service" = "front-portal"
       }
     }
     template {
       metadata {
         labels = {
-          "app"     = "spring-worker"
-          "service" = "spring-worker"
+          "app"     = "front-portal"
+          "service" = "front-portal"
         }
       }
 
       spec {
         container {
-          name  = "spring-worker"
-          image = "d3ds3g/authme-spring-worker:latest"
+          name  = "front-portal"
+          image = "d3ds3g/front-portal"
           port {
             container_port = 8080
             protocol       = "TCP"
@@ -31,12 +31,12 @@ resource "kubernetes_deployment_v1" "spring-worker" {
   }
 }
 
-resource "kubernetes_service_v1" "spring-worker-loadbalancer" {
+resource "kubernetes_service_v1" "front-portal-loadbalancer" {
   metadata {
-    name = "spring-worker-loadbalancer"
+    name = "front-portal-loadbalancer"
     labels = {
-        "app" = "spring-worker"
-        "service" = "spring-worker"
+        "app" = "front-portal"
+        "service" = "front-portal"
     }
   }
   spec {
@@ -47,8 +47,97 @@ resource "kubernetes_service_v1" "spring-worker-loadbalancer" {
       target_port = 8080
     }
     selector = {
-        "service" = "spring-worker"
+        "service" = "front-portal"
     }
   }
 } 
 
+# MySql
+
+
+resource "kubernetes_persistent_volume_claim" "mysql-claim" {
+  metadata {
+    name = "mysql-claim"
+  }
+  spec {
+    access_modes = ["ReadWriteMany"]
+    resources {
+      requests = {
+        storage = "2Gi"
+      }
+    }
+  }
+}
+
+
+resource "kubernetes_deployment_v1" "mysql" {
+  metadata {
+    name = "mysql-depl"
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        "app" = "mysql"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          "app" = "mysql"
+        }
+      }
+
+      spec {
+        container {
+          name  = "mysql"
+          image = "mysql:latest"
+          port {
+            container_port = 3306
+          }
+          env {
+            name  = "MYSQL_ROOT_PASSWORD"
+            value = "example"
+          }
+          
+      }
+    }
+  }
+  }
+}
+
+
+resource "kubernetes_service_v1" "mysql-clusterip-srv" {
+  metadata {
+    name = "mysql-clusterip-srv"
+  }
+  spec {
+    type = "ClusterIP"
+    selector = {
+      "app" = "mysql"
+    }
+    port {
+      name        = "mysql"
+      protocol    = "TCP"
+      port        = 3306
+      target_port = 3306
+    }
+  }
+}
+
+resource "kubernetes_service_v1" "mysql-loadbalancer" {
+  metadata {
+    name = "mysql-loadbalancer"
+  }
+  spec {
+    type = "LoadBalancer"
+    selector = {
+      "app" = "mysql"
+    }
+    port {
+      protocol    = "TCP"
+      port        = 3306
+      target_port = 3306
+    }
+  }
+} 
