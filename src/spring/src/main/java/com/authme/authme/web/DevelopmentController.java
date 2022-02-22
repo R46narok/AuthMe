@@ -1,14 +1,12 @@
 package com.authme.authme.web;
 
-import com.authme.authme.data.dto.ProfileDTO;
+import com.authme.authme.data.dto.ProfileDTOGet;
 import com.authme.authme.utils.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,14 +26,14 @@ public class DevelopmentController {
     }
 
     @GetMapping("/dev/profile/{dataId}")
-    public ResponseEntity<ProfileDTO> getProfileData(@PathVariable Long dataId) {
+    public ResponseEntity<ProfileDTOGet> getProfileData(@PathVariable Long dataId) {
         Profile profile = data.get(dataId);
         return ResponseEntity.ok(profile.getData());
     }
 
     @PostMapping("/dev/profile/{dataId}")
-    public ResponseEntity<ProfileDTO> updateProfileData(@PathVariable Long dataId,
-                                                        @RequestBody ProfileDTO body) {
+    public ResponseEntity<ProfileDTOGet> updateProfileData(@PathVariable Long dataId,
+                                                           @RequestBody ProfileDTOGet body) {
         Profile profile = data.get(dataId);
         profile.getData().update(body);
         return ResponseEntity.ok(profile.getData());

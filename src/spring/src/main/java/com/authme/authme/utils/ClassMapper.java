@@ -2,8 +2,8 @@ package com.authme.authme.utils;
 
 import com.authme.authme.data.binding.ProfileBindingModel;
 import com.authme.authme.data.binding.RegisterBindingModel;
-import com.authme.authme.data.dto.ProfileDTO;
-import com.authme.authme.data.dto.objects.ProfileEntryObject;
+import com.authme.authme.data.dto.ProfileDTOGet;
+import com.authme.authme.data.dto.ProfileDTOPost;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.entity.DataValidationRecord;
 import com.authme.authme.data.entity.GoldenToken;
@@ -18,7 +18,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,24 +35,16 @@ public class ClassMapper extends ModelMapper {
         return super.map(bindingModel, RegisterServiceModel.class);
     }
 
-    public ProfileBindingModel toProfileBindingModel(ProfileDTO profileDTO) {
+    public ProfileBindingModel toProfileBindingModel(ProfileDTOGet profileDTOGet) {
         return new ProfileBindingModel()
-                .setFirstName(profileDTO.getName().getValue())
-                .setFirstNameValidated(profileDTO.getName().getValidated())
-                .setMiddleName(profileDTO.getMiddleName().getValue())
-                .setMiddleNameValidated(profileDTO.getMiddleName().getValidated())
-                .setLastName(profileDTO.getSurname().getValue())
-                .setLastNameValidated(profileDTO.getSurname().getValidated())
-                .setDateOfBirth(profileDTO.getDateOfBirth().getValue())
-                .setDateOfBirthValidated(profileDTO.getDateOfBirth().getValidated());
-    }
-
-    public ProfileDTO toProfileDTO(ProfileBindingModel profileBindingModel) {
-        return new ProfileDTO()
-                .setName(new ProfileEntryObject<String>().setValue(profileBindingModel.getFirstName()).setValidated(profileBindingModel.getFirstNameValidated()))
-                .setMiddleName(new ProfileEntryObject<String>().setValue(profileBindingModel.getMiddleName()).setValidated(profileBindingModel.getMiddleNameValidated()))
-                .setSurname(new ProfileEntryObject<String>().setValue(profileBindingModel.getLastName()).setValidated(profileBindingModel.getLastNameValidated()))
-                .setDateOfBirth(new ProfileEntryObject<LocalDate>().setValue(profileBindingModel.getDateOfBirth()).setValidated(profileBindingModel.getDateOfBirthValidated()));
+                .setFirstName(profileDTOGet.getName().getValue())
+                .setFirstNameValidated(profileDTOGet.getName().getValidated())
+                .setMiddleName(profileDTOGet.getMiddleName().getValue())
+                .setMiddleNameValidated(profileDTOGet.getMiddleName().getValidated())
+                .setLastName(profileDTOGet.getSurname().getValue())
+                .setLastNameValidated(profileDTOGet.getSurname().getValidated())
+                .setDateOfBirth(profileDTOGet.getDateOfBirth().getValue())
+                .setDateOfBirthValidated(profileDTOGet.getDateOfBirth().getValidated());
     }
 
     public List<PermissionViewModel> toPermissionViewModelList(List<Permission> all) {
@@ -109,5 +100,13 @@ public class ClassMapper extends ModelMapper {
                 .setExpiry(token.getExpiry())
                 .setPermissions(allPermissionViews);
         return goldenTokenView;
+    }
+
+    public ProfileDTOPost toProfileDTOSend(ProfileBindingModel profileBindingModel) {
+        return new ProfileDTOPost()
+                .setName(profileBindingModel.getFirstName())
+                .setMiddleName(profileBindingModel.getMiddleName())
+                .setSurname(profileBindingModel.getLastName())
+                .setDateOfBirth(profileBindingModel.getDateOfBirth());
     }
 }

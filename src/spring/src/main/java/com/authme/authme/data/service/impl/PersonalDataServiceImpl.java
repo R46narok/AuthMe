@@ -3,7 +3,8 @@ package com.authme.authme.data.service.impl;
 import com.authme.authme.config.CustomConfig;
 import com.authme.authme.data.binding.ProfileBindingModel;
 import com.authme.authme.data.binding.ValidateProfileBindingModel;
-import com.authme.authme.data.dto.ProfileDTO;
+import com.authme.authme.data.dto.ProfileDTOGet;
+import com.authme.authme.data.dto.ProfileDTOPost;
 import com.authme.authme.data.dto.ValidatableResponse;
 import com.authme.authme.data.entity.AuthMeUserEntity;
 import com.authme.authme.data.service.CurrentUserService;
@@ -44,18 +45,23 @@ public class PersonalDataServiceImpl implements PersonalDataService {
     @Override
     public Long newEntry() {
         ValidatableResponse<Long> response = request(RemoteEndpoints.entry(), HttpMethod.GET, null, null,
-                new ParameterizedTypeReference<ValidatableResponse<Long>>());
+                new ParameterizedTypeReference<>() {
+                });
         return response.getResult();
     }
 
     @Override
     public ProfileBindingModel getBindingModel() {
         AuthMeUserEntity user = currentUser.getCurrentLoggedUser();
-        ValidatableResponse<ProfileDTO> response =
-                restTemplate.exchange(RemoteEndpoints.profile(user.getDataId()), HttpMethod.GET, null,
-                                new ParameterizedTypeReference<ValidatableResponse<ProfileDTO>>() {
-                                })
-                        .getBody();
+
+        ValidatableResponse<ProfileDTOGet> response =
+                request(RemoteEndpoints.profile(user.getDataId()),
+                        HttpMethod.GET,
+                        null,
+                        null,
+                        new ParameterizedTypeReference<>() {
+                        });
+
         if (response == null || !response.isValid()) {
             throw CommonErrorMessages.errorExtractingEntityFromSecondService();
         }
@@ -65,17 +71,20 @@ public class PersonalDataServiceImpl implements PersonalDataService {
     @Override
     public void patchProfile(ProfileBindingModel profileBindingModel) {
         AuthMeUserEntity user = currentUser.getCurrentLoggedUser();
-
-        ProfileDTO profileDTO = classMapper.toProfileDTO(profileBindingModel);
-        profileDTO.setId(user.getId());
-        HttpEntity<ProfileDTO> entity = new HttpEntity<>(profileDTO);
-
-        restTemplate.exchange(RemoteEndpoints.profile(user.getDataId()), HttpMethod.POST, entity, Void.class);
+        ProfileDTOPost profileDTOPost = classMapper.toProfileDTOSend(profileBindingModel);
+        profileDTOPost.setId(user.getId());
+        request(RemoteEndpoints.profile(user.getDataId()),
+                HttpMethod.POST,
+                null,
+                profileDTOPost,
+                new ParameterizedTypeReference<Void>() {
+                });
     }
 
     @Override
     public void deleteProfile(Long id) {
-        restTemplate.delete(RemoteEndpoints.profile(id));
+        request(RemoteEndpoints.profile(id), HttpMethod.DELETE, null, null, new ParameterizedTypeReference<Void>() {
+        });
     }
 
 
@@ -92,10 +101,8 @@ public class PersonalDataServiceImpl implements PersonalDataService {
         body.add("documentFront", frontImage.getResource());
         body.add("documentBack", backImage.getResource());
 
-        HttpEntity<MultiValueMap<String, Object>> requestEntity =
-                new HttpEntity<>(body, headers);
-
-        restTemplate.exchange(RemoteEndpoints.picture(), HttpMethod.POST, requestEntity, Void.class);
+        request(RemoteEndpoints.picture(), HttpMethod.POST, headers, body, new ParameterizedTypeReference<Void>() {
+        });
     }
 
     @Override
@@ -110,28 +117,22 @@ public class PersonalDataServiceImpl implements PersonalDataService {
         return false;
     }
 
-    private <T, B> T request(String endpoint, HttpMethod method, HttpHeaders headers, B body, ResponseEntity<T> responseEntity) {
+    private <T, B> T request(String endpoint, HttpMethod method, HttpHeaders headers, B body, ParameterizedTypeReference<T> typeReference) {
         try {
             if (headers == null)
                 headers = new HttpHeaders();
             headers.set("Authorization", "Bearer " + accessToken);
 
-            HttpEntity<B> requestEntity = new HttpEntity<B>(body, headers);
+            HttpEntity<B> requestEntity = new HttpEntity<>(body, headers);
 
             ResponseEntity<T> response =
-                    restTemplate.exchange(endpoint, method, requestEntity,
-                            new ParameterizedTypeReference<>() {
-                            });
+                    restTemplate.exchange(endpoint, method, requestEntity, typeReference);
 
-            T entity = (T) response.getBody();
-            if (entity == null) {
-                throw CommonErrorMessages.errorCreatingEntityInSecondService();
-            }
-            return entity;
+            return response.getBody();
         } catch (HttpClientErrorException e) {
-            if(e.getStatusCode().value() == 401){
+            if (e.getStatusCode().value() == 401) {
                 retrieveToken();
-                return request(endpoint, method, headers, body);
+                return request(endpoint, method, headers, body, typeReference);
             }
             throw e;
         }

@@ -1,6 +1,6 @@
 package com.authme.authme.data.service.impl;
 
-import com.authme.authme.data.dto.ProfileDTO;
+import com.authme.authme.data.dto.ProfileDTOGet;
 import com.authme.authme.data.entity.Permission;
 import com.authme.authme.data.repository.PermissionRepository;
 import com.authme.authme.data.service.PermissionService;
@@ -21,7 +21,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public void init() {
         if (permissionRepository.count() == 0) {
-            Field[] fieldsInDTO = ProfileDTO.class.getDeclaredFields();
+            Field[] fieldsInDTO = ProfileDTOGet.class.getDeclaredFields();
             for (Field field : fieldsInDTO) {
                 Permission permission = new Permission().setFieldName(field.getName());
                 permissionRepository.saveAndFlush(permission);

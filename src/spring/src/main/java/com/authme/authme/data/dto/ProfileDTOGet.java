@@ -1,14 +1,11 @@
 package com.authme.authme.data.dto;
 
 import com.authme.authme.data.dto.objects.ProfileEntryObject;
-import com.authme.authme.data.dto.serializers.LocalDateCustomSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 
-public class ProfileDTO {
+public class ProfileDTOGet {
     private Long id;
     private ProfileEntryObject<String> name;
     private ProfileEntryObject<String> middleName;
@@ -19,7 +16,7 @@ public class ProfileDTO {
         return name;
     }
 
-    public ProfileDTO setName(ProfileEntryObject<String> name) {
+    public ProfileDTOGet setName(ProfileEntryObject<String> name) {
         this.name = name;
         return this;
     }
@@ -28,7 +25,7 @@ public class ProfileDTO {
         return middleName;
     }
 
-    public ProfileDTO setMiddleName(ProfileEntryObject<String> middleName) {
+    public ProfileDTOGet setMiddleName(ProfileEntryObject<String> middleName) {
         this.middleName = middleName;
         return this;
     }
@@ -37,23 +34,22 @@ public class ProfileDTO {
         return surname;
     }
 
-    public ProfileDTO setSurname(ProfileEntryObject<String> surname) {
+    public ProfileDTOGet setSurname(ProfileEntryObject<String> surname) {
         this.surname = surname;
         return this;
     }
 
-    @JsonSerialize(using = LocalDateCustomSerializer.class)
     public ProfileEntryObject<LocalDate> getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public ProfileDTO setDateOfBirth(ProfileEntryObject<LocalDate> dateOfBirth) {
+    public ProfileDTOGet setDateOfBirth(ProfileEntryObject<LocalDate> dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         return this;
     }
 
-    public void update(ProfileDTO body) {
-        Field[] fields = ProfileDTO.class.getDeclaredFields();
+    public void update(ProfileDTOGet body) {
+        Field[] fields = ProfileDTOGet.class.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
             try {
@@ -77,7 +73,7 @@ public class ProfileDTO {
         return id;
     }
 
-    public ProfileDTO setId(Long id) {
+    public ProfileDTOGet setId(Long id) {
         this.id = id;
         return this;
     }
