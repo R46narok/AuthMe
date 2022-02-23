@@ -1,4 +1,4 @@
-using AuthMe.IdentityMsrv.Application.Common.Interfaces;
+﻿using AuthMe.IdentityMsrv.Application.Common.Interfaces;
 using AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 using AuthMe.IdentityMsrv.Infrastructure.Settings;
 using AuthMe.IdentityService.Infrastructure.Grpc;

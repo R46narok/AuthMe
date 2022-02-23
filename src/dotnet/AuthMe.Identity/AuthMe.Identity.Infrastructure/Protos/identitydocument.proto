@@ -13,6 +13,16 @@ message CreateIdentityDocumentResponse {
   int32 id = 1;
 }
 
+message GetIdentityDocumentRequest {
+  int32 identityId = 1;
+}
+
+message GetIdentityDocumentResponse {
+  bytes documentFront = 2;
+  bytes documentBack = 3;
+}
+
 service IdentityDocumentSrv {
   rpc CreateIdentityDocument (CreateIdentityDocumentRequest) returns (CreateIdentityDocumentResponse);
+  rpc GetIdentityDocument (GetIdentityDocumentRequest) returns (GetIdentityDocumentResponse);
 }

@@ -2,6 +2,7 @@
 using AuthMe.Domain.Entities;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.CreateIdentityDocument;
+using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocument;
 using AuthMe.IdentityDocumentService.Grpc;
 using Google.Protobuf;
 using Grpc.Core;
@@ -34,6 +35,6 @@ public class IdentityDocumentService : IdentityDocumentSrv.IdentityDocumentSrvBa
 
         var response = await _mediator.Send(command);
         
-        return new CreateIdentityDocumentResponse() {Id = response.Result};
+        return new CreateIdentityDocumentResponse {Id = response.Result};
     }
 }
