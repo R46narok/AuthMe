@@ -20,7 +20,7 @@ public class IdentityValidityController : ControllerBase
 
     [Authorize]
     [HttpPost(Name = "TriggerIdentityValidation")]
-    public async Task<ActionResult> TriggerIdentityValidation(
+    public async Task<IActionResult> TriggerIdentityValidation(
         [FromForm] int id, [FromForm] IFormFile documentFront, [FromForm] IFormFile documentBack)
     {
         var command = new AttachIdentityDocumentCommand()

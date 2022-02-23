@@ -4,5 +4,5 @@ namespace AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 
 public interface IIdentityDocumentService
 {
-    public Task<IdentityDocumentDto> ReadIdentityDocument(byte[] document);
+    public Task<IdentityDto> ReadIdentityDocument(byte[] document);
 }

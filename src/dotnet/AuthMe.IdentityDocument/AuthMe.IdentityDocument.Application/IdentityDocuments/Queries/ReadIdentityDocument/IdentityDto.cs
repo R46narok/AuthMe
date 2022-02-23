@@ -2,7 +2,7 @@ using AuthMe.Domain.Entities;
 
 namespace AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.ReadIdentityDocument;
 
-public class IdentityDocumentDto
+public class IdentityDto
 {
     public string Name { get; set; }
     public string MiddleName { get; set; }

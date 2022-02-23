@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.ReadIdentityDocument;
 
-public class ReadIdentityDocumentQuery : IRequest<ValidatableResponse<IdentityDocumentDto>>
+public class ReadIdentityDocumentQuery : IRequest<ValidatableResponse<IdentityDto>>
 {
     public int IdentityId { get; set; }
 }
 
-public class ReadIdentityDocumentQueryHandler : IRequestHandler<ReadIdentityDocumentQuery, ValidatableResponse<IdentityDocumentDto>>
+public class ReadIdentityDocumentQueryHandler : IRequestHandler<ReadIdentityDocumentQuery, ValidatableResponse<IdentityDto>>
 {
     private readonly IIdentityDocumentRepository _repository;
     private readonly IIdentityDocumentService _identityDocumentService;
@@ -24,7 +24,7 @@ public class ReadIdentityDocumentQueryHandler : IRequestHandler<ReadIdentityDocu
         _documentValidityService = documentValidityService;
     }
     
-    public async Task<ValidatableResponse<IdentityDocumentDto>> Handle(ReadIdentityDocumentQuery request, CancellationToken cancellationToken)
+    public async Task<ValidatableResponse<IdentityDto>> Handle(ReadIdentityDocumentQuery request, CancellationToken cancellationToken)
     {
         var document = await _repository.GetDocument(request.IdentityId);
 
@@ -35,9 +35,9 @@ public class ReadIdentityDocumentQueryHandler : IRequestHandler<ReadIdentityDocu
             var valid = await _documentValidityService.IsValidAsync(documentDto.DocumentNumber, documentDto.DateOfBirth.Value.ToString("dd.MM.yyyy"));
 
             if (!valid)
-                return new ValidatableResponse<IdentityDocumentDto>(documentDto, new[] {"Document is not valid."});
+                return new ValidatableResponse<IdentityDto>(documentDto, new[] {"Document is not valid."});
         }
         
-        return new ValidatableResponse<IdentityDocumentDto>(documentDto);
+        return new ValidatableResponse<IdentityDto>(documentDto);
     }
 }
