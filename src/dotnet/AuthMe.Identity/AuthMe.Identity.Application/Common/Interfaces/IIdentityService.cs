@@ -15,4 +15,6 @@ public interface IIdentityService
     /// <param name="documentBack">Image of the rear of the document in bytes.</param>
     /// <returns></returns>
     public Task<int> AttachIdentityDocument(int identityId, byte[]? documentFront, byte[]? documentBack);
+    
+
 }
