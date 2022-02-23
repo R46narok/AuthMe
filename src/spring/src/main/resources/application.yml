@@ -9,15 +9,8 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
-  #  sql:
-  #    init:
-  #      mode: always
   jpa:
-    # Choose either MySQL 8 or MySQL 5 below
-    # For MySQL 8
     database-platform: org.hibernate.dialect.MySQL8Dialect
-    #For MySQL 5
-    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
     open-in-view: false
@@ -28,24 +21,16 @@ spring:
     multipart:
       max-file-size: 2MB
       max-request-size: 2MB
-    #defer-datasource-initialization: true
-  #Cloudinary Properties
   profiles:
     active: prod
-#cloudinary:
-#  api-key: 339616528418163
-#  api-secret: ${CLOUDINARY_API_SECRET}
-#  cloud-name: dwqf9zolg
-#server:
-#  ssl:
-#    key-store: classpath:springboot.p12
-#    key-store-password: ${KEYSTORE_PASSWORD}
-#    key-store-type: pkcs12
-#    key-alias: springboot
-#    key-password: ${KEYSTORE_PASSWORD}
-#    enabled: true
-#  port: 8080
 server:
   servlet:
     session:
       persistent: false
+custom:
+  dotnetEndpoint: "http://localhost:5000"
+  azureClientId: "c4a2ab21-acdb-4a07-83be-b07b28fffe54"
+  azureClientSecret: "WD57Q~88~v2Vta21TM.EqsJygrPWcPG6nbZwX"
+  azureResource: "api://bc005232-4de2-4e23-a624-17f0921944de"
+  azureTenant: "505fc22a-c476-49ef-97df-da53b5b7dfe9"
+  azureInstance: "https://login.microsoftonline.com/"

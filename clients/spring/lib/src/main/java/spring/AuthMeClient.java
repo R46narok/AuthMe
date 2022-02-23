@@ -15,22 +15,24 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Map;
+
 
 public class AuthMeClient {
-    private final Gson gson = new GsonBuilder().create();
+    private final Gson gson = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd").create();
     private String goldenTokenPrevRequest = "";
     private String platinumTokenLeftPrevRequest = "";
 
-    public void firstRequest(String goldenToken, String issuerName)
-            throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder(new URI("http://localhost:8080/api/identity/check/"))
+    public void firstRequest(String goldenToken, String issuerName) throws URISyntaxException, IOException, InterruptedException {
+        HttpRequest request = HttpRequest
+                .newBuilder(new URI("http://localhost:8080/api/identity/check/"))
+                .POST(HttpRequest.BodyPublishers.noBody())
                 .setHeader("goldenToken", goldenToken)
                 .setHeader("issuerName", issuerName)
-                .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
         ServiceDTO body = gson.fromJson(response.body(), ServiceDTO.class);
+
         if (response.statusCode() == 401) {
             if (body.getStatus().equals("Invalid golden token!"))
                 throw new InvalidGoldenTokenException();
@@ -42,19 +44,18 @@ public class AuthMeClient {
     }
 
     public boolean secondRequest(String platinumTokenRight,
-                                 ValidateProfileBindingModel bindingModel)
-            throws URISyntaxException, IOException, InterruptedException {
-        String json = gson.toJson(bindingModel);
+                                 ValidateProfileBindingModel bindingModel) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest request = HttpRequest
                 .newBuilder(new URI("http://localhost:8080/api/identity/check/validate"))
                 .setHeader("goldenToken", goldenTokenPrevRequest)
                 .setHeader("platinumTokenLeft", platinumTokenLeftPrevRequest)
                 .setHeader("platinumTokenRight", platinumTokenRight)
-                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .setHeader("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(bindingModel)))
                 .build();
-        HttpResponse<String> response =
-                HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
         ServiceDTO body = gson.fromJson(response.body(), ServiceDTO.class);
+
 
         if (response.statusCode() == 401) {
             if (body.getStatus().equals("No permissions for the requested fields!"))

@@ -1,5 +1,6 @@
 package com.authme.authme.config;
 
+import com.authme.authme.data.service.CurrentUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -10,11 +11,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.Random;
 
 @Configuration
 public class ApplicationConfig {
+    private final CurrentUserService currentUserService;
+
+    public ApplicationConfig(CurrentUserService currentUserService) {
+        this.currentUserService = currentUserService;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new Pbkdf2PasswordEncoder();
@@ -32,7 +38,7 @@ public class ApplicationConfig {
 
     @Bean
     public AuthMeMethodSecurityExpressionHandler expressionHandlerResolver(){
-        return new AuthMeMethodSecurityExpressionHandler();
+        return new AuthMeMethodSecurityExpressionHandler(currentUserService);
     }
 
     @Bean

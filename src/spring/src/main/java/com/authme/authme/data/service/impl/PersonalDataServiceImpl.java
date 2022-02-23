@@ -11,7 +11,6 @@ import com.authme.authme.data.service.CurrentUserService;
 import com.authme.authme.data.service.PersonalDataService;
 import com.authme.authme.exceptions.CommonErrorMessages;
 import com.authme.authme.utils.ClassMapper;
-import com.authme.authme.utils.RemoteEndpoints;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,7 +44,7 @@ public class PersonalDataServiceImpl implements PersonalDataService {
 
     @Override
     public Long newEntry() {
-        ValidatableResponse<Long> response = request(RemoteEndpoints.entry(), HttpMethod.GET, null, null,
+        ValidatableResponse<Long> response = request(customConfig.getDotnetEndpoint() + "/api/identity", HttpMethod.GET, null, null,
                 new ParameterizedTypeReference<>() {
                 });
         return response.getResult();
@@ -53,7 +52,7 @@ public class PersonalDataServiceImpl implements PersonalDataService {
 
     public ProfileDTOGet getProfile(Long dataId) {
         ValidatableResponse<ProfileDTOGet> response =
-                request(RemoteEndpoints.profile(dataId),
+                request(customConfig.getDotnetEndpoint() + "/api/identity/" + dataId,
                         HttpMethod.GET,
                         null,
                         null,
@@ -76,7 +75,7 @@ public class PersonalDataServiceImpl implements PersonalDataService {
         AuthMeUserEntity user = currentUser.getCurrentLoggedUser();
         ProfileDTOPost profileDTOPost = classMapper.toProfileDTOSend(profileBindingModel);
         profileDTOPost.setId(user.getId());
-        request(RemoteEndpoints.profile(user.getDataId()),
+        request(customConfig.getDotnetEndpoint() + "/api/identity/" + user.getDataId(),
                 HttpMethod.POST,
                 null,
                 profileDTOPost,
@@ -86,7 +85,7 @@ public class PersonalDataServiceImpl implements PersonalDataService {
 
     @Override
     public void deleteProfile(Long id) {
-        request(RemoteEndpoints.profile(id), HttpMethod.DELETE, null, null, new ParameterizedTypeReference<Void>() {
+        request(customConfig.getDotnetEndpoint() + "/api/identity/" + id, HttpMethod.DELETE, null, null, new ParameterizedTypeReference<Void>() {
         });
     }
 
@@ -104,7 +103,7 @@ public class PersonalDataServiceImpl implements PersonalDataService {
         body.add("documentFront", frontImage.getResource());
         body.add("documentBack", backImage.getResource());
 
-        request(RemoteEndpoints.picture(), HttpMethod.POST, headers, body, new ParameterizedTypeReference<Void>() {
+        request(customConfig.getDotnetEndpoint() + "/api/identityvalidity", HttpMethod.POST, headers, body, new ParameterizedTypeReference<Void>() {
         });
     }
 

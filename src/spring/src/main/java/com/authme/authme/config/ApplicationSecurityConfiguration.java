@@ -38,6 +38,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                         "/",
                         "/login",
                         "/register",
+                        "/test/**",
                         "/error/**",
                         "/identity/check/**",
                         "/api/identity/check/**")
