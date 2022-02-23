@@ -51,12 +51,15 @@ public class DataCheckControllerRest {
     public ResponseEntity<Map<String, String>> finishProcess(@RequestHeader String goldenToken,
                                                              @RequestHeader String platinumTokenLeft,
                                                              @RequestHeader String platinumTokenRight,
-                                                             ValidateProfileBindingModel bindingModel) {
+                                                             @RequestBody ValidateProfileBindingModel bindingModel) {
         String status =
                 dataValidationService.finishDataValidationProcessAndValidateData(
                         goldenToken,
                         platinumTokenLeft + platinumTokenRight,
                         bindingModel);
+        if (status.equals("invalid-golden-token"))
+            return ResponseEntity.status(401).body(Map.of("status", "Invalid golden token!"));
+
         if (status.equals("no-permissions"))
             return ResponseEntity.status(401).body(Map.of("status", "No permissions for the requested fields!"));
 

@@ -6,7 +6,7 @@ public class ValidateProfileBindingModel {
     private String name;
     private String middleName;
     private String surname;
-    private LocalDate dateOfBirth;
+    private String dateOfBirth;
 
     public ValidateProfileBindingModel() {
         name = "";
@@ -42,11 +42,11 @@ public class ValidateProfileBindingModel {
         return this;
     }
 
-    public LocalDate getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public ValidateProfileBindingModel setDateOfBirth(LocalDate dateOfBirth) {
+    public ValidateProfileBindingModel setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         return this;
     }

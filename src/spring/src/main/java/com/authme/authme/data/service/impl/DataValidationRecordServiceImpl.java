@@ -87,9 +87,11 @@ public class DataValidationRecordServiceImpl implements DataValidationRecordServ
     @Override
     public String finishDataValidationProcessAndValidateData(String goldenToken, String platinumToken, ValidateProfileBindingModel bindingModel) {
         Optional<DataValidationRecord> record = validationRepository.findByPlatinumToken(platinumToken);
+        GoldenToken token = goldenTokenService.findByIdOrNull(goldenToken);
+        if(token == null)
+            return "invalid-golden-token";
         if(record.isEmpty() || record.get().getExpired())
             return "invalid-platinum-token";
-        GoldenToken token = goldenTokenService.findByIdOrThrow(goldenToken);
         if (!hasPermissions(token, bindingModel)) {
             return "no-permissions";
         }
