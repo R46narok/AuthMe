@@ -24,7 +24,7 @@ public class IdentityController : ControllerBase
     [Authorize]
     [HttpGet("{id}", Name = "GetIdentity")]
     [Log("Invoked GetIdentity endpoint")]
-    public async Task<ActionResult<ValidatableResponse<IdentityDto>>> GetIdentity(int id)
+    public async Task<IActionResult> GetIdentity(int id)
     {
         var query = new GetIdentityQuery { Id = id };
         var result = await _mediator.Send(query);
@@ -38,7 +38,7 @@ public class IdentityController : ControllerBase
     [Authorize]
     [HttpGet(Name = "CreateIdentity")]
     [Log("Invoked CreateIdentity endpoint")]
-    public async Task<ActionResult<ValidatableResponse<int>>> CreateIdentity()
+    public async Task<IActionResult> CreateIdentity()
     {
         var createIdentityCmd = new CreateIdentityCommand();
         var response = await _mediator.Send(createIdentityCmd);
@@ -51,7 +51,7 @@ public class IdentityController : ControllerBase
 
     [Authorize]
     [HttpPost("{id}", Name = "UpdateIdentity")]
-    public async Task<ActionResult<ValidatableResponse>> UpdateIdentity(int id, [FromBody] UpdateIdentityCommand command)
+    public async Task<IActionResult> UpdateIdentity(int id, [FromBody] UpdateIdentityCommand command)
     {
         command.Id = id;
         var response = await _mediator.Send(command);
@@ -60,7 +60,7 @@ public class IdentityController : ControllerBase
 
     [Authorize]
     [HttpDelete("{id}", Name = "DeleteIdentity")]
-    public async Task<ActionResult<ValidatableResponse>> DeleteIdentity(int id)
+    public async Task<IActionResult> DeleteIdentity(int id)
     {
         var command = new DeleteIdentityCommand {Id = id};
         var response = await _mediator.Send(command);

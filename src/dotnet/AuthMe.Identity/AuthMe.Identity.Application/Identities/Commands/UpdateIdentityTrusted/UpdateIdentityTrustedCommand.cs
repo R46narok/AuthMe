@@ -43,7 +43,7 @@ public class UpdateIdentityTrustedCommandHandler : IRequestHandler<UpdateIdentit
         InvalidateUpdatedFields(request.DateOfBirth, oldIdentity.DateOfBirth);
 
         await _repository.UpdateIdentityAsync(oldIdentity);
-        _logger.LogInformation("Updated identity trusted with id {Id}", request.Id);
+        _logger.LogInformation("Updated trusted identity with id {Id}", request.Id);
 
         return new ValidatableResponse();
     }

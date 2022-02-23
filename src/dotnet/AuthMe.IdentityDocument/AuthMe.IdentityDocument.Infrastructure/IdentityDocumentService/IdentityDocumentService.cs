@@ -53,7 +53,7 @@ public class IdentityDocumentService : IIdentityDocumentService
 
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         if (_identityDtoProps == null)
-            _identityDtoProps = typeof(IdentityDocumentDto).GetProperties();
+            _identityDtoProps = typeof(IdentityDto).GetProperties();
     }
 
     /// <summary>
@@ -64,9 +64,9 @@ public class IdentityDocumentService : IIdentityDocumentService
     /// </summary>
     /// <param name="document">An identity document to extract information from.</param>
     /// <returns>Empty Dto, if errors occur.</returns>
-    public async Task<IdentityDocumentDto> ReadIdentityDocument(byte[] document)
+    public async Task<IdentityDto> ReadIdentityDocument(byte[] document)
     {
-        var identity = new IdentityDocumentDto();
+        var identity = new IdentityDto();
         
         var client = _httpFactory.CreateClient("AzureCognitivePrediction");
         var request = new HttpRequestMessage(HttpMethod.Post, "");
@@ -106,9 +106,9 @@ public class IdentityDocumentService : IIdentityDocumentService
     /// </summary>
     /// <param name="document">An image to extract from.</param>
     /// <returns>Populated dto.</returns>
-    private async Task<IdentityDocumentDto> PopulateIdentityDtoAsync(byte[] document)
+    private async Task<IdentityDto> PopulateIdentityDtoAsync(byte[] document)
     {
-        var dto = new IdentityDocumentDto();
+        var dto = new IdentityDto();
         
         foreach (var prop in _identityDtoProps)
         {

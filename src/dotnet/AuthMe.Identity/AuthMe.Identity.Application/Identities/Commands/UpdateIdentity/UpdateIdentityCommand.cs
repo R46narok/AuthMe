@@ -52,21 +52,13 @@ public class UpdateIdentityCommandHandler : IRequestHandler<UpdateIdentityComman
 
     private void InvalidateUpdatedFields(string updated, IdentityProperty<string> old)
     {
-        if (updated != null && updated != old.Value)
-            old.Validated = false;
-        else
-            old.Validated = true;
-
+        old.Validated = string.IsNullOrEmpty(updated);
         old.Value = updated;
     }
 
     private void InvalidateUpdatedFields(DateTime? updated, IdentityProperty<DateTime> old)
     {
-        if (updated != null && DateTime.Compare(updated.Value, old.Value) != 0)
-            old.Validated = false;
-        else
-            old.Validated = true;
-
+        old.Validated = updated == null;
         old.Value = updated.Value;
     }
 }

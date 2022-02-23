@@ -15,6 +15,8 @@ builder.Services.AddGrpc(options =>
     options.MaxReceiveMessageSize = 20 * 1024 * 1024; // 10 MB
     options.MaxSendMessageSize = 20 * 1024 * 1024; // 10 MB
 });
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -32,5 +34,10 @@ using (var scope = app.Services.CreateScope())
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<IdentityDocumentService>();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

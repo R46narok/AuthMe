@@ -46,7 +46,7 @@ public class IdentityDocumentProcessor : BackgroundService
             var response = await mediatr!.Send(query);
 
             var command = new DeleteIdentityDocumentCommand { IdentityId = @event.Model};
-            await mediatr.Send(command);
+            //await mediatr.Send(command);
             
             await bus.Send(new ValidateIdentityCompletedEvent(new ValidateIdentityCompletedModel
             {
