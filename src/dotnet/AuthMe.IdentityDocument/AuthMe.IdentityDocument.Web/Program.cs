@@ -1,7 +1,6 @@
 using AuthMe.IdentityDocumentMsrv.Infrastructure;
 using AuthMe.IdentityDocumentService.Application;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
-using IdentityDocumentService = AuthMe.IdentityDocumentService.Web.Services.IdentityDocumentService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,12 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
 
 // Add services to the container.
-builder.Services.AddGrpc(options =>
-{
-    options.EnableDetailedErrors = true;
-    options.MaxReceiveMessageSize = 20 * 1024 * 1024; // 10 MB
-    options.MaxSendMessageSize = 20 * 1024 * 1024; // 10 MB
-});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -31,9 +24,6 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<IIdentityDocumentDbContext>();
     context.Database.EnsureCreated();
 }
-
-// Configure the HTTP request pipeline.
-app.MapGrpcService<IdentityDocumentService>();
 
 app.UseAuthentication();
 app.UseAuthorization();

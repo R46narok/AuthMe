@@ -35,38 +35,27 @@ resource "kubernetes_deployment_v1" "identity" {
   }
 }
 
-resource "kubernetes_service_v1" "identity-clusterip-srv" {
+resource "kubernetes_service" "identity-loadbalancer" {
   metadata {
-    name = "identity-clusterip-srv"
+    name = "identity-loadbalancer"
+    annotations = {
+        "service.beta.kubernetes.io/azure-load-balancer-internal" = "true"
+    }
   }
   spec {
-    type = "ClusterIP"
     selector = {
-      "app" = "identity"
+      app = "identity"
     }
     port {
-      name        = "identity"
-      protocol    = "TCP"
       port        = 80
+      target_port = 80
     }
-  }
-} 
 
-# Identity db
-
-resource "kubernetes_persistent_volume_claim" "identity-identity-mssql-claim" {
-  metadata {
-    name = "identity-mssql-claim"
-  }
-  spec {
-    access_modes = ["ReadWriteMany"]
-    resources {
-      requests = {
-        storage = "2Gi"
-      }
-    }
+    type = "LoadBalancer"
   }
 }
+
+# Identity db
 
 resource "kubernetes_deployment_v1" "identity-mssql" {
   metadata {
@@ -101,9 +90,9 @@ resource "kubernetes_deployment_v1" "identity-mssql" {
             name  = "SA_PASSWORD"
             value = "AuthMeSuperSecurePassword123"
           }
+        }
       }
-    }
-    
+
     }
   }
 }
@@ -118,9 +107,9 @@ resource "kubernetes_service_v1" "identity-mssql_clusterip_srv" {
       "app" = "identity-mssql"
     }
     port {
-      name        = "identity-mssql"
-      protocol    = "TCP"
-      port        = 1433
+      name     = "identity-mssql"
+      protocol = "TCP"
+      port     = 1433
     }
   }
 }

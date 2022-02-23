@@ -35,38 +35,28 @@ resource "kubernetes_deployment_v1" "dotnet-worker" {
   }
 }
 
-resource "kubernetes_service_v1" "identity-document-clusterip-srv" {
+resource "kubernetes_service" "identity-document-loadbalancer" {
   metadata {
-    name = "identity-document-clusterip-srv"
+    name = "identity-document-loadbalancer"
+    annotations = {
+        "service.beta.kubernetes.io/azure-load-balancer-internal" = "true"
+    }
   }
   spec {
-    type = "ClusterIP"
     selector = {
-      "app" = "identity-document"
+      app = "identity-document"
     }
     port {
-      name        = "identity-document"
-      protocol    = "TCP"
       port        = 80
+      target_port = 80
     }
-  }
-} 
 
-# identity-document db
-
-resource "kubernetes_persistent_volume_claim" "identity-document-identity-document-mssql-claim" {
-  metadata {
-    name = "identity-document-mssql-claim"
-  }
-  spec {
-    access_modes = ["ReadWriteMany"]
-    resources {
-      requests = {
-        storage = "2Gi"
-      }
-    }
+    type = "LoadBalancer"
   }
 }
+
+
+# identity-document db
 
 resource "kubernetes_deployment_v1" "identity-document-mssql" {
   metadata {

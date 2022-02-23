@@ -54,22 +54,6 @@ resource "kubernetes_service_v1" "front-portal-loadbalancer" {
 
 # MySql
 
-
-resource "kubernetes_persistent_volume_claim" "mysql-claim" {
-  metadata {
-    name = "mysql-claim"
-  }
-  spec {
-    access_modes = ["ReadWriteMany"]
-    resources {
-      requests = {
-        storage = "2Gi"
-      }
-    }
-  }
-}
-
-
 resource "kubernetes_deployment_v1" "mysql" {
   metadata {
     name = "mysql-depl"

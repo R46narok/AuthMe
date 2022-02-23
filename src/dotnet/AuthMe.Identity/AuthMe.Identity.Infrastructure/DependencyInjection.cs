@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace AuthMe.IdentityMsrv.Infrastructure;
 
@@ -28,6 +29,13 @@ public static class DependencyInjection
         
         var connString = configuration.GetConnectionString("MsSQLDb");
         services.AddDbContext<IIdentityDbContext, IdentityDbContext>(options => options.UseSqlServer(connString));
+        
+        services.AddHttpClient("IdentityDocument", (serviceProvider, client) =>
+        {
+            var options = serviceProvider.GetService<IOptions<IdentityServiceSettings>>()!.Value;
+    
+            client.BaseAddress = new Uri(options.Endpoint);
+        });
         
         return services;
     }

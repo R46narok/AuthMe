@@ -1,4 +1,5 @@
-﻿using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocument;
+﻿using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.CreateIdentityDocument;
+using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocument;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,17 @@ public class IdentityDocumentController : ControllerBase
         _mediator = mediator;
     }
 
+    [HttpPost]
+    public async Task<IActionResult> CreateIdentityDocument([FromBody] CreateIdentityDocumentCommand command)
+    {
+        var response = await _mediator.Send(command);
+        
+        if (response.Valid)
+            return Ok(response);
+
+        return BadRequest(response);
+    }
+    
     [HttpGet("{identityId}")]
     public async Task<IActionResult> GetIdentityDocument(int identityId)
     {

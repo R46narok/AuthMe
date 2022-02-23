@@ -1,4 +1,7 @@
-﻿using AuthMe.IdentityMsrv.Application.Common.Interfaces;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
+using AuthMe.IdentityMsrv.Application.Common.Interfaces;
+using AuthMe.IdentityMsrv.Application.Identities.Commands.AttachIdentityDocument;
 using AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 using AuthMe.IdentityMsrv.Infrastructure.Settings;
 using AuthMe.IdentityService.Infrastructure.Grpc;
@@ -8,26 +11,35 @@ using Microsoft.Extensions.Options;
 
 namespace AuthMe.IdentityMsrv.Infrastructure;
 
+class AttachIdentityDocumentResponse
+{
+    public int Id { get; set; }
+}
+
 public class IdentityService : IIdentityService
 {
-    private readonly IdentityDocumentSrv.IdentityDocumentSrvClient _client;
+    private readonly HttpClient _client;
 
-    public IdentityService(IOptions<IdentityServiceSettings> options)
+    public IdentityService(IHttpClientFactory httpFactory)
     {
-        var channel = GrpcChannel.ForAddress(options.Value.Endpoint);
-        _client = new IdentityDocumentSrv.IdentityDocumentSrvClient(channel);
+        _client = httpFactory.CreateClient("IdentityDocument");
     }
 
     public async Task<int> AttachIdentityDocument(int identityId, byte[]? documentFront, byte[]? documentBack)
     {
-        var request = new CreateIdentityDocumentRequest
+        var command = new AttachIdentityDocumentCommand
         {
             IdentityId = identityId,
-            DocumentFront = ByteString.CopyFrom(documentFront),
-            DocumentBack = ByteString.CopyFrom(documentBack)
+            DocumentFront = documentFront,
+            DocumentBack = documentBack
         };
 
-        var response = await _client.CreateIdentityDocumentAsync(request);
-        return response.Id;
+        var request = new HttpRequestMessage(HttpMethod.Post, "/api/identitydocument");
+        request.Content = JsonContent.Create(command);
+        
+        var response = await _client.SendAsync(request);
+        var model = response.Content.ReadFromJsonAsync<AttachIdentityDocumentResponse>();
+        
+        return model.Id;
     }
 }
