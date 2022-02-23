@@ -15,7 +15,7 @@ public class AuthMeUserEntity extends BaseEntity {
     private Long dataId;
     @OneToMany(mappedBy = "user")
     private List<GoldenToken> goldenTokens;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @NotNull
     private List<Role> roles;
     @OneToMany(mappedBy = "user")
