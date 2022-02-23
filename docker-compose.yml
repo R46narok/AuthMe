@@ -30,15 +30,15 @@ services:
   #   depends_on:
   #     - mssql
 
-  mysql:
-    image: mysql:latest
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-    ports:
-      - 3306:3306
-    cap_add:
-      - SYS_NICE
+  # mysql:
+  #   image: mysql:latest
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: example
+  #   ports:
+  #     - 3306:3306
+  #   cap_add:
+  #     - SYS_NICE
 
   # spring-worker:
   #   depends_on:

@@ -34,16 +34,16 @@ public class DataCheckControllerRest {
         if (goldenTokenService.findByIdOrNull(goldenToken) == null)
             return ResponseEntity
                     .status(401)
-                    .body(Map.of("error", "Invalid golden token!"));
+                    .body(Map.of("status", "Invalid golden token!"));
 
 
         if (goldenTokenService.findById(goldenToken).getExpiry().isBefore(LocalDateTime.now()))
             return ResponseEntity
                     .status(401)
-                    .body(Map.of("error", "Expired golden token!"));
+                    .body(Map.of("status", "Expired golden token!"));
 
         String platinumToken = dataValidationService.triggerDataValidationProcess(goldenToken, issuerName, request.getRemoteAddr());
-        return ResponseEntity.ok(Map.of("status", "triggered", "platinumToken", platinumToken));
+        return ResponseEntity.ok(Map.of("status", "triggered", "result", platinumToken));
     }
 
     @Transactional
@@ -58,10 +58,10 @@ public class DataCheckControllerRest {
                         platinumTokenLeft + platinumTokenRight,
                         bindingModel);
         if (status.equals("no-permissions"))
-            return ResponseEntity.status(401).body(Map.of("error", "No permissions for the requested fields!"));
+            return ResponseEntity.status(401).body(Map.of("status", "No permissions for the requested fields!"));
 
         if (status.equals("invalid-platinum-token"))
-            return ResponseEntity.status(401).body(Map.of("error", "Invalid platinum token!"));
+            return ResponseEntity.status(401).body(Map.of("status", "Invalid platinum token!"));
 
         return ResponseEntity.ok().body(Map.of("status", "finished", "result", status));
     }
