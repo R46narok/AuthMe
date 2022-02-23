@@ -1,6 +1,6 @@
 namespace AuthMe.Client.Models;
 
-public class TriggerValidationResponse
+internal class TriggerValidationResponse
 {
     public string PlatinumToken { get; set; }
     public string Status { get; set; }

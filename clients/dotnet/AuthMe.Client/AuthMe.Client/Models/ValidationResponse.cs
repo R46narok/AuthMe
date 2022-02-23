@@ -1,6 +1,6 @@
 namespace AuthMe.Client.Models;
 
-public class ValidationResponse
+internal class ValidationResponse
 {
     public string Result { get; set; }
     //public string Status { get; set; }
