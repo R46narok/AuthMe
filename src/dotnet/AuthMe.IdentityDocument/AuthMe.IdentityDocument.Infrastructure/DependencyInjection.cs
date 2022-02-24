@@ -4,7 +4,9 @@ using AuthMe.IdentityDocumentMsrv.Infrastructure.Data;
 using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService;
 using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Settings;
 using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentValidityService.Settings;
+using AuthMe.IdentityDocumentMsrv.Infrastructure.OcrService;
 using AuthMe.IdentityDocumentMsrv.Infrastructure.OcrService.Settings;
+using AuthMe.IdentityDocumentMsrv.Infrastructure.OcrValidityService;
 using AuthMe.IdentityDocumentMsrv.Infrastructure.ServiceBus;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,7 @@ public static class DependencyInjection
         services.AddTransient<IOcrService, OcrService.OcrService>();
         services.AddTransient<IImageService, ImageService.ImageService>();
         services.AddTransient<IIdentityDocumentValidityService,IdentityDocumentValidityService.IdentityDocumentValidityService>();
+        services.AddTransient<IOcrValidityService, OcrValidityService.OcrValidityService>();
     
         services.AddHostedService<IdentityDocumentProcessor>();
         services.AddSingleton<IServiceBus, AzureServiceBus>();

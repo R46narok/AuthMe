@@ -22,7 +22,7 @@ public class IdentityDocumentProcessor : BackgroundService
     {
         _serviceProvider = serviceProvider;
         _client = new ServiceBusClient(options.Value.Endpoint);
-        _processor = _client.CreateProcessor(options.Value.Queue);
+        _processor = _client.CreateProcessor(options.Value.ValidityQueue);
 
         _processor.ProcessMessageAsync += MessageHandler;
         _processor.ProcessErrorAsync += ErrorHandler;
@@ -61,6 +61,9 @@ public class IdentityDocumentProcessor : BackgroundService
                 Surname = response.Result.Surname,
                 DateOfBirth = response.Result.DateOfBirth
             }),"identity_validity");
+            
+            await bus.Send(new ValidateOcrEvent(@event.Model),
+                "identity_ocr_validity");
             
             return true;
         });

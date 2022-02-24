@@ -3,5 +3,6 @@ namespace AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Set
 public class AzureServiceBusSettings
 {
     public string Endpoint { get; set; }
-    public string Queue { get; set; }
+    public string ValidityQueue { get; set; }
+    public string ValidityOcrQueue { get; set; }
 }

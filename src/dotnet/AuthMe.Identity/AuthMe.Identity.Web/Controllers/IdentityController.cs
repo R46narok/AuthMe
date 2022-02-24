@@ -3,6 +3,7 @@ using AuthMe.Identity.Web.Filters;
 using AuthMe.IdentityMsrv.Application.Identities.Commands.CreateIdentity;
 using AuthMe.IdentityMsrv.Application.Identities.Commands.DeleteIdentity;
 using AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentity;
+using AuthMe.IdentityMsrv.Application.Identities.Commands.UpdateIdentityTrusted;
 using AuthMe.IdentityMsrv.Application.Identities.Queries.GetIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -50,6 +51,15 @@ public class IdentityController : ControllerBase
     [Authorize]
     [HttpPost("{id}", Name = "UpdateIdentity")]
     public async Task<IActionResult> UpdateIdentity(int id, [FromBody] UpdateIdentityCommand command)
+    {
+        command.Id = id;
+        var response = await _mediator.Send(command);
+        return Ok(response);
+    }
+    
+    [Authorize]
+    [HttpPost("/api/[controller]/trusted/{id}", Name = "UpdateIdentityTrusted")]
+    public async Task<IActionResult> UpdateIdentityTrusted(int id, [FromBody] UpdateIdentityTrustedCommand command)
     {
         command.Id = id;
         var response = await _mediator.Send(command);
