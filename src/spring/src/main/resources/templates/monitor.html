@@ -9,60 +9,48 @@
 
 <body class="legion-background">
 <div th:replace="fragments/fragments::nav"></div>
-<div id="layoutSidenav">
-    <div th:replace="fragments/fragments::sideNav"></div>
-    <div id="layoutSidenav_content">
-        <main style="padding-bottom: 10px;margin: 25px;width: 96%;background-color: white;border-radius: 10px;">
-            <div class="container" style="padding: 25px;border-color: white;/*margin-left: 25px;*/width: 97%;">
-                <div class="card py-3 px-3 rounded-back" id="TableSorterCard"
-                     style="border-color: white;/*width: 90%;*/">
-                    <div class="row">
-                        <div class="col">
-                            <h1>Access monitor</h1>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p style="max-width: 450px;font-size: 20px;">Check out who has access to your information
-                                and details to the authentication.</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div style="text-align: center;">
-                                <table class="table table tablesorter" id="ipi-table">
-                                    <thead class="thead-dark">
-                                    <tr style="background-color: rgb(60,60,60);">
-                                        <th>Name</th>
-                                        <th class="sorter-false">IP address</th>
-                                        <th class="filter-false">Location</th>
-                                        <th class="filter-false sorter-false">Platinum token</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="r : ${dataMonitorViewModel.requests}" >
-                                        <td th:text="${r.name}">Facebook</td>
-                                        <td th:text="${r.ip}">157.240.9.35</td>
-                                        <td th:text="${r.location}">Sofia, Bulgaria</td>
-                                        <td th:text="${r.platinumToken.substring(r.platinumToken.length() / 2)}">qwertyuiopasdfghjklzxcvbnm</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+<div class="container">
+    <div class="row mt-5 py-3 px-3 rounded-back bg-white">
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col">
+                <h1>Access monitor</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col">
+                <p>Check out who has access to your information
+                    and details to the authentication.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <div class="text-center">
+                    <table class="table">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">IP address</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Platinum token</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="r : ${dataMonitorViewModel.requests}">
+                            <td th:text="${r.name}">Facebook</td>
+                            <td th:text="${r.ip}">157.240.9.35</td>
+                            <td th:text="${r.location}">Sofia, Bulgaria</td>
+                            <td th:text="${r.platinumToken.substring(r.platinumToken.length() / 2)}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 </div>
-<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/jquery.tablesorter.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/widgets/widget-filter.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/widgets/widget-storage.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
 <script src="/js/monitor/script.min.js"></script>
 </body>
-
 </html>

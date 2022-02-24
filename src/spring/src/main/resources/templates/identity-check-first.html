@@ -8,37 +8,36 @@
 
 <body class="legion-background">
 <div th:replace="fragments/fragments::nav"></div>
-<div class="container mt-4 rounded-back bg-white">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 pt-3 ps-3 pb-3">
-                <h1>Profile check</h1>
-                <form th:action="@{/identity/check}" th:method="post">
-                    <div class="mb-3">
-                        <p class="text-danger" th:if="${invalidGoldenToken}">Golden token is invalid!</p>
-                        <p class="text-danger" th:if="${tokenExpired}">Golden token has expired!</p>
-                        <label for="goldenToken" class="form-label">Golden token</label>
-                        <input name="goldenToken" th:value="${goldenToken}" type="text" class="form-control"
-                               id="goldenToken" aria-describedby="goldenTokenHelp">
-                    </div>
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Your name:</label>
-                        <input name="issuerName" th:value="${issuerName}" type="text" class="form-control" id="name">
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-dark">Trigger process</button>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-6 pt-3 ps-3 pb-3">
-                <div class="container-fluid">
-                    <div class="row h-100">
-                        <div class="col-sm-12 my-auto">
-                            <p>You are able to invoke profile check on other people if you have the sufficient
-                                permissions.</p>
-                            <p>Here you need to enter the golden token you've received from the person you are
-                                checking.</p>
-                        </div>
+<div class="container">
+    <div class="row mt-5 py-3 px-3 rounded-back bg-white">
+        <div class="col-md-6 pt-3 ps-3 pb-3">
+            <h1>Profile check</h1>
+            <form th:action="@{/identity/check}" th:method="post">
+                <div class="mb-3">
+                    <p class="text-danger" th:if="${invalidGoldenToken}">Golden token is invalid!</p>
+                    <p class="text-danger" th:if="${tokenExpired}">Golden token has expired!</p>
+                    <label for="goldenToken" class="form-label">Golden token</label>
+                    <input name="goldenToken" th:value="${goldenToken}" type="text" class="form-control"
+                           id="goldenToken" aria-describedby="goldenTokenHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Your name</label>
+                    <input name="issuerName" th:value="${issuerName}" type="text" class="form-control" id="name">
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-dark">Trigger process</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 pt-3 ps-3 pb-3">
+            <div class="row" style="height: 30%"></div>
+            <div class="container-fluid">
+                <div class="row h-100">
+                    <div class="col-sm-12 my-auto">
+                        <p>You are able to invoke profile check on other people if you have the sufficient
+                            permissions.</p>
+                        <p>Here you need to enter the golden token you've received from the person you are
+                            checking.</p>
                     </div>
                 </div>
             </div>

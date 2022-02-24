@@ -16,78 +16,67 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:300,400|Roboto:300,400,700">
     <link rel="stylesheet" href="/fonts/font-awesome.min.css">
     <link href="/fonts/ionicons.min.css" rel="stylesheet">
-<!--    <link rel="stylesheet" href="/css/home/styles.min.css">-->
-<!--    <link rel="stylesheet" href="/css/identity-check/styles.min.css">-->
-<!--    <link rel="stylesheet" href="/css/monitor/styles.min.css">-->
-<!--    <link rel="stylesheet" href="/css/token/styles.min.css">-->
     <link rel="stylesheet" href="/css/main.css">
 </span>
 <body>
 <div th:fragment="nav">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/}">Home</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" th:href="@{/}">AuthMe</a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarLeft, #navbarRight"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse row" id="navbarNav">
-                <div class="col-sm-6">
+
+            <div class="collapse navbar-collapse" id="navbarLeft">
+                <div class="justify-content-start">
                     <ul class="navbar-nav">
-                        <li sec:authorize="isAuthenticated()" class="nav-item">
-                            <a class="nav-link active" aria-current="page" th:href="@{/profile}">Profile</a>
-                        </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" th:href="@{/identity/check}">Identity check</a>
+                            <a class="nav-link" th:href="@{/identity/check}">Identity check</a>
+                        </li>
+                        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                            <a class="nav-link dropdown-toggle" href="#" id="controlsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Controls
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="controlsDropdown">
+                                <li><a class="dropdown-item" th:href="@{/data}">Access monitor</a></li>
+                                <li><a class="dropdown-item" th:href="@{/token}">Golden token</a></li>
+                                <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated() && hasRole('ROLE_MANAGER')">
+                            <a class="nav-link" th:href="@{/manager/console}">Console</a>
                         </li>
                     </ul>
                 </div>
-                <div class="col-sm-6 d-flex flex-row-reverse">
+            </div>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarRight">
+                <div class="justify-content-end">
                     <ul class="navbar-nav">
-                        <li sec:authorize="!isAuthenticated()" class="nav-item">
-                            <a class="nav-link active" aria-current="page" th:href="@{/login}">Login</a>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/login}" sec:authorize="!isAuthenticated()">Login</a>
                         </li>
-                        <li sec:authorize="!isAuthenticated()" class="nav-item">
-                            <a class="nav-link active" aria-current="page" th:href="@{/register}">Register</a>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/register}" sec:authorize="!isAuthenticated()">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" th:method="post">
+                                <button type="submit"
+                                        class="btn btn-link link-secondary no-underline"
+                                        aria-current="page">Logout
+                                </button>
+                            </form>
                         </li>
                     </ul>
-                    <form sec:authorize="isAuthenticated()" th:action="@{/logout}" th:method="post">
-                        <button type="submit" class="btn btn-link nav-link active text-light" aria-current="page">Logout</button>
-                    </form>
                 </div>
             </div>
         </div>
     </nav>
-</div>
-<div th:fragment="sideNav" id="layoutSidenav_nav">
-    <link rel="stylesheet" href="/css/sidebar.css">
-    <div id="sidenavAccordion" class="sb-sidenav accordion sb-sidenav-dark">
-        <div class="sb-sidenav-menu">
-            <div class="nav">
-                <div>
-                    <div class="sb-sidenav-menu-heading"><span>Main</span></div>
-                    <a class="nav-link active" th:href="@{/data}">
-                        <div class="sb-nav-link-icon"><i class="fa fa-dashboard"></i></div>
-                        <span>Access monitor</span>
-                    </a>
-                    <a class="nav-link active" th:href="@{/token}">
-                        <div class="sb-nav-link-icon"><i class="fa fa-eercast"></i></div>
-                        <span>Golden token</span>
-                    </a>
-                </div>
-                <div>
-                    <div class="sb-sidenav-menu-heading"><span>Personal data</span></div>
-                    <a class="nav-link active" th:href="@{/profile}">
-                        <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
-                        <span>Profile</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="sb-sidenav-footer">
-            <div class="small"><span>Logged as: <span th:text="${#authentication.name}"></span></span></div>
-        </div>
-    </div>
 </div>
 <div th:fragment="footer">
     <footer class="footer-dark">

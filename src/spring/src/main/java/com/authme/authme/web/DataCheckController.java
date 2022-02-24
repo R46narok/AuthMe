@@ -129,6 +129,8 @@ public class DataCheckController {
                 redirectAttributes.addFlashAttribute("noPermissions", true);
 
             return "redirect:/identity/check/validate";
+        } else if(status.equals("invalid-golden-token")) {
+            return "redirect:/identity/check";
         }
 
         return "redirect:/identity/check/result/" + status;

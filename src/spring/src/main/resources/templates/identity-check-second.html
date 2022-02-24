@@ -8,95 +8,59 @@
 
 <body class="legion-background">
 <div th:replace="fragments/fragments::nav"></div>
-<main style="padding-bottom: 25px;margin: 25px;/*width: 96%;*/background-color: white;border-radius: 10px;">
-    <div class="container rounded-back">
-        <div class="container">
-            <h1 style="padding-left: 25px;padding-top: 25px;">Profile check</h1>
-            <p style="padding-left: 25px;max-width: 450px;">You are able to invoke profile check on other people if you
+<div class="container">
+    <div class="row mt-5 py-3 px-3 rounded-back bg-white">
+        <div class="col-12 mb-3">
+            <h1>Profile check</h1>
+            <p>You are able to invoke profile check on other people if you
                 have the sufficient permissions.</p>
         </div>
-        <div class="container" style="padding-top: 50px;">
-            <div class="row">
-
-                <div class="col-md-6">
-                    <form th:action="@{/identity/check/validate}" th:method="post">
-                        <p th:if="${noPermissions}" class="text-danger">You don't have permissions to validate these fields!</p>
-                        <input name="goldenToken" th:value="${goldenToken}" hidden>
-                        <input name="platinumTokenLeft" th:value="${platinumTokenLeft}" hidden>
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <p class="text-danger" th:if="${invalidPlatinumToken}">Invalid platinum token!</p>
-                                    <div class="col-4">
-                                        <p style="margin-left: 25px;">Platinum token:</p>
-                                    </div>
-                                    <div class="col"><input name="platinumTokenRight" th:value="${platinumTokenRight}" type="text"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p style="margin-left: 25px;">First name:</p>
-                                    </div>
-                                    <div class="col"><input th:field="${bindingModel.name}" name="firstName" type="text"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p style="margin-left: 25px;">Father's name:</p>
-                                    </div>
-                                    <div class="col"><input th:field="${bindingModel.middleName}" name="middleName" type="text"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p style="margin-left: 25px;">Surname:</p>
-                                    </div>
-                                    <div class="col"><input th:field="${bindingModel.surname}" name="lastName" type="text"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p style="margin-left: 25px;">Date of birth:</p>
-                                    </div>
-                                    <div class="col"><input th:field="${bindingModel.dateOfBirth}" name="dateOfBirth" type="date"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <input type="submit"
-                                       class="btn btn-primary btn-dark"
-                                       style="margin-top: 10px;margin-left: 25px;border-radius: 10px;"
-                                       value="Check">
-                            </div>
-                        </div>
-                    </form>
+        <div class="col-6">
+            <form th:action="@{/identity/check/validate}" th:method="post">
+                <p th:if="${noPermissions}" class="text-danger">You don't have permissions to validate these
+                    fields!</p>
+                <input name="goldenToken" th:value="${goldenToken}" hidden>
+                <input name="platinumTokenLeft" th:value="${platinumTokenLeft}" hidden>
+                <div class="mb-3">
+                    <p class="text-danger" th:if="${invalidPlatinumToken}">Invalid platinum token!</p>
+                    <label for="platinumTokenRight" class="form-label">Platinum token</label>
+                    <input type="text"
+                           name="platinumTokenRight"
+                           th:value="${platinumTokenRight}"
+                           class="form-control"
+                           id="platinumTokenRight"
+                           aria-describedby="platinumTokenRightHelp">
                 </div>
-
-                <div class="col-md-6">
-                    <p style="max-width: 500px;">Fill in the details of the identity you want to check. If the
-                        provided
-                        golden token is&nbsp;associated with sufficient permissions you will get the desired output.<br><br>Note:
-                        The person, whose identity you are trying to confirm will receive a notification about this
-                        process.</p>
+                <div class="mb-3">
+                    <label  for="name" class="form-label">Name</label>
+                    <input type="text" th:field="${bindingModel.name}" class="form-control" id="name">
                 </div>
-
-            </div>
+                <div class="mb-3">
+                    <label for="middleName" class="form-label">Middle name</label>
+                    <input type="text" th:field="${bindingModel.middleName}" class="form-control" id="middleName">
+                </div>
+                <div class="mb-3">
+                    <label for="surname" class="form-label">Surname</label>
+                    <input type="text" th:field="${bindingModel.surname}" class="form-control" id="surname">
+                </div>
+                <div class="mb-3">
+                    <label for="dateOfBirth" class="form-label">Date of birth</label>
+                    <input type="date" th:field="${bindingModel.dateOfBirth}" class="form-control" id="dateOfBirth">
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-dark">Validate</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-6">
+            <p style="max-width: 500px;">Fill in the details of the identity you want to check. If the
+                provided
+                golden token is&nbsp;associated with sufficient permissions you will get the desired output.<br><br>Note:
+                The person, whose identity you are trying to confirm will receive a notification about this
+                process.</p>
         </div>
     </div>
-</main>
+</div>
 </body>
 
 </html>
