@@ -1,7 +1,6 @@
 package com.authme.authme.data.service.impl;
 
 import com.authme.authme.data.entity.AuthMeUserEntity;
-import com.authme.authme.data.entity.Role;
 import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.RoleRepository;
@@ -25,6 +24,7 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
 
     private final UserDetailsService userDetailsService;
     private final PersonalDataService personalDataService;
+    private final CurrentUserService currentUserService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -32,11 +32,12 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
                                  RoleRepository roleRepository,
                                  UserDetailsService userDetailsService,
                                  PersonalDataService personalDataService,
-                                 PasswordEncoder passwordEncoder) {
+                                 CurrentUserService currentUserService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userDetailsService = userDetailsService;
         this.personalDataService = personalDataService;
+        this.currentUserService = currentUserService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -71,6 +72,7 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
             return;
         if(user.getRoles().stream().noneMatch(r -> r.getName().ordinal() == role))
             user.getRoles().add(roleRepository.findByName(AuthMeUserRole.values()[role]).get());
+        userRepository.saveAndFlush(user);
     }
 
     @Override
@@ -80,6 +82,17 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
             return;
         if(user.getRoles().stream().anyMatch(r -> r.getName().ordinal() == role))
             user.setRoles(user.getRoles().stream().filter(r -> r.getName().ordinal() != role).collect(Collectors.toList()));
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void updatePassword(String newPassword) {
+        userRepository
+                .saveAndFlush(
+                        currentUserService
+                                .getCurrentLoggedUser()
+                                .setPassword(passwordEncoder.encode(newPassword)));
+
     }
 
     @Override
@@ -90,8 +103,20 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
                     .setPassword("8abb9bfc12232d7e0ca435b875173f577729923491d7e12a144fd26970b30060d7c8b04484e130e7")
                     .setRoles(List.of(roleRepository.findByName(AuthMeUserRole.USER).get()))
                     .setDataId(personalDataService.newEntry());
+            AuthMeUserEntity admin = new AuthMeUserEntity()
+                    .setUsername("admin")
+                    .setPassword(passwordEncoder.encode("admin"))
+                    .setRoles(List.of(roleRepository.findByName(AuthMeUserRole.ADMIN).get()))
+                    .setDataId(personalDataService.newEntry());
+            AuthMeUserEntity manager = new AuthMeUserEntity()
+                    .setUsername("manager")
+                    .setPassword(passwordEncoder.encode("manager"))
+                    .setRoles(List.of(roleRepository.findByName(AuthMeUserRole.MANAGER).get()))
+                    .setDataId(personalDataService.newEntry());
 
             userRepository.saveAndFlush(user);
+            userRepository.saveAndFlush(admin);
+            userRepository.saveAndFlush(manager);
         }
     }
 }

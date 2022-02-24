@@ -12,5 +12,7 @@ public interface AuthMeUserService {
 
     void removeRole(String username, Integer role);
 
+    void updatePassword(String newPassword);
+
     void init();
 }
