@@ -20,7 +20,7 @@ resource "kubernetes_deployment_v1" "front-portal" {
       spec {
         container {
           name  = "front-portal"
-          image = "d3ds3g/front-portal"
+          image = "authmecontainerregistry.azurecr.io/front-portal"
           port {
             container_port = 8080
             protocol       = "TCP"
