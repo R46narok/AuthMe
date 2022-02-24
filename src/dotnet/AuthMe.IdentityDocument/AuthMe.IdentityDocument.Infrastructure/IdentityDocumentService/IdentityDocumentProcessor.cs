@@ -1,12 +1,10 @@
-using AuthMe.Domain.Common;
 using AuthMe.Domain.Events;
 using AuthMe.IdentityDocumentMsrv.Infrastructure.IdentityDocumentService.Settings;
 using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
-using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.DeleteIdentityDocument;
+using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.UpdateIdentityDocument;
 using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.ReadIdentityDocument;
 using Azure.Messaging.ServiceBus;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -45,10 +43,17 @@ public class IdentityDocumentProcessor : BackgroundService
             var query = new ReadIdentityDocumentQuery {IdentityId = @event.Model};
             var response = await mediatr!.Send(query);
 
-            var command = new DeleteIdentityDocumentCommand { IdentityId = @event.Model};
-            //await mediatr.Send(command);
+            var command = new UpdateIdentityDocumentCommand
+            {
+                IdentityId = @event.Model,
+                OcrName = response.Result.Name,
+                OcrMiddleName = response.Result.MiddleName,
+                OcrSurname = response.Result.Surname,
+                OcrDateOfBirth = response.Result.DateOfBirth?.ToString("dd-MM-yyyy")
+            };
+            await mediatr.Send(command);
             
-            await bus.Send(new ValidateIdentityCompletedEvent(new ValidateIdentityCompletedModel
+            await bus!.Send(new ValidateIdentityCompletedEvent(new ValidateIdentityCompletedModel
             {
                 Id = @event.Model,
                 Name = response.Result.Name,
@@ -75,8 +80,8 @@ public class IdentityDocumentProcessor : BackgroundService
         await Task.CompletedTask;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        
+        return Task.CompletedTask;
     }
 }

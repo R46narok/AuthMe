@@ -21,6 +21,12 @@ public class IdentityDocumentRepository : IIdentityDocumentRepository
         return entry.Entity.Id;
     }
 
+    public async Task UpdateDocumentAsync(IdentityDocument document)
+    {
+        _dbContext.IdentityDocuments.Update(document);
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task DeleteDocumentAsync(int identityId)
     {
         var document = await _dbContext.IdentityDocuments.FirstOrDefaultAsync(x => x.IdentityId == identityId);
