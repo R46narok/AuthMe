@@ -3,14 +3,13 @@ resource "azurerm_resource_group" "rg" {
   location = var.location
 }
 
-/*
 resource "azurerm_container_registry" "container_registry" {
   name = "AuthMeContainerRegistry"
   resource_group_name = azurerm_resource_group.rg.name
   location = azurerm_resource_group.rg.location
   sku = "Standard"
   admin_enabled = false
-}*/
+}
 
 resource "azurerm_kubernetes_cluster" "cluster" {
   name = "AuthMeCluster"
@@ -62,4 +61,11 @@ resource "azurerm_kubernetes_cluster" "cluster" {
       enabled = false
     }
   }
+}
+
+resource "azurerm_role_assignment" "role" {
+  principal_id                     = var.serviceprinciple_id
+  role_definition_name             = "AcrPull"
+  scope                            = azurerm_container_registry.container_registry.id
+  skip_service_principal_aad_check = true
 }

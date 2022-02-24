@@ -21,9 +21,8 @@ public class IdentityController : ControllerBase
         _mediator = mediator;
     }
     
-    
+    [Authorize]
     [HttpGet("{id}", Name = "GetIdentity")]
-    [Log("Invoked GetIdentity endpoint")]
     public async Task<IActionResult> GetIdentity(int id)
     {
         var query = new GetIdentityQuery { Id = id };
@@ -35,9 +34,8 @@ public class IdentityController : ControllerBase
         return NotFound(result);
     }
     
-    
+    [Authorize]
     [HttpGet(Name = "CreateIdentity")]
-    [Log("Invoked CreateIdentity endpoint")]
     public async Task<IActionResult> CreateIdentity()
     {
         var createIdentityCmd = new CreateIdentityCommand();
@@ -49,7 +47,7 @@ public class IdentityController : ControllerBase
         return BadRequest(response);
     }
 
-
+    [Authorize]
     [HttpPost("{id}", Name = "UpdateIdentity")]
     public async Task<IActionResult> UpdateIdentity(int id, [FromBody] UpdateIdentityCommand command)
     {
@@ -58,6 +56,7 @@ public class IdentityController : ControllerBase
         return Ok(response);
     }
     
+    [Authorize]
     [HttpDelete("{id}", Name = "DeleteIdentity")]
     public async Task<IActionResult> DeleteIdentity(int id)
     {
