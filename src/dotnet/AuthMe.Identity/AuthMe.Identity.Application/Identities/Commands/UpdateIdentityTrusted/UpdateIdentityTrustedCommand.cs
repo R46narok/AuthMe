@@ -24,15 +24,13 @@ public class UpdateIdentityTrustedCommandHandler : IRequestHandler<UpdateIdentit
     private readonly IIdentityRepository _repository;
     private readonly IMapper _mapper;
     private readonly ILogger<UpdateIdentityTrustedCommandHandler> _logger;
-    private readonly IHttpClientFactory _httpClientFactory;
-
+    
     public UpdateIdentityTrustedCommandHandler(IIdentityRepository repository, IMapper mapper,
-        ILogger<UpdateIdentityTrustedCommandHandler> logger, IHttpClientFactory httpClientFactory)
+        ILogger<UpdateIdentityTrustedCommandHandler> logger)
     {
         _repository = repository;
         _mapper = mapper;
         _logger = logger;
-        _httpClientFactory = httpClientFactory;
     }
 
     public async Task<ValidatableResponse> Handle(UpdateIdentityTrustedCommand request, CancellationToken cancellationToken)
@@ -47,9 +45,6 @@ public class UpdateIdentityTrustedCommandHandler : IRequestHandler<UpdateIdentit
         await _repository.UpdateIdentityAsync(oldIdentity);
         _logger.LogInformation("Updated trusted identity with id {Id}", request.Id);
 
-        var client = _httpClientFactory.CreateClient("IdentityDocument");
-        await client.DeleteAsync($"api/IdentityDocument/{request.Id}", cancellationToken);
-        
         return new ValidatableResponse();
     }
 
