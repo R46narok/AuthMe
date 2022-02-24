@@ -1,4 +1,5 @@
-﻿using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
+﻿using System.Globalization;
+using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.CreateIdentityDocument;
 using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.DeleteIdentityDocument;
 using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocumentImage;
@@ -37,8 +38,15 @@ public class IdentityDocumentController : ControllerBase
         var query = new GetIdentityDocumentOcrQuery();
         var response = await _mediator.Send(query);
 
+
+
         if (response.Valid)
+        {
+            var time = DateTime.ParseExact(response.Result.DateOfBirth!, "dd-MM-yyyy", CultureInfo.CurrentCulture);
+            response.Result.DateOfBirth = time.ToString("yyyy-MM-dd");
             return Ok(response);
+        }
+            
 
         return NotFound(response);
     }
