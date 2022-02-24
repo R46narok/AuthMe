@@ -1,5 +1,6 @@
 ﻿using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.CreateIdentityDocument;
-using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocument;
+using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocumentImage;
+using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocumentOcr;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,10 +28,28 @@ public class IdentityDocumentController : ControllerBase
         return BadRequest(response);
     }
     
-    [HttpGet("{identityId}")]
-    public async Task<IActionResult> GetIdentityDocument(int identityId)
+    
+    [HttpGet("/api/[controller]/ocr/{identityId}")]
+    public async Task<IActionResult> GetIdentityDocumentOcr(int identityId)
     {
-        var query = new GetIdentityDocumentQuery {IdentityId = identityId};
+        var query = new GetIdentityDocumentOcrQuery {IdentityId = identityId};
+        var response = await _mediator.Send(query);
+
+        if (response.Valid)
+            return Ok(response);
+
+        return NotFound(response);
+    }
+    
+    [HttpGet("/api/[controller]/image/{side}/{identityId}")]
+    public async Task<IActionResult> GetIdentityDocumentImage(string side, int identityId)
+    {
+        var query = new GetIdentityDocumentImageQuery() {IdentityId = identityId};
+        if (side == "front")
+            query.Side = DocumentSide.Front;
+        else
+            query.Side = DocumentSide.Back;
+
         var response = await _mediator.Send(query);
 
         if (response.Valid)

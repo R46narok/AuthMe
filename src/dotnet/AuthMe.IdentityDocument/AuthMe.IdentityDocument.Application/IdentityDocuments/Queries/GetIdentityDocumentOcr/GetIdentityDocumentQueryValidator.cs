@@ -1,11 +1,11 @@
 ﻿using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
 using FluentValidation;
 
-namespace AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocument;
+namespace AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocumentOcr;
 
-public class GetIdentityDocumentQueryValidator : AbstractValidator<GetIdentityDocumentQuery>
+public class GetIdentityDocumentOcrQueryValidator : AbstractValidator<GetIdentityDocumentOcrQuery>
 {
-    public GetIdentityDocumentQueryValidator(IIdentityDocumentRepository repository)
+    public GetIdentityDocumentOcrQueryValidator(IIdentityDocumentRepository repository)
     {
         RuleFor(query => query.IdentityId)
             .MustAsync(async (id, _) => await repository.DocumentExistsAsync(id))
