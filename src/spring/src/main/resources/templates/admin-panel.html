@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <span th:replace="fragments/fragments::imports"></span>
+    <script src="/js/admin/app.js" type="module"></script>
+</head>
+
+<body class="legion-background">
+<div th:replace="fragments/fragments::nav"></div>
+<div class="container">
+    <div class="row mt-5 py-4 px-4 rounded-back bg-white">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <form th:action="@{/admin}" th:method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Name</label>
+                    <input type="text" class="form-control" name="username" th:value="${username}" id="username"
+                           aria-describedby="usernameHelp">
+                    <div id="usernameResult" class="mt-1 ms-1"></div>
+                </div>
+                <div class="mb-3">
+                    <select name="role"
+                            class="form-select form-select-lg mb-3"
+                            aria-label=".form-select-lg example">
+                        <option selected value="-1">Select role</option>
+                        <option th:each="r : ${roles}" th:value="${r.ordinal()}" th:text="${r.name()}"></option>
+                    </select>
+                </div>
+                <div class="mb-3 text-center">
+                    <input type="radio" class="btn-check" name="action" value="add" id="success-outlined"
+                           autocomplete="off" checked>
+                    <label class="btn btn-outline-success" for="success-outlined">Add</label>
+
+                    <input type="radio" class="btn-check" name="action" value="remove" id="danger-outlined"
+                           autocomplete="off">
+                    <label class="btn btn-outline-danger" for="danger-outlined">Remove</label>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-dark">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+</body>
+
+</html>

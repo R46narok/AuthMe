@@ -1,16 +1,13 @@
 package com.authme.authme.config;
 
-import org.springframework.boot.autoconfigure.security.StaticResourceLocation;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -43,10 +40,12 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                         "/identity/check/**",
                         "/api/identity/check/**")
                 .permitAll()
+                .antMatchers("/manager/**").hasAnyRole("MANAGER", "ADMIN")
+                .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .antMatchers("/**").authenticated()
                 .and()
                 .csrf()
-                .ignoringAntMatchers("/api/identity/check/**")
+                .ignoringAntMatchers("/api/identity/check/**", "/test/**")
 
                 .and()
                 .formLogin()

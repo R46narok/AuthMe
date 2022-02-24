@@ -8,43 +8,44 @@
 
 <body class="legion-background">
 <div th:replace="fragments/fragments::nav"></div>
-<div class="container mt-4 py-4 rounded-back bg-white">
-    <div class="row text-center">
-        <div class="col-6">
-            <img style="height: 40vh"
-                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg">
+<div class="container">
+    <div class="row mt-5 py-4 px-4 rounded-back bg-white">
+        <div class="row mb-4 text-center">
+            <div class="col-6">
+                <img style="height: 38vh"
+                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg">
+            </div>
+            <div class="col-6">
+                <img style="height: 38vh"
+                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg">
+            </div>
         </div>
-        <div class="col-6">
-            <img style="height: 40vh"
-                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg">
-        </div>
-    </div>
-    <div class="row">
         <div class="col-3"></div>
         <div class="col-6">
-            <form>
-                <input value="6969" name="id" type="text" hidden>
+            <form th:action="@{/manager/console}" th:method="post">
+                <input th:field="${bindingModel.dataId}" name="id" type="text" hidden>
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
+                    <input th:field="${bindingModel.name}" type="text" class="form-control" id="name" aria-describedby="nameHelp">
                 </div>
                 <div class="mb-3">
                     <label for="middleName" class="form-label">Middle name</label>
-                    <input type="text" class="form-control" id="middleName">
+                    <input th:field="${bindingModel.middleName}" type="text" class="form-control" id="middleName">
                 </div>
                 <div class="mb-3">
                     <label for="surname" class="form-label">Surname</label>
-                    <input type="text" class="form-control" id="surname">
+                    <input th:field="${bindingModel.surname}" type="text" class="form-control" id="surname">
                 </div>
                 <div class="mb-3">
                     <label for="dateOfBirth" class="form-label">Date of birth</label>
-                    <input type="date" class="form-control" id="dateOfBirth">
+                    <input th:field="${bindingModel.dateOfBirth}" type="date" class="form-control" id="dateOfBirth">
                 </div>
                 <div class="text-center">
                     <button type="submit" class="btn btn-dark">Submit</button>
                 </div>
             </form>
         </div>
+        <div class="col-3"></div>
     </div>
 </div>
 </body>
