@@ -23,8 +23,10 @@ public class PermissionServiceImpl implements PermissionService {
         if (permissionRepository.count() == 0) {
             Field[] fieldsInDTO = ProfileDTOGet.class.getDeclaredFields();
             for (Field field : fieldsInDTO) {
-                Permission permission = new Permission().setFieldName(field.getName());
-                permissionRepository.saveAndFlush(permission);
+                if (!field.getName().equals("id")) {
+                    Permission permission = new Permission().setFieldName(field.getName());
+                    permissionRepository.saveAndFlush(permission);
+                }
             }
         }
     }

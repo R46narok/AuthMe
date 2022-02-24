@@ -9,66 +9,63 @@
 
 <body class="legion-background">
 <div th:replace="fragments/fragments::nav"></div>
-<div id="layoutSidenav">
-    <div th:replace="fragments/fragments::sideNav"></div>
-    <div id="layoutSidenav_content">
-        <main style="padding-bottom: 10px;margin: 25px;width: 96%;background-color: white;border-radius: 10px;">
-            <div class="container">
-                <h1 style="padding-left: 25px;padding-top: 25px;">Golden tokens</h1>
-                <div class="col-6">
-                    <p style="padding-left: 25px;max-width: 450px;">Be sure to keep your golden tokens safe from others,
-                        they are
-                        your primary way of authentication.</p>
-                </div>
-                <div class="col-6">
-                    <p style="padding-left: 25px;max-width: 450px;">Select the permissions to your token which an
-                        authority can check!</p>
+
+<div class="container">
+    <div class="row mt-5 py-3 px-3 rounded-back bg-white">
+        <div class="col-1"></div>
+
+        <div class="col-11">
+            <h1>Golden tokens</h1>
+            <div class="col-6">
+                <p>Be sure to keep your golden tokens safe from others,
+                    they are
+                    your primary way of authentication.</p>
+            </div>
+            <div class="col-6">
+                <p>Select the permissions to your token which an
+                    authority can check!</p>
+            </div>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-10">
+
+            <div class="text-center table-responsive">
+                <table class="table">
+                    <thead class="table-dark">
+                    <tr>
+                        <th class="filter-false"></th>
+                        <th>Token</th>
+                        <th class="sorter-false">Expiry</th>
+                        <th class="filter-false" th:each="p : ${permissions}" th:text="${p.fieldName}"></th>
+                        <th class="filter-false"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="token : ${tokens}">
+                        <td>
+                            <button class="btn btn-primary btn-dark copy-btn">Copy</button>
+                        </td>
+                        <td th:text="${token.id}" class="token-id"></td>
+                        <td th:text="${#temporals.format(token.expiry, 'HH:mm:ss')}"></td>
+                        <form th:action="@{/token/golden/permission}" th:method="post">
+                            <input name="goldenToken" th:value="${token.id}" hidden>
+                            <td th:each="p : ${token.permissions}">
+                                <input type="checkbox" th:checked="${p.allowed}" name="permission"
+                                       th:value="${p.id}">
+                            </td>
+                            <td><input class="btn btn-primary btn-dark" type="submit" value="Alter"></td>
+                        </form>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <a class="btn btn-dark"
+                       th:href="@{/token/golden/generate}">Generate a new one</a>
                 </div>
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div style="text-align: center;">
-                            <table class="table table tablesorter" id="ipi-table">
-                                <thead class="thead-dark">
-                                <tr style="background-color: rgb(60,60,60);">
-                                    <th class="filter-false"></th>
-                                    <th>Token</th>
-                                    <th class="sorter-false">Expiry</th>
-                                    <th class="filter-false" th:each="p : ${permissions}" th:text="${p.fieldName}"></th>
-                                    <th class="filter-false"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="token : ${tokens}">
-                                    <td>
-                                        <button class="btn btn-primary btn-dark copy-btn">Copy</button>
-                                    </td>
-                                    <td th:text="${token.id}" class="token-id"></td>
-                                    <td th:text="${#temporals.format(token.expiry, 'HH:mm:ss')}"></td>
-                                    <form th:action="@{/token/golden/permission}" th:method="post">
-                                        <input name="goldenToken" th:value="${token.id}" hidden>
-                                        <td th:each="p : ${token.permissions}">
-                                            <input type="checkbox" th:checked="${p.allowed}" name="permission"
-                                                   th:value="${p.id}">
-                                        </td>
-                                        <td><input class="btn btn-primary btn-dark" type="submit" value="Alter"></td>
-                                    </form>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="text-center">
-                                <a class="btn btn-primary btn-dark"
-                                   th:href="@{/token/golden/generate}"
-                                   style="font-size: 15px;">Generate a new one</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
 </div>
 </body>
-
 </html>
