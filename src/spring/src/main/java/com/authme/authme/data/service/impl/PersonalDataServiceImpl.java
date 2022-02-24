@@ -112,20 +112,20 @@ public class PersonalDataServiceImpl implements PersonalDataService {
         ProfileDTOGet profile = getProfile(user.getDataId());
         if (!bindingModel.getName().equals("") &&
                 (!profile.getName().getValidated() ||
-                !profile.getName().getValue().equals(bindingModel.getName())))
+                !bindingModel.getName().equals(profile.getName().getValue())))
             return false;
 
         if (!bindingModel.getMiddleName().equals("") &&
                 (!profile.getMiddleName().getValidated() ||
-                !profile.getMiddleName().getValue().equals(bindingModel.getMiddleName())))
+                !bindingModel.getMiddleName().equals(profile.getMiddleName().getValue())))
             return false;
         if (!bindingModel.getSurname().equals("") &&
                 (!profile.getSurname().getValidated() ||
-                !profile.getSurname().getValue().equals(bindingModel.getSurname())))
+                !bindingModel.getSurname().equals(profile.getSurname().getValue())))
             return false;
         if (bindingModel.getDateOfBirth() != null &&
                 (!profile.getDateOfBirth().getValidated() ||
-                !profile.getDateOfBirth().getValue().equals(bindingModel.getDateOfBirth())))
+                !bindingModel.getDateOfBirth().equals(profile.getDateOfBirth().getValue())))
             return false;
         return true;
     }

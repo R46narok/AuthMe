@@ -12,6 +12,13 @@ public class ProfileDTOGet {
     private ProfileEntryObject<String> surname;
     private ProfileEntryObject<LocalDate> dateOfBirth;
 
+    public ProfileDTOGet() {
+        name = new ProfileEntryObject<String>().setValue("");
+        middleName = new ProfileEntryObject<String>().setValue("");
+        surname = new ProfileEntryObject<String>().setValue("");
+        dateOfBirth = new ProfileEntryObject<>();
+    }
+
     public ProfileEntryObject<String> getName() {
         return name;
     }
