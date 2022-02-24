@@ -1,8 +1,10 @@
 package com.authme.authme.data.service.impl;
 
 import com.authme.authme.config.CustomConfig;
+import com.authme.authme.data.binding.ManagerConsoleBindingModel;
 import com.authme.authme.data.binding.ProfileBindingModel;
 import com.authme.authme.data.binding.ValidateProfileBindingModel;
+import com.authme.authme.data.dto.FilePack;
 import com.authme.authme.data.dto.ProfileDTOGet;
 import com.authme.authme.data.dto.ProfileDTOPost;
 import com.authme.authme.data.dto.ValidatableResponse;
@@ -14,6 +16,7 @@ import com.authme.authme.utils.ClassMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,11 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -130,7 +138,43 @@ public class PersonalDataServiceImpl implements PersonalDataService {
         return true;
     }
 
+    @Override
+    public ManagerConsoleBindingModel getNewManagerConsoleBindingModel() {
+//      request(customConfig.getDotnetEndpoint() + "/api/manager",
+        return request("http://localhost:8080/test/bindingModel",
+                        HttpMethod.GET, null, null,
+                        new ParameterizedTypeReference<>() {});
+    }
+
+    @Override
+    public FilePack getImage(String id) throws IOException {
+        ResponseEntity<byte[]> response = requestResponse("http://localhost:8080/test/image/" + id,
+                HttpMethod.GET, null, null, new ParameterizedTypeReference<>() {
+        });
+
+        String contentType = response.getHeaders().get("Content-Type").stream().findFirst().orElse(null);
+
+        File temp = File.createTempFile("xtra------------", "------------xtra");
+        temp.deleteOnExit();
+        OutputStream os = new FileOutputStream(temp);
+        os.write(response.getBody());
+        os.close();
+        return new FilePack().setTemp(temp).setMimeType(contentType);
+    }
+
+    @Override
+    public void updateBindingModel(ManagerConsoleBindingModel bindingModel) {
+        request("http://localhost:8080/test/bindingModel",
+                HttpMethod.POST, null, bindingModel,
+                new ParameterizedTypeReference<>() {
+                });
+    }
+
     private <T, B> T request(String endpoint, HttpMethod method, HttpHeaders headers, B body, ParameterizedTypeReference<T> typeReference) {
+        return requestResponse(endpoint, method, headers, body, typeReference).getBody();
+    }
+
+    private <T, B> ResponseEntity<T> requestResponse(String endpoint, HttpMethod method, HttpHeaders headers, B body, ParameterizedTypeReference<T> typeReference) {
         try {
             if (headers == null)
                 headers = new HttpHeaders();
@@ -141,11 +185,11 @@ public class PersonalDataServiceImpl implements PersonalDataService {
             ResponseEntity<T> response =
                     restTemplate.exchange(endpoint, method, requestEntity, typeReference);
 
-            return response.getBody();
+            return response;
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode().value() == 401) {
                 retrieveToken();
-                return request(endpoint, method, headers, body, typeReference);
+                return requestResponse(endpoint, method, headers, body, typeReference);
             }
             throw e;
         }

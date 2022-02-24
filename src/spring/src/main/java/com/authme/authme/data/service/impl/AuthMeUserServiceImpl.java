@@ -1,6 +1,7 @@
 package com.authme.authme.data.service.impl;
 
 import com.authme.authme.data.entity.AuthMeUserEntity;
+import com.authme.authme.data.entity.Role;
 import com.authme.authme.data.entity.enums.AuthMeUserRole;
 import com.authme.authme.data.repository.AuthMeUserRepository;
 import com.authme.authme.data.repository.RoleRepository;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthMeUserServiceImpl implements AuthMeUserService {
@@ -58,8 +60,31 @@ public class AuthMeUserServiceImpl implements AuthMeUserService {
     }
 
     @Override
+    public AuthMeUserEntity getRolesOrNull(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
+
+    @Override
+    public void setRole(String username, Integer role) {
+        AuthMeUserEntity user = userRepository.findByUsername(username).orElse(null);
+        if (user == null)
+            return;
+        if(user.getRoles().stream().noneMatch(r -> r.getName().ordinal() == role))
+            user.getRoles().add(roleRepository.findByName(AuthMeUserRole.values()[role]).get());
+    }
+
+    @Override
+    public void removeRole(String username, Integer role) {
+        AuthMeUserEntity user = userRepository.findByUsername(username).orElse(null);
+        if (user == null)
+            return;
+        if(user.getRoles().stream().anyMatch(r -> r.getName().ordinal() == role))
+            user.setRoles(user.getRoles().stream().filter(r -> r.getName().ordinal() != role).collect(Collectors.toList()));
+    }
+
+    @Override
     public void init() {
-        if(userRepository.count() == 0) {
+        if (userRepository.count() == 0) {
             AuthMeUserEntity user = new AuthMeUserEntity()
                     .setUsername("test")
                     .setPassword("8abb9bfc12232d7e0ca435b875173f577729923491d7e12a144fd26970b30060d7c8b04484e130e7")
