@@ -1,4 +1,6 @@
-﻿using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.CreateIdentityDocument;
+﻿using AuthMe.IdentityDocumentService.Application.Common.Interfaces;
+using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.CreateIdentityDocument;
+using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Commands.DeleteIdentityDocument;
 using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocumentImage;
 using AuthMe.IdentityDocumentService.Application.IdentityDocuments.Queries.GetIdentityDocumentOcr;
 using MediatR;
@@ -29,10 +31,10 @@ public class IdentityDocumentController : ControllerBase
     }
     
     
-    [HttpGet("/api/[controller]/ocr/{identityId}")]
-    public async Task<IActionResult> GetIdentityDocumentOcr(int identityId)
+    [HttpGet("/api/[controller]/ocr/")]
+    public async Task<IActionResult> GetIdentityDocumentOcr()
     {
-        var query = new GetIdentityDocumentOcrQuery {IdentityId = identityId};
+        var query = new GetIdentityDocumentOcrQuery();
         var response = await _mediator.Send(query);
 
         if (response.Valid)
@@ -44,13 +46,25 @@ public class IdentityDocumentController : ControllerBase
     [HttpGet("/api/[controller]/image/{side}/{identityId}")]
     public async Task<IActionResult> GetIdentityDocumentImage(string side, int identityId)
     {
-        var query = new GetIdentityDocumentImageQuery() {IdentityId = identityId};
+        var query = new GetIdentityDocumentImageQuery {IdentityId = identityId};
         if (side == "front")
             query.Side = DocumentSide.Front;
         else
             query.Side = DocumentSide.Back;
 
         var response = await _mediator.Send(query);
+
+        if (response.Valid)
+            return Ok(response);
+
+        return NotFound(response);
+    }
+
+    [HttpDelete("{identityId}")]
+    public async Task<IActionResult> DeleteIdentityDocument(int identityId)
+    {
+        var command = new DeleteIdentityDocumentCommand {IdentityId = identityId};
+        var response = await _mediator.Send(command);
 
         if (response.Valid)
             return Ok(response);

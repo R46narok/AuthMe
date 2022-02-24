@@ -11,20 +11,29 @@ namespace AuthMe.IdentityDocumentMsrv.Infrastructure.ServiceBus;
 public class AzureServiceBus : IServiceBus
 {
     private readonly ServiceBusClient _client;
-    private readonly Dictionary<string, ServiceBusSender> _senders;
+    private readonly ServiceBusSender _validitySender;
+    private readonly ServiceBusSender _ocrSender;
 
     public AzureServiceBus(IOptions<AzureServiceBusSettings> options)
     {
         _client = new ServiceBusClient(options.Value.Endpoint);
-        _senders = new Dictionary<string, ServiceBusSender>();
+        _validitySender = _client.CreateSender(options.Value.ValidityQueue);
+        _ocrSender = _client.CreateSender(options.Value.ValidityOcrQueue);
     }
 
     public async Task Send<T>(Event<T> e, string queue)
     {
-        if (!_senders.ContainsKey(queue))
-            _senders.Add(queue, _client.CreateSender(queue));
-        
         var json = JsonSerializer.Serialize(e);
-        await _senders[queue].SendMessageAsync(new ServiceBusMessage(json));
+        var message = new ServiceBusMessage(json);
+
+        switch (queue)
+        {
+            case "identity_validity":
+                await _validitySender.SendMessageAsync(message);
+                break;
+            case "identity_ocr_validity":
+                await _ocrSender.SendMessageAsync(message);
+                break;
+        }
     }
 }

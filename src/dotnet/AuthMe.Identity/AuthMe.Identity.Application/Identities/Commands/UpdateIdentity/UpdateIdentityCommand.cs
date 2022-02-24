@@ -14,9 +14,9 @@ public class UpdateIdentityCommand : IRequest<ValidatableResponse>, IValidatable
 {
     public int Id { get; set; }
 
-    public string Name { get; set; }
-    public string MiddleName { get; set; }
-    public string Surname { get; set; }
+    public string? Name { get; set; }
+    public string? MiddleName { get; set; }
+    public string? Surname { get; set; }
     public DateTime? DateOfBirth { get; set; }
 }
 
@@ -50,15 +50,29 @@ public class UpdateIdentityCommandHandler : IRequestHandler<UpdateIdentityComman
         return new ValidatableResponse();
     }
 
-    private void InvalidateUpdatedFields(string updated, IdentityProperty<string> old)
+    private void InvalidateUpdatedFields(string? updated, IdentityProperty<string> old)
     {
-        old.Validated = old.Validated || string.IsNullOrEmpty(updated);
-        old.Value = updated;
+        if (updated == null || old.Value == updated)
+        {
+            old.Validated = true;
+        }
+        else
+        {
+            old.Validated = string.IsNullOrEmpty(updated);
+            old.Value = updated;
+        }
     }
 
     private void InvalidateUpdatedFields(DateTime? updated, IdentityProperty<DateTime> old)
     {
-        old.Validated = old.Validated || updated == null;
-        old.Value = updated.Value;
+        if (updated == null || old.Value == updated)
+        {
+            old.Validated = true;
+        }
+        else
+        {
+            old.Validated = updated.Value.CompareTo(DateTime.Parse("0001-01-01T00:00:00")) == 0;
+            old.Value = updated.Value;
+        }
     }
 }
