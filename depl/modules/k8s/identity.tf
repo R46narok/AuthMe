@@ -20,7 +20,7 @@ resource "kubernetes_deployment_v1" "identity" {
       spec {
         container {
           name  = "identity"
-          image = "authmecontainerregistry.azurecr.io/identity"
+          image = "d3ds3g/identity"
           port {
             container_port = 80
             protocol       = "TCP"

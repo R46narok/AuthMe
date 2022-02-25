@@ -65,7 +65,7 @@ public class UpdateIdentityCommandHandler : IRequestHandler<UpdateIdentityComman
 
     private void InvalidateUpdatedFields(DateTime? updated, IdentityProperty<DateTime> old)
     {
-        if (updated == null || old.Value == updated)
+        if (updated == null || (old.Value == updated && old.Validated))
         {
             old.Validated = true;
         }
