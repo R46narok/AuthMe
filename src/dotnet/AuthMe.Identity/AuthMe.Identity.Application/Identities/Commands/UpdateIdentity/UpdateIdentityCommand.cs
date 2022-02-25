@@ -52,7 +52,7 @@ public class UpdateIdentityCommandHandler : IRequestHandler<UpdateIdentityComman
 
     private void InvalidateUpdatedFields(string? updated, IdentityProperty<string> old)
     {
-        if (updated == null || old.Value == updated)
+        if (updated == "" || (old.Value == updated && old.Validated))
         {
             old.Validated = true;
         }

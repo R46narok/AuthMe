@@ -6,12 +6,15 @@ import com.authme.authme.data.service.PersonalDataService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.http.HttpClient;
 
 @Controller
 public class ManagerConsoleController {
@@ -21,16 +24,20 @@ public class ManagerConsoleController {
         this.personalDataService = personalDataService;
     }
 
-    @ModelAttribute("bindingModel")
-    public ManagerConsoleBindingModel bindingModel() {
-        ManagerConsoleBindingModel bindingModel = personalDataService.getNewManagerConsoleBindingModel();
-        bindingModel.setFrontImage("/manager/image/" + bindingModel.getFrontImage());
-        bindingModel.setBackImage("/manager/image/" + bindingModel.getBackImage());
-        return bindingModel;
-    }
-
     @GetMapping("/manager/console")
-    public String getPage() {
+    public String getPage(Model model) {
+        try {
+            ManagerConsoleBindingModel bindingModel = personalDataService.getNewManagerConsoleBindingModel();
+            bindingModel.setFrontImage("/manager/image/front-" + bindingModel.getIdentityId());
+            bindingModel.setBackImage("/manager/image/back-" + bindingModel.getIdentityId());
+            model.addAttribute("bindingModel", bindingModel);
+        } catch (HttpClientErrorException ex) {
+            ManagerConsoleBindingModel bindingModel = new ManagerConsoleBindingModel();
+            bindingModel.setFrontImage("https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg");
+            bindingModel.setBackImage("https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg");
+            model.addAttribute("bindingModel", bindingModel);
+        }
+
         return "manager-console";
     }
 

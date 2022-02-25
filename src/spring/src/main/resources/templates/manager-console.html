@@ -13,17 +13,17 @@
         <div class="row mb-4 text-center">
             <div class="col-6">
                 <img style="height: 38vh"
-                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg">
+                     th:src="${bindingModel.getFrontImage()}">
             </div>
             <div class="col-6">
                 <img style="height: 38vh"
-                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg">
+                     th:src="${bindingModel.getBackImage()}">
             </div>
         </div>
         <div class="col-3"></div>
         <div class="col-6">
             <form th:action="@{/manager/console}" th:method="post">
-                <input th:field="${bindingModel.dataId}" name="id" type="text" hidden>
+                <input th:field="${bindingModel.identityId}" name="id" type="text" hidden>
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input th:field="${bindingModel.name}" type="text" class="form-control" id="name" aria-describedby="nameHelp">

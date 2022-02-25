@@ -1,18 +1,29 @@
 package com.authme.authme.data.binding;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 public class ManagerConsoleBindingModel {
-    private Long dataId;
+    private Long identityId;
     private String name;
     private String middleName;
     private String surname;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
     private String frontImage;
     private String backImage;
+
+    public Long getIdentityId() {
+        return identityId;
+    }
+
+    public ManagerConsoleBindingModel setIdentityId(Long identityId) {
+        this.identityId = identityId;
+        return this;
+    }
 
     public String getName() {
         return name;
@@ -65,15 +76,6 @@ public class ManagerConsoleBindingModel {
 
     public ManagerConsoleBindingModel setBackImage(String backImage) {
         this.backImage = backImage;
-        return this;
-    }
-
-    public Long getDataId() {
-        return dataId;
-    }
-
-    public ManagerConsoleBindingModel setDataId(Long dataId) {
-        this.dataId = dataId;
         return this;
     }
 }

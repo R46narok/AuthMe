@@ -29,6 +29,7 @@ server:
       persistent: false
 custom:
   dotnetEndpoint: "http://localhost:5000"
+  dotnetEndpoint2: "http://localhost:5185"
   azureClientId: "c4a2ab21-acdb-4a07-83be-b07b28fffe54"
   azureClientSecret: "WD57Q~88~v2Vta21TM.EqsJygrPWcPG6nbZwX"
   azureResource: "api://bc005232-4de2-4e23-a624-17f0921944de"

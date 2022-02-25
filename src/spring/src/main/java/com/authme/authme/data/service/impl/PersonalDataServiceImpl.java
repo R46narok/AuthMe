@@ -140,15 +140,16 @@ public class PersonalDataServiceImpl implements PersonalDataService {
 
     @Override
     public ManagerConsoleBindingModel getNewManagerConsoleBindingModel() {
-//      request(customConfig.getDotnetEndpoint() + "/api/manager",
-        return request("http://localhost:8080/test/bindingModel",
+        ValidatableResponse<ManagerConsoleBindingModel> response = request(customConfig.getDotnetEndpoint2() + "/api/identitydocument/ocr/",
+//        return request("http://localhost:8080/test/bindingModel",
                         HttpMethod.GET, null, null,
                         new ParameterizedTypeReference<>() {});
+        return response.getResult();
     }
 
     @Override
     public FilePack getImage(String id) throws IOException {
-        ResponseEntity<byte[]> response = requestResponse("http://localhost:8080/test/image/" + id,
+        ResponseEntity<byte[]> response = requestResponse(customConfig.getDotnetEndpoint2() + "/api/identitydocument/image/" + id.replace('-', '/'),
                 HttpMethod.GET, null, null, new ParameterizedTypeReference<>() {
         });
 
@@ -164,9 +165,9 @@ public class PersonalDataServiceImpl implements PersonalDataService {
 
     @Override
     public void updateBindingModel(ManagerConsoleBindingModel bindingModel) {
-        request("http://localhost:8080/test/bindingModel",
+        request(customConfig.getDotnetEndpoint() + "/api/identity/trusted/" + bindingModel.getIdentityId(),
                 HttpMethod.POST, null, bindingModel,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Void>() {
                 });
     }
 

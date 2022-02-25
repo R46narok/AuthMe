@@ -21,7 +21,7 @@ public class TestController {
     @ResponseBody
     public ManagerConsoleBindingModel test() {
         return new ManagerConsoleBindingModel()
-                .setDataId(1L)
+                .setIdentityId(1L)
                 .setName("Valentin")
                 .setMiddleName("Gurliov")
                 .setSurname("Labadaichov")

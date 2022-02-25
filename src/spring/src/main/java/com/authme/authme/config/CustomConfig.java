@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "custom")
 public class CustomConfig {
     private String dotnetEndpoint;
+    private String dotnetEndpoint2;
     private String azureClientId;
     private String azureClientSecret;
     private String azureResource;
@@ -64,6 +65,15 @@ public class CustomConfig {
 
     public CustomConfig setAzureInstance(String azureInstance) {
         this.azureInstance = azureInstance;
+        return this;
+    }
+
+    public String getDotnetEndpoint2() {
+        return dotnetEndpoint2;
+    }
+
+    public CustomConfig setDotnetEndpoint2(String dotnetEndpoint2) {
+        this.dotnetEndpoint2 = dotnetEndpoint2;
         return this;
     }
 }

@@ -63,8 +63,8 @@ public class IdentityDocumentController : ControllerBase
         var response = await _mediator.Send(query);
 
         if (response.Valid)
-            return Ok(response);
-
+            return File(response.Result, "image/jpeg");
+        
         return NotFound(response);
     }
 

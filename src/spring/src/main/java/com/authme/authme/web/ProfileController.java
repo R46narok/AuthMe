@@ -55,7 +55,9 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/validation")
-    public String uploadPictures(@RequestPart MultipartFile frontImage, @RequestPart MultipartFile backImage) {
+    public String uploadPictures(@RequestPart(required = false) MultipartFile frontImage, @RequestPart(required = false) MultipartFile backImage) {
+        if(frontImage.getOriginalFilename().equals("") || backImage.getOriginalFilename().equals(""))
+            return "redirect:/profile";
         personalDataService.uploadIdCardPictures(frontImage, backImage);
         return "redirect:/profile";
     }
