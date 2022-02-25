@@ -20,7 +20,7 @@ resource "kubernetes_deployment_v1" "front-portal" {
       spec {
         container {
           name  = "front-portal"
-          image = "authmecontainerregistry.azurecr.io/front-portal"
+          image = "d3ds3g/front-portal"
           port {
             container_port = 8080
             protocol       = "TCP"
@@ -49,6 +49,7 @@ resource "kubernetes_service_v1" "front-portal-loadbalancer" {
     selector = {
         "service" = "front-portal"
     }
+    external_traffic_policy = "Local"
   }
 } 
 

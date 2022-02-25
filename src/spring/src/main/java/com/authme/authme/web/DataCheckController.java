@@ -70,7 +70,7 @@ public class DataCheckController {
 
             return "redirect:/identity/check";
         }
-        String platinumToken = dataValidationService.triggerDataValidationProcess(goldenToken, issuerName, request.getRemoteAddr());
+        String platinumToken = dataValidationService.triggerDataValidationProcess(goldenToken, issuerName, request.getRemoteHost());
         redirectAttributes.addFlashAttribute("goldenToken", goldenToken);
         redirectAttributes.addFlashAttribute("platinumTokenLeft", platinumToken);
         return "redirect:/identity/check/validate";

@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "rg" {
-  name = "AuthMeResourceGroup"
+  name = "AuthMeDepl"
   location = var.location
 }
 
@@ -63,9 +63,9 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   }
 }
 
-resource "azurerm_role_assignment" "role" {
-  principal_id                     = var.serviceprinciple_id
-  role_definition_name             = "AcrPull"
-  scope                            = azurerm_container_registry.container_registry.id
-  skip_service_principal_aad_check = true
-}
+# resource "azurerm_role_assignment" "role" {
+#   principal_id                     = var.serviceprinciple_id
+#   role_definition_name             = "AcrPull"
+#   scope                            = azurerm_container_registry.container_registry.id
+#   skip_service_principal_aad_check = true
+# }
