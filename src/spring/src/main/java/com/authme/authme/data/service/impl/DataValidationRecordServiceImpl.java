@@ -13,6 +13,7 @@ import com.authme.authme.utils.ClassMapper;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +26,7 @@ public class DataValidationRecordServiceImpl implements DataValidationRecordServ
 
     private final DataValidationRecordRepository validationRepository;
     private final AuthMeUserRepository userRepository;
-    private final Random random;
+    private final SecureRandom random;
     private final IpLocatorService ipLocatorService;
     private final GoldenTokenService goldenTokenService;
     private final GoldenTokenRepository goldenTokenRepository;
@@ -35,7 +36,7 @@ public class DataValidationRecordServiceImpl implements DataValidationRecordServ
 
     public DataValidationRecordServiceImpl(DataValidationRecordRepository validationRepository,
                                            AuthMeUserRepository userRepository,
-                                           Random random,
+                                           SecureRandom random,
                                            IpLocatorService ipLocatorService,
                                            GoldenTokenService goldenTokenService,
                                            GoldenTokenRepository goldenTokenRepository, PersonalDataService personalDataService, CurrentUserService currentUserService, ClassMapper classMapper) {

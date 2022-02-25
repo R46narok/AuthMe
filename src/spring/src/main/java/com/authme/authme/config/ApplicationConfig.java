@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 @Configuration
@@ -42,8 +43,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public Random random() {
-        return new Random();
+    public SecureRandom random() {
+        return new SecureRandom();
     }
 
     @Bean
